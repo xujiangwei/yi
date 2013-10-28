@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>壹框 - 东华软件</title>
+<link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="assets/css/style.css" rel="stylesheet">
+<link id="theme" href="assets/css/theme.css" rel="stylesheet">
+</head>
+
+<body>
+<div id="wrap">
+  <!-- 顶部横幅 - 开始 -->
+  <div class="navbar navbar-default navbar-fixed-top">
+    <div>
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <div class="toggle-nav">
+          <a href="javascript:framework.toggleNav();" data-toggle="tooltip" data-placement="right" title="切换导航栏"><span class="glyphicon glyphicon-list"></span></a>
+        </div>
+        <a class="navbar-brand" href="index.html">壹框</a>
+      </div>
+      <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav pull-right">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle user-menu" data-toggle="dropdown">软件研究院 <b class="caret"></b></a>
+            <ul class="dropdown-menu" role="menu">
+              <li class="dropdown-header">角色：管理员</li>
+              <li><a href="#"><span class="glyphicon glyphicon-cog"></span> 账号设置</a></li>
+              <li><a href="#"><span class="glyphicon glyphicon-user"></span> 修改信息</a></li>
+              <li><a href="#"><span class="glyphicon glyphicon-question-sign"></span> 帮助</a></li>
+              <li class="divider"></li>
+              <li><a href="#"><span class="glyphicon glyphicon-off"></span> 注销</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div><!-- /.navbar -->
+  <!-- 顶部横幅 - 结束 -->
+
+  <!-- 主内容区 - 开始 -->
+  <div class="container content">
+    <div class="row">
+      <div id="sidebar" class="col-md-2">
+        <div class="sidebar-nav">
+          <ul class="nav">
+            <li class="active"><a href="javascript:;">仪表板</a></li>
+            <li>
+              <a data-toggle="collapse" href="#ui_elements">界面元素</a>
+              <ul id="ui_elements" class="nav collapse menu-second">
+                <li><a href="javascript:;">排版</a></li>
+                <li><a href="javascript:;">布局</a></li>
+              </ul>
+            </li>
+            <li><a href="#">表单</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-10 content-header">
+        <ol class="breadcrumb">
+          <span class="glyphicon glyphicon-home"></span>&nbsp;&nbsp;
+          <li class="active">仪表板</li>
+        </ol>
+      </div>
+      <div id="content" class="col-md-10">
+        <div class="row">
+          <div class="col-md-6 col-sm-6 col-lg-6">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title"><span class="glyphicon glyphicon-stats"></span> 图表</h3>
+              </div>
+              <div class="panel-body">
+                <div id="demo_chart_1" class="app-placeholder"></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-sm-6 col-lg-6">
+            <h2>联想发布首款 Android 笔记本</h2>
+            <p>联想宣布了会研发名叫A10 的Android 笔记本，号称是世界第一个Andoird 笔记本。A10 希望以传统笔记本的方式，开拓新的系统市场。A10 的基本参数：10.1英寸HD屏幕可触摸，1.6GHz 4核Cortex-A9处理器，32GB存储，2GB内存。</p>
+            <p>联想称这个笔记本可以支持9个小时的视频播放。A10 修改于Android 4.2 系统，有笔记本模式和标注触摸模式，可以方便的管理文件和应用。</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <h2>重构</h2>
+            <p>重构是一种对软件进行修改的行为，但它并不改变软件的功能特征，而是通过让软件程序更清晰，更简洁和更条理来改进软件的质量。代码重构之于软件，相当于结构修改之于散文。每次人们对如何对代码进行重构的讨论就像是讨论如果对一篇文学作品进行修订一样无休无止。所有人都知道应该根据项目的自身情况来对代码进行重构，而重构是无止境的。莫扎特从来不不对他的作品进行修订，特罗洛普对自己作品修订的恰到好处，大多数作家认为他们俩这样做都是合适的，但他们的合适对于你我来说未必是合适的。</p>
+          </div>
+        </div>
+      </div>
+    </div><!-- /.row -->
+  </div><!-- /.content -->
+  <!-- 主内容区 - 结束 -->
+
+</div><!-- /#wrap -->
+
+<!-- 页脚 - 开始 -->
+<div id="footer">
+  <div class="container">
+    <p class="text-muted credit">&copy; 2013 东华软件</p>
+  </div>
+</div>
+<!-- 页脚 - 结束 -->
+
+<script src="lib/jquery/jquery-2.0.3.min.js" type="text/javascript"></script>
+<script src="lib/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="lib/seajs/sea.js" type="text/javascript"></script>
+<script src="assets/js/style.js" type="text/javascript"></script>
+<script src="assets/js/main.js" type="text/javascript"></script>
+</body>
+</html>
