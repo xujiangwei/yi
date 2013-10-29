@@ -14,6 +14,10 @@ body {
   padding-left: 0px;
   padding-right: 0px;
 }
+.page-wrapper .col-md-10 {
+  padding-left: 0px;
+  padding-right: 0px;
+}
 @media(max-width:767px) {
   .page-wrapper {
     padding: 0;
@@ -52,11 +56,14 @@ body {
     max-width: 1920px !important;
   }
 }
+.page-wrapper .page-nav {
+}
 
 .sidebar-nav {
   margin: 0 auto 0;
   padding: 0;
   width: 100% !important;
+  border-right: #2986b9 solid thin;
 }
 .sidebar-nav-menu {
 }

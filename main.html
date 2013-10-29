@@ -4,12 +4,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Yi Web Application</title>
-<link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<link href="lib/bootflat/css/font-awesome.min.css" rel="stylesheet">
-<link href="lib/bootflat/css/bootflat.css" rel="stylesheet">
-<link href="assets/css/frame.css" rel="stylesheet">
-<link id="theme" href="assets/css/theme.css" rel="stylesheet">
+<title>Yi</title>
+<link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<link href="lib/bootflat/css/font-awesome.min.css" rel="stylesheet" />
+<link href="lib/bootflat/css/bootflat.css" rel="stylesheet" />
+<link href="lib/bootflat/css/bootflat-square.css" rel="stylesheet" />
+<link href="assets/css/frame.css" rel="stylesheet" />
+<link id="theme" href="assets/css/theme.css" rel="stylesheet" />
 <!--[if lt IE 9]>
   <script src="lib/bootflat/js/html5shiv.js"></script>
   <script src="lib/bootflat/js/respond.min.js"></script>
@@ -34,11 +35,11 @@
 <div class="container page-wrapper">
   <div class="col-md-2">
     <div class="sidebar-nav">
-      <ul class="nav sidebar-nav-menu">
-        <li><a href="#">Home</a></li>
+      <ul class="nav nav-pills nav-pills-square nav-stacked sidebar-nav-menu">
+        <li class="active"><a href="#">Home</a></li>
         <li data-submenu-id="submenu-sacm">
           <a href="#">SACM</a>
-          <div id="submenu-sacm" class="popover">
+          <div id="submenu-sacm" class="popover popover-square">
           	<div class="popover-content">SACM Menu 1</div>
           </div>
         </li>
@@ -53,7 +54,21 @@
     </div>
   </div>
   <div class="col-md-10">
-    Content
+  	<ol class="breadcrumb breadcrumb-square page-nav">
+  	  <li><span class="glyphicon glyphicon-home"></span>&nbsp;&nbsp;Home</li>
+  	  <li><a href="#">Dashboard</a></li>
+  	</ol>
+  	<div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="panel">
+            <div class="panel-heading">Heading</div>
+            <div class="panel-body">body</div>
+          </div>
+        </div>
+      <div class="col-md-6"></div>
+    </div>
+    </div>
   </div>
 </div>
 

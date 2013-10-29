@@ -2,7 +2,7 @@
  * @author Jiangwei Xu
  */
 
-window.framework = {
+window.yi = {
 	setup: function() {
 		// 配置主导航
 		common.use('menu-aim', function(){
@@ -59,8 +59,37 @@ window.framework = {
 				$("a.maintain-hover").removeClass("maintain-hover");
         	});
 		});
+
+		// 启用对话框
+		common.use('dialog', function() {
+			bootbox.setDefaults({
+				locale: 'zh_CN'
+			});
+		});
+	},
+
+	/** 模态模式显示 Alert 对话框。
+	 */
+	alert: function(message, callback) {
+		bootbox.alert(message, callback);
+	},
+	/** 模态模式显示 Confirm 对话框。
+	 */
+	confirm: function(message, callback) {
+		bootbox.confirm(message, callback);
+	},
+	/** 模态模式显示 Prompt 对话框。
+	 */
+	prompt: function(title, callback) {
+		bootbox.prompt(title, callback);
+	},
+	/** 显示指定配置的对话框。
+	 */
+	dialog: function(options) {
+		bootbox.dialog(options);
 	}
 };
+
 
 
 /**
@@ -72,7 +101,8 @@ window.framework = {
 		base: "./lib/",
 		alias: {
 			"console": "console/console.js",
-			"menu-aim": "plugins/jquery.menu-aim.js"
+			"menu-aim": "plugins/jquery.menu-aim.js",
+			"dialog": "plugins/bootbox.min.js"
 		}
 	});
 
@@ -90,5 +120,5 @@ window.framework = {
 	}
 
 	// 框架配置
-	window.framework.setup();
+	window.yi.setup();
 })();
