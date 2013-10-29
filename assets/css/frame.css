@@ -1,0 +1,71 @@
+/* 框架样式 */
+
+html, body {
+  height: 100%;
+  min-height: 100%;
+}
+
+body {
+  font-family: "微软雅黑", "宋体", Verdana, Geneva, sans-serif;
+  padding-top: 50px;
+}
+
+.page-wrapper .col-md-2 {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+@media(max-width:767px) {
+  .page-wrapper {
+    padding: 0;
+    margin: 0;
+	height: 100%;
+	width: 100%;
+  }
+}
+@media(min-width:768px) {
+  .page-wrapper {
+    padding: 0;
+    margin: 0;
+	height: 100%;
+	width: 100%;
+	max-width: 800px;
+  }
+}
+@media(min-width:992px) {
+  .page-wrapper {
+    left: 0;
+    right: 0;
+	height: 100% !important;
+	min-height: 100%;
+    padding: 0;
+    margin: 0;
+    max-width: 1920px !important;
+  }
+}
+@media(min-width:1200px) {
+  .page-wrapper {
+    left: 0;
+    right: 0;
+	height: 100% !important;
+    padding: 0;
+    margin: 0;
+    max-width: 1920px !important;
+  }
+}
+
+.sidebar-nav {
+  margin: 0 auto 0;
+  padding: 0;
+  width: 100% !important;
+}
+.sidebar-nav-menu {
+}
+.sidebar-nav-menu .popover {
+  height: 100% !important;
+}
+.sidebar-nav-menu a.maintain-hover {
+  color: white;
+  background-color: #0081C2;
+}
+
+
