@@ -49,6 +49,10 @@ window.framework = {
 				$row.find("a").removeClass("maintain-hover");
 			}
 
+			// Bootstrap 默认超链接 click 时间会关闭文档
+			$(".sidebar-nav-menu li").click(function(e) {
+				e.stopPropagation();
+			});
 			$(document).click(function() {
 				// 单机消失浮动子菜单
 				$(".popover").css("display", "none");

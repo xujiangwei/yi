@@ -61,7 +61,10 @@ body {
 .sidebar-nav-menu {
 }
 .sidebar-nav-menu .popover {
+  width: 100%;
+  min-width: 80px;
   height: 100% !important;
+  min-height: 100px;
 }
 .sidebar-nav-menu a.maintain-hover {
   color: white;
