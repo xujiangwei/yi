@@ -9,6 +9,7 @@
 <link href="lib/core/bootflat/css/font-awesome.min.css" rel="stylesheet" />
 <link href="lib/core/bootflat/css/bootflat.css" rel="stylesheet" />
 <link href="lib/core/bootflat/css/bootflat-square.css" rel="stylesheet" />
+<link href="lib/extensions/bootflat-panel.css" rel="stylesheet" />
 <link href="assets/css/frame.css" rel="stylesheet" />
 <link id="theme" href="assets/css/theme.css" rel="stylesheet" />
 <!--[if lt IE 9]>
@@ -77,7 +78,7 @@
   	  <div class="container">
         <div class="row">
           <div class="col-md-6">
-            <div class="panel panel-default">
+            <div class="panel panel-default panel-square">
               <div class="panel-heading"><div class="panel-title">Dialog Demo</div></div>
               <div class="panel-body">
                 <a class="btn btn-default" href="javascript:yi.alert('I am a alert dailog');">Alert</a>
@@ -87,45 +88,49 @@
             </div>
           </div>
           <div class="col-md-6">
-            <div class="panel panel-info">
+            <div class="panel panel-info panel-square">
+              <div class="panel-heading"><div class="panel-title">TODO</div></div>
+              <div class="panel-body">
+                <button class="btn btn-default">TODO</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="panel panel-primary panel-square">
               <div class="panel-heading"><div class="panel-title">Console</div></div>
               <div class="panel-body">
-                <button id="btn-show-console" class="btn btn-default">Show Console</button>
-                <button id="btn-hide-console" class="btn btn-default">Hide Console</button>
+                <button id="btn-show-console" class="btn btn-primary">Show Console</button>
+                <button id="btn-hide-console" class="btn btn-primary">Hide Console</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-8">
+            <div class="panel panel-success panel-square">
+              <div class="panel-heading"><div class="panel-title">Panel Success</div></div>
+              <div class="panel-body">
+                <button class="btn btn-success">TODO</button>
               </div>
             </div>
           </div>
           <div class="col-md-6">
-            <div class="panel panel-primary">
-              <div class="panel-heading"><div class="panel-title">Panel Primary</div></div>
-              <div class="panel-body">Body</div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="panel panel-success">
-              <div class="panel-heading"><div class="panel-title">Panel Success</div></div>
-              <div class="panel-body">Body</div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="panel panel-warning">
+            <div class="panel panel-warning panel-square">
               <div class="panel-heading"><div class="panel-title">Panel Warning</div></div>
               <div class="panel-body">Body</div>
             </div>
           </div>
           <div class="col-md-6">
-            <div class="panel panel-danger">
+            <div class="panel panel-danger panel-square">
               <div class="panel-heading"><div class="panel-title">Panel Danger</div></div>
               <div class="panel-body">Body</div>
             </div>
           </div>
           <div class="col-md-9">
-          	<div class="alert alert-info">
+          	<div class="alert alert-info alert-square">
               <p>".col-md-9"</p>
              </div>
           </div>
           <div class="col-md-3">
-          	<div class="alert alert-info">
+          	<div class="alert alert-info alert-square">
               <p>".col-md-3"</p>
              </div>
           </div>

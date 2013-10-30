@@ -9,5 +9,13 @@ define(function(require, exports, module) {
 		var Console = require('console');
 		var c = new Console();
 		c.start();
+
+		// 设置按钮事件
+		$('#btn-show-console').click(function() {
+			console.open();
+		});
+		$('#btn-hide-console').click(function() {
+			console.close();
+		});
 	};
 });
