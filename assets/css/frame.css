@@ -1,4 +1,7 @@
-/* 框架样式 */
+/*
+ * 主框架样式
+ * @author Jiangwei Xu
+ */
 
 html, body {
   height: 100%;
@@ -29,11 +32,7 @@ body {
   margin-left: 0px;
   margin-right: 0px;
 }
-.page-wrapper .col-md-2 {
-  padding-left: 0px;
-  padding-right: 0px;
-}
-.page-wrapper .col-md-10 {
+.page-wrapper .page-col {
   padding-left: 0px;
   padding-right: 0px;
 }
@@ -76,7 +75,13 @@ body {
     margin: 0 0 -40px 0;
   }
 }
-.page-wrapper .page-nav {
+.page-wrapper .page-nav a {
+  border-radius: 0 0 0 0 !important;
+}
+.page-wrapper .page-nav span {
+  margin-top: 9px;
+  margin-left: 0px;
+  padding-left: 0px;
 }
 
 .sidebar-nav {
@@ -89,14 +94,24 @@ body {
 .sidebar-nav-menu {
 }
 .sidebar-nav-menu .popover {
-  width: 100%;
-  min-width: 80px;
-  height: 100% !important;
-  min-height: 100px;
+  min-width: 200px;
+  max-width: 360px !important;
+  padding: 0;
+  margin: 0;
+  border-radius: 0 0 0 0;
+  background-color: #0081c2;
+  border-color: #0081c2;
+}
+.sidebar-nav-menu .popover-content {
+  padding: 0;
+  margin: 0;
+}
+.sidebar-nav-menu .popover-content a:hover {
+  color: #555;
 }
 .sidebar-nav-menu a.maintain-hover {
   color: white;
-  background-color: #0081C2;
+  background-color: #0081c2;
 }
 
 

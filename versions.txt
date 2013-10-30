@@ -1,0 +1,11 @@
+Version records
+
+Name          Version             Modified
+--------------------------------------------------------------------------------
+Bootstrap     3.0.0               No
+Bootflat      1.0.1               No
+jQuery        1.10.2 & 2.0.3      No
+Seajs         2.1.1               Yes
+Console       1.0.0               No
+Bootbox       4.1.0               Yes
+Holder        2.2                 No

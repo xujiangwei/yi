@@ -5,3 +5,7 @@
 .panel-square {
   border-radius: 0 0 0 0;
 }
+
+.panel-square .panel-heading {
+  border-radius: 0 0 0 0;
+}

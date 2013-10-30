@@ -1,4 +1,5 @@
 /**
+ * 主框架入口脚本
  * @author Jiangwei Xu
  */
 
@@ -15,7 +16,6 @@ window.yi = {
 	        	var $row = $(row),
 	        		submenuId = $row.data("submenuId"),
 	        		$submenu = $("#" + submenuId),
-	        		height = $menu.outerHeight(),
 	        		width = $menu.outerWidth();
 
 				// 是否配置了子菜单项
@@ -27,8 +27,7 @@ window.yi = {
 				$submenu.css({
 					display: "block",
 					top: -1,
-					left: width - 3,	// 为了美观子菜单覆盖一点主菜单
-					height: height - 4
+					left: width - 3	// 为了美观子菜单覆盖一点主菜单
 				});
 
 				// 保持当前激活的行高亮
