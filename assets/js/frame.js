@@ -65,6 +65,9 @@ window.yi = {
 				locale: 'zh_CN'
 			});
 		});
+
+		// Tooltips
+		$('#toggle_nav').tooltip({ container: 'body' });
 	},
 
 	/** 模态模式显示 Alert 对话框。
@@ -86,6 +89,25 @@ window.yi = {
 	 */
 	dialog: function(options) {
 		bootbox.dialog(options);
+	},
+
+	/** 切换侧边导航栏
+	 */
+	toggleNav: function() {
+		var nav = $('#main_nav');
+		var content = $('#main_content');
+		if (nav.css('display') == 'none') {
+			// 显示导航
+			nav.css('display', 'block');
+			content.removeClass('col-md-12');
+			content.addClass('col-md-10');
+		}
+		else {
+			// 隐藏导航
+			nav.css('display', 'none');
+			content.removeClass('col-md-10');
+			content.addClass('col-md-12');
+		}
 	}
 };
 

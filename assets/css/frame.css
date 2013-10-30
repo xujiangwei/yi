@@ -13,6 +13,13 @@ body {
   padding-top: 50px;
 }
 
+header {
+  background-color: #eaf1f1;
+  border-bottom-color: #d3d9d9 !important;
+  border-bottom-width: thin;
+  border-bottom-style: solid;
+}
+
 /* 页脚 */
 .page-wrapper-footer {
   height: 40px;
