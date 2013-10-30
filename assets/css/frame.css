@@ -1,4 +1,4 @@
-/*
+/*!
  * 主框架样式
  * @author Jiangwei Xu
  */
@@ -13,17 +13,9 @@ body {
   padding-top: 50px;
 }
 
-header {
-  background-color: #eaf1f1;
-  border-bottom-color: #d3d9d9 !important;
-  border-bottom-width: thin;
-  border-bottom-style: solid;
-}
-
 /* 页脚 */
 .page-wrapper-footer {
   height: 40px;
-  background-color: #f5f5f5;
 }
 .page-wrapper-footer .credit {
   margin: 10px 0;
@@ -35,6 +27,7 @@ header {
   background-position: 6px 9px;
 }
 
+/* 主页面结构封装 */
 .page-wrapper > .row {
   margin-left: 0px;
   margin-right: 0px;
@@ -90,15 +83,19 @@ header {
   margin-left: 0px;
   padding-left: 0px;
 }
+.page-col > .breadcrumb {
+  border-radius: 0 0 0 0 !important;
+}
 
+/* 侧边栏 */
 .sidebar-nav {
   margin: 0 auto 0;
   padding: 0;
   height: 100%;
   width: 100% !important;
-  border-right: #2986b9 solid thin;
 }
 .sidebar-nav-menu {
+  border-radius: 0px;
 }
 .sidebar-nav-menu .popover {
   min-width: 200px;
@@ -113,12 +110,13 @@ header {
   padding: 0;
   margin: 0;
 }
-.sidebar-nav-menu .popover-content a:hover {
-  color: #555;
-}
-.sidebar-nav-menu a.maintain-hover {
-  color: white;
-  background-color: #0081c2;
+.sidebar-nav-menu a {
+  border-radius: 0px !important;
 }
 
-
+/* 切换侧边栏导航按钮 */
+#toggle_nav {
+  font-size: 24px;
+  margin:11px 15px 10px;
+  padding:0;
+}

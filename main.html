@@ -6,11 +6,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Yi</title>
 <link href="lib/core/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-<link href="lib/core/bootflat/css/font-awesome.min.css" rel="stylesheet" />
+<!--
 <link href="lib/core/bootflat/css/bootflat.css" rel="stylesheet" />
 <link href="lib/core/bootflat/css/bootflat-square.css" rel="stylesheet" />
 <link href="lib/core/bootflat/css/bootflat-extensions.css" rel="stylesheet" />
 <link href="lib/extensions/bootflat-panel.css" rel="stylesheet" />
+-->
 <link href="assets/css/frame.css" rel="stylesheet" />
 <link id="theme" href="assets/css/theme.css" rel="stylesheet" />
 <!--[if lt IE 9]>
@@ -33,7 +34,7 @@
     </div>
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
-        <li><a id="toggle_nav" href="javascript:yi.toggleNav();" data-toggle="tooltip" data-placement="left" title="开关侧边导航栏" style="font-size:24px;margin:10px 15px 10px;padding:0;"><span class="glyphicon glyphicon-th-list"></span></a></li>
+        <li><a id="toggle_nav" href="javascript:yi.toggleNav();" data-toggle="tooltip" data-placement="left" title="开关侧边导航栏"><span class="glyphicon glyphicon-th-list"></span></a></li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle user-menu" data-toggle="dropdown">软件研究院 <b class="caret"></b></a>
           <ul class="dropdown-menu" role="menu">
@@ -54,7 +55,7 @@
   <div class="row">
     <div id="main_nav" class="col-md-2 page-col">
       <div class="sidebar-nav">
-        <ul class="nav nav-pills nav-pills-square nav-stacked sidebar-nav-menu">
+        <ul class="nav nav-pills nav-stacked sidebar-nav-menu">
           <li class="active"><a href="#">Home</a></li>
           <li data-submenu-id="submenu-sacm">
             <a href="#">SACM</a>
@@ -133,7 +134,7 @@
       </div>
     </div>
     <div id="main_content" class="col-md-10 page-col">
-  	  <ol class="breadcrumb breadcrumb-arrow breadcrumb-arrow-square page-nav">
+  	  <ol class="breadcrumb page-nav">
   	    <li><a href="#"><span class="glyphicon glyphicon-home"></span>Home</a></li>
   	    <li><a href="#">This is just</a></li>
   	    <li class="active"><a href="#">a breadcrumb demo</a></li>
@@ -212,9 +213,8 @@
 
 <script src="lib/core/jquery/jquery-1.10.2.min.js" type="text/javascript"></script>
 <script src="lib/core/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-<script src="lib/core/bootflat/js/jquery.icheck.js" type="text/javascript"></script>
-<script src="lib/utils/holder.js" type="text/javascript"></script>
 <script src="lib/core/seajs/sea.js" type="text/javascript"></script>
+<script src="lib/yi.js" type="text/javascript"></script>
 <script src="assets/js/frame.js" type="text/javascript"></script>
 </body>
 </html>

@@ -1,1 +1,33 @@
-/* 主题样式 */
+/*!
+ * 主题样式，配合默认 Bootstrap 样式
+ * @author Jiangwei Xu
+ */
+
+header {
+  background-color: #eaf1f1;
+  border-bottom-color: #d3d9d9 !important;
+  border-bottom-width: thin;
+  border-bottom-style: solid;
+}
+
+/* 页脚 */
+.page-wrapper-footer {
+  background-color: #f5f5f5;
+}
+
+/* 面包屑引导 */
+.page-nav span {
+  padding: 0px 8px 0px 0px;
+}
+
+/* 侧边导航栏 */
+.sidebar-nav {
+  border-right: #2986b9 solid thin;
+}
+.sidebar-nav-menu .popover-content a:hover {
+  color: #333;
+}
+.sidebar-nav-menu a.maintain-hover {
+  color: white;
+  background-color: #0081c2;
+}
