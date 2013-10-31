@@ -11,9 +11,12 @@
 	common.config({
 		base: "./lib/",
 		alias: {
-			"console": "core/console/console.js",
-			"menu-aim": "plugins/jquery.menu-aim.js",
-			"dialog": "plugins/bootbox.min.js"
+			"class": "utils/class.js",							// 辅助构建 JS 对象关系
+			"map": "utils/hashmap.js",							// 实用 Map 实现
+			"console": "core/console/console.js",				// 可视化控制台
+			"dialog": "plugins/bootbox.min.js",					// 对话框
+			"menu-aim": "plugins/jquery.menu-aim.js",			// 改进的浮动菜单
+			"theme-manager": "modules/misc/theme-manager.min.js"		// 主题管理器
 		}
 	});
 
@@ -54,5 +57,7 @@
 	})();
 
 	// 框架配置
-	window.yi.setup();
+	window.yi.setup(function(yi) {
+		yi.themeManager.addTheme({name:"bootflat"});
+	});
 })();
