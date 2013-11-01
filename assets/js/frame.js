@@ -38,15 +38,21 @@
 		var $sb = $('.sidebar-nav');
 		var ww = parseInt(window.innerWidth);
 		if (ww >= 992) {
-			var sbh = Math.max(parseInt($('.page-wrapper').height())
+			var sbh = Math.max(parseInt($('#main_content').height())
 				, parseInt(document.body.clientHeight) - 50);
 			$sb.height(sbh);
+			var timer = setTimeout(function() {
+				clearTimeout(timer);
+				sbh = Math.max(parseInt($('#main_content').height())
+					, parseInt(document.body.clientHeight) - 50);
+				$sb.height(sbh);
+			}, 1000);
 		}
 
 		$(window).resize(function(e) {
 			var ww = parseInt(window.innerWidth);
 			if (ww >= 992) {
-				var sbh = Math.max(parseInt($('.page-wrapper').height())
+				var sbh = Math.max(parseInt($('#main_content').height())
 					, parseInt(document.body.clientHeight) - 50);
 				$sb.height(sbh);
 			}

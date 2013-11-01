@@ -13,6 +13,10 @@ body {
   padding-top: 50px;
 }
 
+img {
+  font-size: 12px;
+}
+
 /* 页脚 */
 .page-wrapper-footer {
   height: 40px;
