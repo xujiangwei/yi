@@ -10,13 +10,13 @@
 	// 配置库
 	common.config({
 		base: "./lib/",
-		alias: {
-			"class": "utils/class.js",							// 辅助构建 JS 对象关系
-			"map": "utils/hashmap.js",							// 实用 Map 实现
-			"console": "core/console/console.js",				// 可视化控制台
-			"dialog": "plugins/bootbox.min.js",					// 对话框
-			"menu-aim": "plugins/jquery.menu-aim.js",			// 改进的浮动菜单
-			"theme-manager": "modules/misc/theme-manager.min.js"		// 主题管理器
+		alias: {"class": "utils/class.js"						// 辅助构建 JS 对象关系
+			, "map": "utils/hashmap.js"							// 实用 Map 实现
+			, "console": "core/console/console.js"				// 可视化控制台
+			, "dialog": "plugins/bootbox.min.js"				// 对话框
+			, "menu-aim": "plugins/jquery.menu-aim.js"			// 改进的浮动菜单
+			, "fetch": "plugins/fetch/jquery.fetch.js"			// 片段截取
+			, "theme-manager": "modules/misc/theme-manager.min.js"		// 主题管理器
 		}
 	});
 

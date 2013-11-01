@@ -1,0 +1,11 @@
+/* 演示模块样式表 */
+
+.dhc-banner-container {
+  text-align: center;
+  left: auto;
+  right: auto;
+}
+
+.dhc-banner {
+  border-radius: 12px 12px 12px 12px;
+}
