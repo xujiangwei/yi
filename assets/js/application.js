@@ -22,9 +22,13 @@ define(function(require, exports, module) {
 
 		$('#btn-demo-fetch').click(function() {
 			$('#dhc').fetch({
-				ui: 'modules/dhc/ui.html'
+				html: 'modules/dhc/dhc.html'
 				, styles: ['modules/dhc/dhc.css']
 				, scripts: ['modules/dhc/dhc.js']
+				, main: function(args) {
+					window.demo.showAlert(args);
+				}
+				, args: 'demo'
 				, error: function(el) {
 					yi.alert('<p style="color:red">加载 dhc 模组失败！</p>');
 				}
