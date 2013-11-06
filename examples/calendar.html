@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calender</title>
+<link href="../lib/core/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<link href="../assets/css/frame.css" rel="stylesheet" />
+<link id="theme" href="../assets/css/theme.css" rel="stylesheet" />
+<!--[if lt IE 9]>
+  <script src="lib/bootflat/js/html5shiv.js"></script>
+  <script src="lib/bootflat/js/respond.min.js"></script>
+<![endif]-->
+</head>
+<body>
+<header class="navbar navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+      	<span class="sr-only">Toggle navigation</span>
+      	<span class="icon-bar"></span>
+      	<span class="icon-bar"></span>
+      	<span class="icon-bar"></span>
+      </button>
+      <a href="#" class="navbar-brand">Yi->Calender</a>
+    </div>
+
+  </div>
+</header>
+<div class="container page-wrapper">
+    <div class="row">
+        <div id="main_content" class="col-md-12 page-col">
+          	<ol class="breadcrumb page-nav">
+  	          <li><a href="#"><span class="glyphicon glyphicon-home"></span>日历控件说明</a></li>
+  	      
+  	        </ol>
+            <div class="container">
+                <div class="row">
+                   <div class="col-md-4">
+                      <div class="panel panel-success">
+                         <div class="panel-heading"><div class="panel-title">带时间选择的范围日历</div></div>
+                         <div class="panel-body">
+                         <button type="button" class="btn btn-default" id="buttontime">2013-10-11 00:00 - 2013-11-11 00:00</button>
+                         </div>
+                      </div>
+                   </div>   
+                   
+                   <div class="col-md-4">
+                      <div class="panel panel-success">
+                         <div class="panel-heading"><div class="panel-title">带时间选择的2个日历的范围日历</div></div>
+                         <div class="panel-body">
+                         <button type="button" class="btn btn-default" id="buttontime2">2013-10-11 00:00 - 2013-11-11 00:00</button>
+                         </div>
+                      </div>
+                   </div> 
+                   
+                    <div class="col-md-4">
+                      <div class="panel panel-success">
+                         <div class="panel-heading"><div class="panel-title">右端定位的日历</div></div>
+                         <div class="panel-body">
+                         <button type="button" class="btn btn-default" id="buttontime3">2013-10-11 00:00 - 2013-11-11 00:00</button>
+                         </div>
+                      </div>
+                   </div>  
+                   
+                   
+                    <div class="col-md-4">
+                      <div class="panel panel-success">
+                         <div class="panel-heading"><div class="panel-title">没有分钟时间日历选择</div></div>
+                         <div class="panel-body">
+                         <button type="button" class="btn btn-default" id="buttontime4">2013-10-11  - 2013-11-11 </button>
+                         </div>
+                      </div>
+                    </div>  
+                    
+                     <div class="col-md-4">
+                      <div class="panel panel-success">
+                         <div class="panel-heading"><div class="panel-title">没有分钟时间一个日历选择</div></div>
+                         <div class="panel-body">
+                         <button type="button" class="btn btn-default" id="buttontime5">2013-10-11  - 2013-11-11 </button>
+                         </div>
+                      </div>
+                    </div>                    
+   
+                     <div class="col-md-4">
+                      <div class="panel panel-success">
+                         <div class="panel-heading"><div class="panel-title">右端定位的日历</div></div>
+                         <div class="panel-body">
+                         <button type="button" class="btn btn-default" id="buttontime6">2013-10-11  - 2013-11-11 </button>
+                         </div>
+                      </div>
+                    </div> 
+                       
+                    <div class="col-md-4">
+                      <div class="panel panel-success">
+                         <div class="panel-heading"><div class="panel-title">只有选则的</div></div>
+                         <div class="panel-body">
+                         <button type="button" class="btn btn-default" id="buttontime7">2013-10-11  - 2013-11-11 </button>
+                         </div>
+                      </div>
+                    </div>     
+  
+                    <div class="col-md-4">
+                      <div class="panel panel-success">
+                         <div class="panel-heading"><div class="panel-title">只有选则的</div></div>
+                         <div class="panel-body">
+                         <button type="button" class="btn btn-default" id="buttontime8">2013-10-11  - 2013-11-11 </button>
+                         </div>
+                      </div>
+                    </div>   
+  
+                    <div class="col-md-4">
+                      <div class="panel panel-success">
+                         <div class="panel-heading"><div class="panel-title">隐藏后销毁控件内资源</div></div>
+                         <div class="panel-body">
+                         <button type="button" class="btn btn-default" id="buttontime9">2013-10-11 00:00 - 2013-11-11 12:00</button>
+                         </div>
+                      </div>
+                    </div>    
+                    
+                    <div class="col-md-4">
+                      <div class="panel panel-success">
+                         <div class="panel-heading"><div class="panel-title">通过onOk或onHide向旁边的textarea写值</div></div>
+                         <div class="panel-body">
+                         <button type="button" class="btn btn-default" id="buttontime10">2013-10-11 00:00 - 2013-11-11 12:00</button>
+                         </div>
+                      </div>
+                    </div> 
+                    <div class="col-md-4">
+                      <div class="panel panel-success">
+                            <div class="panel-heading"><div class="panel-title">接收值的地方</div></div>
+                            <div class="panel-body">
+                           <textarea class="form-control" rows="3" id="textarea1" >所有控件都有统一的接口</textarea>   
+                             </div>          
+                      </div>
+                    </div> 
+                                                   
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row page-wrapper-footer">
+    <div class="col-md-12">
+      <div>
+        <p class="text-muted credit">&copy; 2013 东华软件</p>
+      </div>
+    </div>
+   </div>
+</div>
+<script src="../lib/core/jquery/jquery-1.10.2.min.js" type="text/javascript"></script>
+<script src="../lib/core/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="../lib/core/seajs/sea.js" type="text/javascript"></script>
+</body>
+<script type="text/javascript">
+common.config({
+	base: "../lib/",
+	alias: {"class": "utils/class.js",
+		    "calendar.large":"modules/components/calendar/choosetime.large.min.js",
+		    "calendar.medium":"modules/components/calendar/choosetime.medium.min.js",
+		    "calendar.small":"modules/components/calendar/choosetime.small.min.js"
+	}
+});
+common.use("calendar.large",function(app){
+	var ChooseTimeLarge	=app;
+	new ChooseTimeLarge({
+
+		location:"left",
+		startTime:"2013-10-10 00:00:00",
+        endTime: "2013-10-17 12:00:00",
+		inputElem:document.getElementById("buttontime"),
+		triggerElem:document.getElementById("buttontime")
+	});
+	
+	new ChooseTimeLarge({
+
+		caleNum:2,
+		location:"left",
+		startTime:"2013-10-16 00:00:00",
+        endTime: "2013-11-10 12:00:00",
+		inputElem:document.getElementById("buttontime2"),
+		triggerElem:document.getElementById("buttontime2")
+	});
+	
+	new ChooseTimeLarge({
+
+		caleNum:2,
+		location:"right",
+		startTime:"2013-10-16 00:00:00",
+        endTime: "2013-10-17 12:00:00",
+		inputElem:document.getElementById("buttontime3"),
+		triggerElem:document.getElementById("buttontime3")
+	});
+	
+	new ChooseTimeLarge({
+        onHide:function(obj){
+        	obj.destroy();
+        },
+		caleNum:2,
+		location:"right",
+		startTime:"2013-10-16 00:00:00",
+        endTime: "2013-10-17 12:00:00",
+		inputElem:document.getElementById("buttontime9"),
+		triggerElem:document.getElementById("buttontime9")
+	});
+	
+	new ChooseTimeLarge({
+		onOk:function(obj){
+			$(textarea1).val("时间范围"+obj.getRange()+"\n起始时间"+obj.getStartTime()+"\n结束时间"+obj.getEndTime());
+		},
+
+		caleNum:2,
+		location:"left",
+		startTime:"2013-10-16 00:00:00",
+        endTime: "2013-10-17 12:00:00",
+		inputElem:document.getElementById("buttontime10"),
+		triggerElem:document.getElementById("buttontime10")
+	});
+});
+common.use("calendar.medium",function(app){
+	var ChooseTimeMedium	=app;
+	new ChooseTimeMedium({
+
+		caleNum:2,
+		location:"left",
+		startTime:"2013-11-16",
+        endTime: "2013-11-17",
+		inputElem:document.getElementById("buttontime4"),
+		triggerElem:document.getElementById("buttontime4")
+	});
+	
+	new ChooseTimeMedium({
+
+		caleNum:1,
+		location:"left",
+		startTime:"2013-11-16",
+        endTime: "2013-11-17",
+		inputElem:document.getElementById("buttontime5"),
+		triggerElem:document.getElementById("buttontime5")
+	});
+	
+	new ChooseTimeMedium({
+
+		caleNum:1,
+		location:"right",
+		startTime:"2013-11-16",
+        endTime: "2013-11-17",
+		inputElem:document.getElementById("buttontime6"),
+		triggerElem:document.getElementById("buttontime6")
+	});
+});
+common.use("calendar.small",function(app){
+	var ChooseTimeSmall	=app;
+	new ChooseTimeSmall({
+
+		caleNum:1,
+		location:"left",
+		startTime:"2013-11-16",
+        endTime: "2013-11-17",
+		inputElem:document.getElementById("buttontime7"),
+		triggerElem:document.getElementById("buttontime7")
+	});
+	
+	new ChooseTimeSmall({
+
+		caleNum:3,
+		location:"left",
+		startTime:"2013-11-16",
+        endTime: "2013-11-17",
+		inputElem:document.getElementById("buttontime8"),
+		triggerElem:document.getElementById("buttontime8")
+	});
+});
+</script>
+</html>

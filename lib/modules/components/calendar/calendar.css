@@ -2,17 +2,14 @@
 
 ._song_choosetime {
 	position: absolute;
-	background-color: #F7F7F7;
-	border: 1px solid #CCC;
+
+
 	margin-left: 1px;
 	margin-top: -1px;
-	padding: 3px;
-	white-space: nowrap;
+
+
 	z-index: 1000;
-	border-radius: 5px 0 5px 5px;
-	-moz-border-radius: 5px 0 5px 5px;
-	-webkit-border-bottom-left-radius: 5px;
-	-webkit-border-bottom-right-radius: 5px;
+
 }
 ._song_choosetime .label-slider{
 	font-size:12px;
