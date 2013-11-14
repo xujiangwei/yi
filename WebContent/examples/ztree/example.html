@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>ZTree</title>
+<script type="text/javascript" src="../../lib/core/seajs/sea.js"></script>
+<script type="text/javascript" src="../../lib/core/jquery/jquery-2.0.3.min.js"></script>
+</head>
+<body>
+	<div id="tree_demo"></div>
+	<script type="text/javascript">
+		seajs.config({
+			paths : {
+				'lib' : '../../../lib' // lib的位置
+			},
+			alias : {
+				'ZTree' : 'lib/modules/components/ZTree'// ZTree.js快捷方式
+			},
+			debug : true
+		});
+
+		seajs.use('./1/1');
+	</script>
+</body>
+</html>
