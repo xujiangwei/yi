@@ -1,0 +1,33 @@
+/*
+ * Yi Framework
+ * 
+ * Copyright (c) 2013,2014 DHC Software Research Department
+ */
+
+html, body {
+  height: 100%;
+  min-height: 100%;
+}
+
+body {
+  font-family: "微软雅黑", "宋体", Verdana, Geneva, sans-serif;
+}
+
+img {
+  font-size: 12px;
+}
+
+/* 页脚 */
+.page-wrapper-footer {
+  height: 40px;
+  max-width: 100% !important;
+  margin-top: 20px;
+  background-color: #f5f5f5;
+}
+.page-wrapper-footer .credit {
+  margin: 10px 0;
+}
+
+#mod {
+  height: 300px;
+}
