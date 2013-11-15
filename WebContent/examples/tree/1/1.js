@@ -1,5 +1,5 @@
 define(function(require, exports, module) {
-			var ZTree = require('ZTree');
+			var Tree = require('tree');
 
 			var setting = {};
 
@@ -76,5 +76,5 @@ define(function(require, exports, module) {
 
 			];
 
-			new ZTree('#tree_demo', setting, zNodes);
+			new Tree('#tree_demo', setting, zNodes);
 		});

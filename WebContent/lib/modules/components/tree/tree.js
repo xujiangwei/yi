@@ -1,9 +1,9 @@
 define(function(require, exports, moudles) {
-			require('../../plugins/ztree/zTreeStyle.css');
-			require('../../plugins/ztree/jquery.ztree.all-3.5.min-cmd');
-			require('../../plugins/ztree/jquery.ztree.exhide-3.5.min-cmd');
+			require('../../../plugins/ztree/zTreeStyle.css');
+			require('../../../plugins/ztree/jquery.ztree.all-3.5.min-cmd');
+			require('../../../plugins/ztree/jquery.ztree.exhide-3.5.min-cmd');
 
-			function ZTree(selector, option, root) {
+			function Tree(selector, option, root) {
 				return $.fn.zTree.init($(selector).addClass('ztree'), selector,
 						root);
 			}
@@ -11,16 +11,16 @@ define(function(require, exports, moudles) {
 			/**
 			 * static
 			 */
-			ZTree.getZTree = function(id) {
+			Tree.getZTree = function(id) {
 				return $.fn.zTree.getZTreeObj(id);
 			};
 
 			/**
 			 * static
 			 */
-			ZTree.destroy = function(id) {
+			Tree.destroy = function(id) {
 				return $.fn.zTree.destroy(id);
 			};
 
-			return ZTree;
+			return Tree;
 		});
