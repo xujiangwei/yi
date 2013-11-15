@@ -8,13 +8,15 @@
  * @param {Object} options
  * {
  *     html: 'modules/dhc/dhc.html',		// html 文件
+ *     tmpl: 'modules/dhc/dhc.tmpl',		// html 模板
  *     styles: ['modules/dhc/dhc1.css', 'modules/dhc/dhc2.css'],
  *     scripts: ['modules/dhc/dhc1.js', 'modules/dhc/dhc2.js'],
  *     main: function(args) {},
  *     args: 'main-args',
- *     tmpl: 'modules/dhc/dhc.tmpl.html',	// html 模板
  *     error: function(el) {}
  * }
+ *
+ * @note html 和 tmpl 两个参数只能二选一使用。
  */
 
 (function($){
@@ -72,6 +74,7 @@
 				$.ajax(options['tmpl'], {
 					async: true
 					, mimeType: 'text/plain; charset=utf-8'
+					, cache: false
 				})
 				.done(function(data) {
 					alert(tmpl(data, options.args));

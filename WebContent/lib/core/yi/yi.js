@@ -134,29 +134,22 @@ var ModManager = function() {
 /**
  * 激活 Mod 。 
  */
-ModManager.prototype.active = function(name, args) {
+ModManager.prototype.load = function(name, args) {
 	
 };
 
 /**
- * 调试普通 MOD 。
+ * 调试 MOD 。
  */
 ModManager.prototype.debug = function(containerId, mod) {
 	var container = $('#' + containerId);
 	container.fetch(mod);
 };
 
-/**
- * 调试模板 MOD 。
- */
-ModManager.prototype.debugTmpl = function(containerId, mod) {
-	
-};
-
 /*
  * 启用 Mod 。
  */
-Yi.prototype.activeMod = function(containerId, args) {
+/*Yi.prototype.activeMod = function(containerId, args) {
 	var container = $('#' + containerId);
 	var modName = container.data('mod');
 
@@ -165,7 +158,7 @@ Yi.prototype.activeMod = function(containerId, args) {
 		tmpl: 'mod/helloworld/helloworld.tmpl'
 		, args: args
 	});
-};
+};*/
 
 // Create yi instance
 global.yi = new Yi();

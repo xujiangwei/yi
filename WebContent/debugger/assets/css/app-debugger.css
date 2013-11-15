@@ -13,10 +13,6 @@ body {
   font-family: "微软雅黑", "宋体", Verdana, Geneva, sans-serif;
 }
 
-img {
-  font-size: 12px;
-}
-
 /* 页脚 */
 .page-wrapper-footer {
   height: 40px;
@@ -29,5 +25,5 @@ img {
 }
 
 #mod {
-  height: 300px;
+  min-height: 400px;
 }

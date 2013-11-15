@@ -9,12 +9,12 @@ Copyright (c) 2013,2014 DHC Software Research Department
 	<!-- 模块版本 -->
 	<version>1.0.0</version>
 
-	<!-- 共享文件 -->
-	<shared-files>
-	</shared-files>
-
 	<!-- 普通文件 -->
 	<files>
 		<html>helloworld.html</html>
 	</files>
+
+	<!-- 共享文件 -->
+	<shared-files>
+	</shared-files>
 </mod>

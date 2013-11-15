@@ -8,6 +8,8 @@ package yi.core;
 
 import java.io.Serializable;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Mod 文件。
@@ -25,6 +27,7 @@ public final class Mod implements Serializable, Comparable<Mod> {
 	private String contextPath;
 
 	private String htmlFilename;
+	private String tmplFilename;
 
 	public Mod() {
 		this("Unknown", "unknown version");
@@ -51,6 +54,10 @@ public final class Mod implements Serializable, Comparable<Mod> {
 		return this.version;
 	}
 
+	/**
+	 * 设置上下文路径。
+	 * @param path
+	 */
 	public void setContextPath(String path) {
 		this.contextPath = path;
 		if (!this.contextPath.endsWith("/")) {
@@ -58,6 +65,10 @@ public final class Mod implements Serializable, Comparable<Mod> {
 		}
 	}
 
+	/**
+	 * 返回上下文路径。
+	 * @return
+	 */
 	public String getContextPath() {
 		return this.contextPath;
 	}
@@ -79,11 +90,63 @@ public final class Mod implements Serializable, Comparable<Mod> {
 	}
 
 	/**
-	 * 注册 HTML 页面文件名。
+	 * 注册 HTML 页面。
 	 * @param filename
 	 */
 	public void registerHtmlFile(String filename) {
 		this.htmlFilename = filename;
+	}
+
+	/**
+	 * 是否配置了模板文件。
+	 * @return
+	 */
+	public boolean existTmplFile() {
+		return (null != this.tmplFilename);
+	}
+
+	/**
+	 * 返回模板文件名。
+	 * @return
+	 */
+	public String getTmplFilename() {
+		return this.tmplFilename;
+	}
+
+	/**
+	 * 注册模板页面。
+	 * @param filename
+	 */
+	public void registerTmplFile(String filename) {
+		this.tmplFilename = filename;
+	}
+
+	/**
+	 * 返回 MOD JSON 格式对象。
+	 * @return
+	 */
+	public JSONObject toJSON() {
+		JSONObject json = new JSONObject();
+		try {
+			if (this.existHtmlFile()) {
+				json.put("html", this.contextPath + this.htmlFilename);
+			}
+			else if (this.existTmplFile()) {
+				json.put("tmpl", this.contextPath + this.htmlFilename);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return json;
+	}
+
+	/**
+	 * 返回 JSON 字符串。
+	 * @return
+	 */
+	public String toJSONString() {
+		JSONObject json = this.toJSON();
+		return json.toString();
 	}
 
 	@Override
