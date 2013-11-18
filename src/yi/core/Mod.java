@@ -7,7 +7,10 @@
 package yi.core;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -29,6 +32,12 @@ public final class Mod implements Serializable, Comparable<Mod> {
 	private String htmlFilename;
 	private String tmplFilename;
 
+	private ArrayList<String> scriptFilenames;
+	private ArrayList<String> styleFilenames;
+
+	// 入口函数名
+	private String main;
+
 	public Mod() {
 		this("Unknown", "unknown version");
 	}
@@ -36,6 +45,8 @@ public final class Mod implements Serializable, Comparable<Mod> {
 	public Mod(String name, String version) {
 		this.name = name;
 		this.version = version;
+		this.scriptFilenames = null;
+		this.styleFilenames = null;
 	}
 
 	/**
@@ -122,17 +133,89 @@ public final class Mod implements Serializable, Comparable<Mod> {
 	}
 
 	/**
+	 * 返回脚本文件名列表。
+	 * @return
+	 */
+	public List<String> getScriptFilenameList() {
+		return this.scriptFilenames;
+	}
+
+	/**
+	 * 添加脚本文件。
+	 * @param filename
+	 */
+	public void addScriptFile(String filename) {
+		if (null == this.scriptFilenames) {
+			this.scriptFilenames = new ArrayList<String>(1);
+		}
+
+		this.scriptFilenames.add(filename);
+	}
+
+	/**
+	 * 返回样式文件名列表。
+	 * @return
+	 */
+	public List<String> getStyleFilenameList() {
+		return this.styleFilenames;
+	}
+
+	/**
+	 * 添加样式文件。
+	 * @param filename
+	 */
+	public void addStyleFile(String filename) {
+		if (null == this.styleFilenames) {
+			this.styleFilenames = new ArrayList<String>(1);
+		}
+
+		this.styleFilenames.add(filename);
+	}
+
+	/**
+	 * 设置主函数名。
+	 * @param main
+	 */
+	public void setMainFunction(String main) {
+		this.main = main;
+	}
+
+	/**
 	 * 返回 MOD JSON 格式对象。
 	 * @return
 	 */
 	public JSONObject toJSON() {
 		JSONObject json = new JSONObject();
 		try {
+			// 界面文件
 			if (this.existHtmlFile()) {
 				json.put("html", this.contextPath + this.htmlFilename);
 			}
 			else if (this.existTmplFile()) {
 				json.put("tmpl", this.contextPath + this.htmlFilename);
+			}
+
+			// 脚本
+			if (null != this.scriptFilenames) {
+				JSONArray list = new JSONArray();
+				for (String file : this.scriptFilenames) {
+					list.put(this.contextPath + file);
+				}
+				json.put("scripts", list);
+			}
+
+			// 样式表
+			if (null != this.styleFilenames) {
+				JSONArray list = new JSONArray();
+				for (String file : this.styleFilenames) {
+					list.put(this.contextPath + file);
+				}
+				json.put("styles", list);
+			}
+
+			// 入口函数
+			if (null != this.main) {
+				json.put("main", this.main);
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();

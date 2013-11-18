@@ -32,17 +32,19 @@ Yi.prototype.ready = function(callback) {
 /**
  * 自动配置 CommonJS 。
  */
-Yi.prototype.config = function(relativePath) {
+Yi.prototype.config = function(relativePath, addition) {
+	var alias = (addition !== undefined) ? addition : {};
+	alias["class"] = "utils/class.js";						// 辅助构建 JS 对象关系
+	alias["map"] = "utils/hashmap.js";						// 实用 Map 实现
+	alias["console"] = "core/console/console.js";			// 可视化控制台
+	alias["dialog"] = "plugins/bootbox.min.js";				// 对话框
+	alias["menu-aim"] = "plugins/jquery.menu-aim.js";		// 改进的浮动菜单
+	alias["fetch"] = "plugins/fetch/jquery.fetch.js";		// 片段截取
+	alias["theme-manager"] = "modules/misc/theme-manager.min.js"	// 主题管理器
+
 	common.config({
 		base: relativePath + "lib/",
-		alias: {"class": "utils/class.js"						// 辅助构建 JS 对象关系
-			, "map": "utils/hashmap.js"							// 实用 Map 实现
-			, "console": "core/console/console.js"				// 可视化控制台
-			, "dialog": "plugins/bootbox.min.js"				// 对话框
-			, "menu-aim": "plugins/jquery.menu-aim.js"			// 改进的浮动菜单
-			, "fetch": "plugins/fetch/jquery.fetch.js"			// 片段截取
-			, "theme-manager": "modules/misc/theme-manager.min.js"		// 主题管理器
-		}
+		alias: alias
 	});
 };
 

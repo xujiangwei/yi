@@ -20,19 +20,22 @@
 		$('#btn_run').click(function(e) {
 			var input = $('#input_args');
 			var val = input.val().toString();
-			var data = null;
+			var args = null;
 			if (val.length > 1) {
-				data = JSON.parse(val);
+				args = JSON.parse(val);
 			}
 
-			if (null != data)
-				mod.args = data;
+			// 设置参数
+			mod.args = args;
 
+			// 调试
 			yi.mod.debug("mod", mod);
 		});
+		$('#btn_run').tooltip({container:'body'});
 
 		$('#btn_clear').click(function(e) {
             $('#input_args').val('');
         });
+		$('#btn_clear').tooltip({container:'body'});
 	});
 })();

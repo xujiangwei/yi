@@ -49,8 +49,8 @@
             <input type="text" class="form-control" id="input_args" placeholder="输入模组参数" maxlength="512" />
           </div>
           <div class="col-sm-2">
-            <button id="btn_run" type="button" class="btn btn-default"><span class="glyphicon glyphicon-play"></span></button>
-            <button id="btn_clear" type="button" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span></button>
+            <button id="btn_run" type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="加载调试"><span class="glyphicon glyphicon-play"></span></button>
+            <button id="btn_clear" type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="清空参数"><span class="glyphicon glyphicon-trash"></span></button>
           </div>
         </div>
       </form>
@@ -89,7 +89,7 @@
 <script src="../lib/utils/json2.js" type="text/javascript"></script>
 <script src="../lib/core/yi/yi.js" type="text/javascript"></script>
 <script type="text/javascript">
-(function(){
+(function() {
 	this.mod = <%=mod.toJSONString()%>;
 })();
 </script>

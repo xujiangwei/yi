@@ -11,8 +11,8 @@
  *     tmpl: 'modules/dhc/dhc.tmpl',		// html 模板
  *     styles: ['modules/dhc/dhc1.css', 'modules/dhc/dhc2.css'],
  *     scripts: ['modules/dhc/dhc1.js', 'modules/dhc/dhc2.js'],
- *     main: function(args) {},
- *     args: 'main-args',
+ *     main: function(parent, args) {},
+ *     args: {},
  *     error: function(el) {}
  * }
  *
@@ -28,6 +28,9 @@
 			, args: null
 			, error: function() {}
 		};
+
+		// 容器自己
+		var pself = $(this);
 
 		// 属性与参数
 		var options = $.extend(defaults, options);
@@ -55,7 +58,13 @@
 							var loadedCallback = function() {
 								++counts;
 								if (maxCounts == counts && null != main) {
-									main.call(null, options.args);
+									if (typeof(main) == 'string') {
+										var f = eval(main);
+										f.call(null, pself, options.args);
+									}
+									else {
+										main.call(null, pself, options.args);
+									}
 								}
 							};
 							for (var i = 0, size = options.scripts.length; i < size; ++i) {

@@ -163,6 +163,22 @@ public final class ModReader {
 				if (name.equals("html")) {
 					mod.registerHtmlFile(n.getTextContent());
 				}
+				else if (name.equals("tmpl")) {
+					mod.registerTmplFile(n.getTextContent());
+				}
+				else if (name.equals("script")) {
+					mod.addScriptFile(n.getTextContent());
+				}
+				else if (name.equals("style")) {
+					mod.addStyleFile(n.getTextContent());
+				}
+			}
+
+			// 主函数入口名
+			NodeList tmp = root.getElementsByTagName("main");
+			if (null != tmp && tmp.getLength() > 0) {
+				Node nodeMain = tmp.item(0);
+				mod.setMainFunction(nodeMain.getTextContent());
 			}
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();

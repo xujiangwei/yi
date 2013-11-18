@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Yi Framework
+Copyright (c) 2013,2014 DHC Software Research Department
+-->
+<mod>
+	<!-- 模块名 -->
+	<name>HelloWorld_B</name>
+	<!-- 模块版本 -->
+	<version>1.0.0</version>
+	<!-- 模块描述 -->
+	<description>简单的加载 HTML 片段及脚本的示例</description>
+
+	<!-- 普通文件 -->
+	<files>
+		<html>helloworld.html</html>
+		<script>helloworld2.js</script>
+	</files>
+
+	<!-- 入口方法 -->
+	<!-- 入口方法参数：
+	container {Object} 组件容器 jQuery 对象。
+	args {Object} 组件附件的其他参数 
+	-->
+	<main>demo.helloworld2</main>
+</mod>
