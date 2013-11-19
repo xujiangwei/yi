@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="java.util.List" %>
 <%@page import="yi.core.*" %>
 <%@page import="yi.debugger.*" %>
@@ -9,12 +9,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>模组调试管理器</title>
-<link href="../lib/core/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<%=Stage.importStyles("../lib/") %>
 <link href="assets/css/index.css" rel="stylesheet" />
-<!--[if lt IE 9]>
-  <script src="lib/bootflat/js/html5shiv.js"></script>
-  <script src="lib/bootflat/js/respond.min.js"></script>
-<![endif]-->
 </head>
 
 <body>
@@ -55,18 +51,21 @@
               </tr>
             </thead>
 <%
-	List<Mod> list = DebuggerDirector.getInstance().getModList();
-	for (Mod mod : list) {
+List<Mod> list = DebuggerDirector.getInstance().getModList();
+for (Mod mod : list) {
 %>
               <tr>
                 <td><input type="checkbox" class="checkbox" /></td>
                 <td><%=mod.getName() %></td>
                 <td><%=mod.getVersion() %></td>
                 <td><%=mod.getContextPath() %></td>
-                <td><a id="btn_debug_<%=mod.getName()%>" class="btn btn-sm btn-primary" href="debugger.jsp?name=<%=mod.getName()%>&version=<%=mod.getVersion()%>" target="_blank">调试</a></td>
+                <td>
+                  <a id="btn_debug_<%=mod.getName()%>" class="btn btn-sm btn-primary" href="debugger.jsp?name=<%=mod.getName()%>&version=<%=mod.getVersion()%>" target="_blank">调试</a>
+                  <a id="btn_build_<%=mod.getName()%>" class="btn btn-sm btn-info" href="builder.jsp?name=<%=mod.getName()%>&version=<%=mod.getVersion()%>" target="_blank">构建</a>
+                </td>
               </tr>
 <%
-	}
+}
 %>
             <tbody>
               
@@ -88,13 +87,7 @@
     </div>
   </div>
 </div>
-
-<script src="../lib/core/jquery/jquery-1.10.2.min.js" type="text/javascript"></script>
-<script src="../lib/core/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-<script src="../lib/core/seajs/sea.js" type="text/javascript"></script>
-<script src="../lib/utils/store.js" type="text/javascript"></script>
-<script src="../lib/utils/json2.js" type="text/javascript"></script>
-<script src="../lib/core/yi/yi.js" type="text/javascript"></script>
+<%=Stage.importScripts("../lib/")%>
 <script src="assets/js/index.js" type="text/javascript"></script>
 </body>
 </html>

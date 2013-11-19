@@ -30,6 +30,7 @@ public final class DebuggerDirector extends AbstractLifeCycle {
 
 	private final static DebuggerDirector instance = new DebuggerDirector();
 
+	private String rootPath;
 	private String workPath;
 	private String managedDir = "debugger" + File.separator + "modules" + File.separator;
 
@@ -75,8 +76,21 @@ public final class DebuggerDirector extends AbstractLifeCycle {
 	 * 设置工作路径。
 	 * @param path
 	 */
-	public void setWorkPath(String path) {
+	public void setRootPath(String path) {
+		this.rootPath = path;
 		this.workPath = path + this.managedDir;
+	}
+
+	/**
+	 * 返回工作路径。
+	 * @return
+	 */
+	public String getRootPath() {
+		return this.rootPath;
+	}
+
+	public String getProjectPath() {
+		return this.rootPath + "debugger";
 	}
 
 	@Override

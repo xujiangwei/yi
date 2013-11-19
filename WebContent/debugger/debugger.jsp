@@ -1,9 +1,9 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="yi.core.*" %>
 <%@page import="yi.debugger.*" %>
 <%
-	Debugger debugger = DebuggerPage.newDebugger(request);
-	Mod mod = debugger.getMod();
+Debugger debugger = DebuggerPage.newDebugger(request);
+Mod mod = debugger.getMod();
 %>
 <!doctype html>
 <html lang="zh-CN">
@@ -12,12 +12,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title><%=mod.getName()%> <%=mod.getVersion()%> - 调试器</title>
-<link href="../lib/core/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<%=Stage.importStyles("../lib/") %>
 <link href="assets/css/app-debugger.css" rel="stylesheet" />
-<!--[if lt IE 9]>
-  <script src="lib/bootflat/js/html5shiv.js"></script>
-  <script src="lib/bootflat/js/respond.min.js"></script>
-<![endif]-->
 </head>
 
 <body>
@@ -81,13 +77,7 @@
     </div>
   </div>
 </div>
-
-<script src="../lib/core/jquery/jquery-1.10.2.min.js" type="text/javascript"></script>
-<script src="../lib/core/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-<script src="../lib/core/seajs/sea.js" type="text/javascript"></script>
-<script src="../lib/utils/store.js" type="text/javascript"></script>
-<script src="../lib/utils/json2.js" type="text/javascript"></script>
-<script src="../lib/core/yi/yi.js" type="text/javascript"></script>
+<%=Stage.importScripts("../lib/")%>
 <script type="text/javascript">
 (function() {
 	this.mod = <%=mod.toJSONString()%>;

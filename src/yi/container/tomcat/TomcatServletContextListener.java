@@ -6,6 +6,8 @@
 
 package yi.container.tomcat;
 
+import java.io.File;
+
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
@@ -27,6 +29,9 @@ public class TomcatServletContextListener implements ServletContextListener {
 		// 进行舞台配置
 		StageConfig config = new StageConfig();
 		config.deployPath = event.getServletContext().getRealPath("/");
+		if (!config.deployPath.endsWith("/") && !config.deployPath.endsWith("\\")) {
+			config.deployPath += File.separator;
+		}
 
 		// 配置并启动
 		Stage.getInstance().config(config).start();
