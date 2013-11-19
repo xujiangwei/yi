@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 	<head>
 		<title>select</title>
@@ -33,7 +33,7 @@
 			<option value="SH">shanghai5</option>
 		</select>
 		<!-- 后几种采用input标签-->
-		<input type='hidden' id='sel1' style='width:200px' />
+		<input type='hidden' id='sel1' multiple style='width:200px' />
 		<input type='hidden' id='sel2' style='width:200px' />
 		<input type='hidden' id='sel3' style='width:200px' />
 
@@ -52,19 +52,19 @@
 
 				new createSelect("selectId1");//基本的下拉框
 
-				new createSelect("selectId2", null, "multiple");//创建可选多值的下拉框
+				new createSelect("selectId2", "", {tagName:"select",multiple:"true",width:"500px"});//创建可选多值的下拉框
 
 				new createSelect("selectId3", {placeholder:"select one", allowClear: true});//添加没选择情况下默认显示在下拉框中的文字，并可设置allowClear为true能清除选中内容
 
 				new createSelect("selectId4", {placeholder:"select one"});//添加没选择情况下默认显示在下拉框中的文字，但没有清除选中内容的功能
 
 				new createSelect("selectId5", {minimumInputLength: 2});//最少输入2个字母可自动进行模糊查询
+				new createSelect("sel1", {data:[{id:0,text:'enhancement'},{id:1,text:'bug'},{id:2,text:'duplicate'},{id:3,text:'invalid'},{id:4,text:'wontfix'}]},{tagName:"input",multiple:"false",width:"500px"});//将data传入并组成json格式，并传入参数tagName:input，告诉createSelect方法使用的标签是input标签，并且type='hidden'
 
-				new createSelect("sel1", {data:[{id:0,text:'enhancement'},{id:1,text:'bug'},{id:2,text:'duplicate'},{id:3,text:'invalid'},{id:4,text:'wontfix'}]}, {tagName:"input"});//将data传入并组成json格式，并传入参数tagName:input，告诉createSelect方法使用的标签是input标签，并且type='hidden'
+				new createSelect("sel2", {tags:["red", "green", "blue"]}, {tagName: "input",multiple:"false",width:"400px"});//同上，指定tags的值将tags里的值当做下拉菜单内容
 
-				new createSelect("sel2", {tags:["red", "green", "blue"]}, {tagName: "input"});//同上，指定tags的值将tags里的值当做下拉菜单内容
+				new createSelect("sel3", {placeholder: "select one",allowClear: true, data: [{id: 0, text: 'story'},{id: 1, text: 'bug'},{id: 2, text: 'task'}]},{tagName:"input",multiple:"false",width:"400px"});//综合第3种和第6种示例
 
-				new createSelect("sel3", {placeholder: "select one",allowClear: true,data: [{id: 0, text: 'story'},{id: 1, text: 'bug'},{id: 2, text: 'task'}]},{tagName:"input"});//综合第3种和第6种示例
 			});
 		</script>
 	</body>
