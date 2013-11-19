@@ -90,7 +90,7 @@ public final class DebuggerDirector extends AbstractLifeCycle {
 	}
 
 	public String getProjectPath() {
-		return this.rootPath + "debugger";
+		return this.rootPath + "debugger" + File.separator;
 	}
 
 	@Override
