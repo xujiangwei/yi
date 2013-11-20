@@ -22,18 +22,34 @@ import yi.util.LifeCycleState;
  */
 public final class ModManager extends AbstractLifeCycle {
 
+	private final static ModManager instance = new ModManager();
+
 	private Timer timer;
+	private TimerTask task;
 
 	private String workPath;
 
 	public final String modSubPath = "modules";
 	public final String deploySubPath = "working";
 
+	// Key：MOD 名称
 	private HashMap<String, Mod> mods;
 
-	protected ModManager() {
+	private ModManager() {
 		this.timer = new Timer();
 		this.mods = new HashMap<String, Mod>();
+	}
+
+	public static ModManager getInstance() {
+		return ModManager.instance;
+	}
+
+	/**
+	 * 作废刷新周期。
+	 */
+	public void invalid() {
+		this.timer.cancel();
+		this.timer.schedule(this.task, 1000, 5 * 60 * 1000);
 	}
 
 	protected void setWorkPath(String path) {
@@ -42,21 +58,49 @@ public final class ModManager extends AbstractLifeCycle {
 
 	@Override
 	protected void doStart() {
-		this.timer.schedule(new DaemonTimerTask(), 5000, 5 * 60 * 1000);
+		this.task = new DaemonTimerTask();
+		this.timer.schedule(this.task, 5000, 5 * 60 * 1000);
 	}
 
 	@Override
 	protected void doStop() {
 		this.timer.cancel();
+		this.task = null;
 	}
 
 	protected void addMod(Mod mod) {
-		// TODO 需要附加版本信息
 		this.mods.put(mod.getName(), mod);
 	}
 
 	public boolean hasMod(String modName) {
 		return false;
+	}
+
+	/**
+	 * 部署 MOD 。
+	 */
+	private void deploy(File modFile, String deployPath) {
+		try {
+			String filename = modFile.getName();
+			// 分析文件名
+			int index = filename.lastIndexOf("_");
+			// 模组名
+			String modName = filename.substring(0, index);
+			// 版本号
+			String version = filename.substring(index + 1, filename.length() - 4);
+
+			String path = deployPath + modName + File.separator + version + File.separator;
+			File dir = new File(path);
+			if (!dir.exists())
+				dir.mkdirs();
+
+			Mod mod = ModReader.read(modFile, path);
+			// 添加 Mod 到管理器
+			if (null != mod)
+				addMod(mod);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -119,14 +163,8 @@ public final class ModManager extends AbstractLifeCycle {
 						// 更新修改日期记录
 						this.modFileLastModifieds.put(filename.toString(), modFile.lastModified());
 
-						try {
-							Mod mod = ModReader.read(modFile, this.deployPath);
-							// 添加 Mod 到管理器
-							if (null != mod)
-								addMod(mod);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
+						// 部署文件到部署路径
+						deploy(modFile, this.deployPath);
 					}
 				}
 			}

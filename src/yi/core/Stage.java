@@ -21,11 +21,7 @@ public final class Stage extends AbstractLifeCycle {
 
 	private String deployPath;
 
-	// 模块管理器
-	private ModManager modMgr;
-
 	private Stage() {
-		this.modMgr = new ModManager();
 	}
 
 	public static Stage getInstance() {
@@ -91,7 +87,7 @@ public final class Stage extends AbstractLifeCycle {
 	public Stage config(StageConfig config) {
 		this.deployPath = config.deployPath;
 
-		this.modMgr.setWorkPath(this.deployPath);
+		ModManager.getInstance().setWorkPath(this.deployPath);
 		DebuggerDirector.getInstance().setRootPath(this.deployPath);
 
 		return this;
@@ -99,13 +95,13 @@ public final class Stage extends AbstractLifeCycle {
 
 	@Override
 	protected void doStart() {
-		this.modMgr.start();
+		ModManager.getInstance().start();
 		DebuggerDirector.getInstance().start();
 	}
 
 	@Override
 	protected void doStop() {
 		DebuggerDirector.getInstance().stop();
-		this.modMgr.stop();
+		ModManager.getInstance().stop();
 	}
 }

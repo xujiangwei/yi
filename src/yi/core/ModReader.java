@@ -6,7 +6,6 @@
 
 package yi.core;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -44,11 +43,10 @@ public final class ModReader {
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	public static Mod read(File file, String relesePath) throws FileNotFoundException, IOException {
-		Mod mod = null;
-
+	public static Mod read(File file, String outputDirectory) throws FileNotFoundException, IOException {
 		// 将所有文件解压到发布路径下
 
+		/* 测试用代码：
 		ZipInputStream zis = null;
 		try {
 			zis = new ZipInputStream(new BufferedInputStream(new FileInputStream(file)));
@@ -112,32 +110,34 @@ public final class ModReader {
 			}
 
 			return null;
-		}
+		}*/
 
-		/*
-		ZipInputStream in=new ZipInputStream(new FileInputStream(zipFileName));
-		ZipEntry z;
-		while ((z=in.getNextEntry() )!= null)
-		{
-		System.out.println("unziping "+z.getName());
-		if (z.isDirectory())
-		{
-		String name=z.getName();
-		name=name.substring(0,name.length()-1);
-		File f=new File(outputDirectory+File.separator+name);
-		f.mkdir();
-		System.out.println("mkdir "+outputDirectory+File.separator+name);
+		ZipInputStream zis = new ZipInputStream(new FileInputStream(file));
+		ZipEntry entry;
+		while ((entry = zis.getNextEntry())!= null) {
+			if (entry.isDirectory()) {
+				String name = entry.getName();
+				name = name.substring(0, name.length() - 1);
+				File f = new File(outputDirectory + File.separator + name);
+				f.mkdir();
+			}
+			else {
+				File f = new File(outputDirectory + File.separator + entry.getName());
+				f.createNewFile();
+				BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(f));
+				byte[] b = new byte[1024];
+				int len = -1;
+				while ((len = zis.read(b)) != -1) {
+					bos.write(b, 0, len);
+				}
+				bos.close();
+			}
 		}
-		else{
-		File f=new File(outputDirectory+File.separator+z.getName());
-		f.createNewFile();
-		FileOutputStream out=new FileOutputStream(f);
-		int b;
-		while ((b=in.read()) != -1)
-		out.write(b);
-		out.close();
-		} 
-		*/
+		zis.close();
+
+		// 尝试读取 mod.xml
+		File configFile = new File(outputDirectory + MOD_CONFIG_FILE);
+		Mod mod = readConfig(configFile);
 		return mod;
 	}
 

@@ -14,6 +14,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
 import yi.core.Mod;
+import yi.core.ModManager;
 import yi.core.ModReader;
 import yi.core.ModWriter;
 import yi.util.AbstractLifeCycle;
@@ -44,6 +45,9 @@ public final class Builder extends AbstractLifeCycle {
 
 	private Mod mod;
 
+	// 是否使用扁平路径
+	private boolean flatBase = true;
+
 	public Builder(String rootPath, String projectPath, String subDir) {
 		this.rootPath = rootPath;
 		this.projectPath = projectPath;
@@ -73,12 +77,26 @@ public final class Builder extends AbstractLifeCycle {
 	 * 打包。
 	 */
 	protected File pack() throws IOException {
-		String temp = this.tempPath + "yi.tmp";
+		String temp = this.tempPath + "mod_" + this.mod.getName() + ".tmp";
 		File destFile = new File(temp);
 		if (destFile.exists() && destFile.isFile())
 			destFile.delete();
 
-		ModWriter.write(this.mod, this.projectPath + this.subDir, this.subDir.toString(), destFile);
+		// 压缩包基础路径
+		String base = null;
+		if (this.flatBase) {
+			base = "";
+		}
+		else {
+			base = this.subDir.toString();
+			if (base.endsWith("/") || base.endsWith("\\")) {
+				base = base.substring(0, base.length() - 1);
+			}
+			int index = base.indexOf("/");
+			base = base.substring(index + 1);
+		}
+
+		ModWriter.write(this.mod, this.projectPath + this.subDir, base, destFile);
 		return destFile;
 	}
 
@@ -118,6 +136,9 @@ public final class Builder extends AbstractLifeCycle {
 		outC.close();
 		in.close();
 		out.close();
+
+		// 删除源文件
+		src.delete();
 	}
 
 	@Override
@@ -138,6 +159,9 @@ public final class Builder extends AbstractLifeCycle {
 
 					// 部署
 					deploy(file);
+
+					// 作废管理器任务，以便刷新
+					ModManager.getInstance().invalid();
 				} catch (Exception e) {
 					e.printStackTrace();
 				} finally {
@@ -151,6 +175,6 @@ public final class Builder extends AbstractLifeCycle {
 
 	@Override
 	protected void doStop() {
-		
+		// Nothing
 	}
 }

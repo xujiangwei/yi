@@ -40,6 +40,18 @@ public class ModServlet extends AbstractHttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		String pathInfo = request.getPathInfo();
+		String[] info = pathInfo.split("/");
+		if (info.length >= 3) {
+			String modName = info[1];
+			String version = info[2];
+		}
+		else {
+			this.wrapResponse(response, HttpServletResponse.SC_BAD_REQUEST);
+		}
+
+//		String modName = pathInfo.substring(1, pathInfo.length());
+
 //		String pageName = request.getParameter(PageName);
 //		if (null != pageName) {
 //			Page page = Stage.getInstance().getPageStage().getPage(pageName);
