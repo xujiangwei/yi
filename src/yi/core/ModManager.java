@@ -32,11 +32,14 @@ public final class ModManager extends AbstractLifeCycle {
 	public final String modSubPath = "modules";
 	public final String deploySubPath = "working";
 
+	// MOD 文件修改时间记录
+	private HashMap<String, Long> modFileLastModifieds;
+
 	// Key：MOD 名称，Value：版本与 MOD 实例映射
 	private HashMap<String, HashMap<String, Mod>> mods;
 
 	private ModManager() {
-		this.timer = new Timer();
+		this.modFileLastModifieds = new HashMap<String, Long>(8);
 		this.mods = new HashMap<String, HashMap<String, Mod>>();
 	}
 
@@ -65,7 +68,10 @@ public final class ModManager extends AbstractLifeCycle {
 	 * 作废刷新周期。
 	 */
 	public void invalid() {
-		this.timer.cancel();
+		if (null != this.timer)
+			this.timer.cancel();
+		this.timer = new Timer();
+		this.task = new DaemonTimerTask();
 		this.timer.schedule(this.task, 1000, 5 * 60 * 1000);
 	}
 
@@ -76,13 +82,19 @@ public final class ModManager extends AbstractLifeCycle {
 	@Override
 	protected void doStart() {
 		this.task = new DaemonTimerTask();
+		if (null == this.timer) {
+			this.timer = new Timer();
+		}
 		this.timer.schedule(this.task, 1000, 5 * 60 * 1000);
 	}
 
 	@Override
 	protected void doStop() {
-		this.timer.cancel();
+		if (null != this.timer) {
+			this.timer.cancel();
+		}
 		this.task = null;
+		this.timer = null;
 	}
 
 	protected void addMod(Mod mod) {
@@ -140,8 +152,6 @@ public final class ModManager extends AbstractLifeCycle {
 		private String modPath;
 		private String deployPath;
 
-		private HashMap<String, Long> modFileLastModifieds;
-
 		protected DaemonTimerTask() {
 			this.filter = new FilenameFilter() {
 				@Override
@@ -162,8 +172,6 @@ public final class ModManager extends AbstractLifeCycle {
 				dir.delete();
 				dir.mkdir();
 			}
-
-			this.modFileLastModifieds = new HashMap<String, Long>(8);
 		}
 
 		@Override
@@ -178,9 +186,9 @@ public final class ModManager extends AbstractLifeCycle {
 				if (null != list && list.length > 0) {
 					for (String filename : list) {
 						File modFile = new File(this.modPath + filename);
-						if (this.modFileLastModifieds.containsKey(filename)) {
+						if (modFileLastModifieds.containsKey(filename)) {
 							// 判断文件修改时间
-							Long lastModified = this.modFileLastModifieds.get(filename);
+							Long lastModified = modFileLastModifieds.get(filename);
 							if (lastModified.longValue() == modFile.lastModified()) {
 								// 修改时间相同，跳过该文件
 								continue;
@@ -188,7 +196,7 @@ public final class ModManager extends AbstractLifeCycle {
 						}
 
 						// 更新修改日期记录
-						this.modFileLastModifieds.put(filename.toString(), modFile.lastModified());
+						modFileLastModifieds.put(filename.toString(), modFile.lastModified());
 
 						// 部署文件到部署路径
 						deploy(modFile, this.deployPath);
