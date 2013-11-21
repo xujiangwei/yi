@@ -7,10 +7,6 @@
 <title>Yi - 动态模块演示</title>
 <link href="../lib/core/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 <link href="assets/app-mod.css" rel="stylesheet" />
-<!--[if lt IE 9]>
-  <script src="lib/bootflat/js/html5shiv.js"></script>
-  <script src="lib/bootflat/js/respond.min.js"></script>
-<![endif]-->
 </head>
 
 <body>
@@ -37,10 +33,11 @@
     <div class="col-md-6">
       <div class="panel panel-primary">
         <div class="panel-heading">
-          <div class="panel-title">Hello World 1</div>
+          <span class="panel-title">Hello World A 演示</span>
+          <span class="pull-right"><button id="btn_helloworld_1" class="btn btn-sm btn-default">加载</button></span>
         </div>
         <div class="panel-body">
-          <div id="helloworld_1" data-mod="HelloWorld_A"></div>
+          <div id="helloworld_1" data-mod="HelloWorld_A" data-mod-ver="1.0.0"></div>
         </div>
       </div>
     </div>
@@ -52,7 +49,7 @@
   <div class="row">
     <div class="col-md-12">
       <div>
-        <p class="text-muted credit">&copy; 2013 东华软件</p>
+        <p class="text-muted credit">&copy; 2013,2014 东华软件</p>
       </div>
     </div>
   </div>

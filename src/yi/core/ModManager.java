@@ -32,16 +32,33 @@ public final class ModManager extends AbstractLifeCycle {
 	public final String modSubPath = "modules";
 	public final String deploySubPath = "working";
 
-	// Key：MOD 名称
-	private HashMap<String, Mod> mods;
+	// Key：MOD 名称，Value：版本与 MOD 实例映射
+	private HashMap<String, HashMap<String, Mod>> mods;
 
 	private ModManager() {
 		this.timer = new Timer();
-		this.mods = new HashMap<String, Mod>();
+		this.mods = new HashMap<String, HashMap<String, Mod>>();
 	}
 
 	public static ModManager getInstance() {
 		return ModManager.instance;
+	}
+
+	/**
+	 * 返回指定名称和版本的 MOD 。
+	 * @param name
+	 * @param version
+	 * @return
+	 */
+	public Mod getMod(String name, String version) {
+		synchronized (this.mods) {
+			HashMap<String, Mod> map = this.mods.get(name);
+			if (null != map) {
+				return map.get(version);
+			}
+
+			return null;
+		}
 	}
 
 	/**
@@ -59,7 +76,7 @@ public final class ModManager extends AbstractLifeCycle {
 	@Override
 	protected void doStart() {
 		this.task = new DaemonTimerTask();
-		this.timer.schedule(this.task, 5000, 5 * 60 * 1000);
+		this.timer.schedule(this.task, 1000, 5 * 60 * 1000);
 	}
 
 	@Override
@@ -69,11 +86,17 @@ public final class ModManager extends AbstractLifeCycle {
 	}
 
 	protected void addMod(Mod mod) {
-		this.mods.put(mod.getName(), mod);
-	}
-
-	public boolean hasMod(String modName) {
-		return false;
+		synchronized (this.mods) {
+			HashMap<String, Mod> map = this.mods.get(mod.getName());
+			if (null != map) {
+				map.put(mod.getVersion(), mod);
+			}
+			else {
+				map = new HashMap<String, Mod>();
+				map.put(mod.getVersion(), mod);
+				this.mods.put(mod.getName(), map);
+			}
+		}
 	}
 
 	/**
@@ -95,9 +118,13 @@ public final class ModManager extends AbstractLifeCycle {
 				dir.mkdirs();
 
 			Mod mod = ModReader.read(modFile, path);
-			// 添加 Mod 到管理器
-			if (null != mod)
-				addMod(mod);
+			if (null != mod) {
+				// 设置上下文
+				mod.setContextPath(this.deploySubPath + "/" + mod.getName() + "/" + mod.getVersion());
+
+				// 添加 Mod 到管理器
+				this.addMod(mod);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -8,6 +8,8 @@ Copyright (c) 2013,2014 DHC Software Research Department
 	<name>HelloWorld_A</name>
 	<!-- 模块版本 -->
 	<version>1.0.0</version>
+	<!-- 模块描述 -->
+	<description>简单的加载 HTML 片段示例</description>
 
 	<!-- 普通文件 -->
 	<files>

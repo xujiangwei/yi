@@ -192,7 +192,7 @@ public final class Mod implements Serializable, Comparable<Mod> {
 				json.put("html", this.contextPath + this.htmlFilename);
 			}
 			else if (this.existTmplFile()) {
-				json.put("tmpl", this.contextPath + this.htmlFilename);
+				json.put("tmpl", this.contextPath + this.tmplFilename);
 			}
 
 			// 脚本
@@ -230,6 +230,56 @@ public final class Mod implements Serializable, Comparable<Mod> {
 	public String toJSONString() {
 		JSONObject json = this.toJSON();
 		return json.toString();
+	}
+
+	/**
+	 * 返回加入指定 ROOT 上下文路径的 MOD 的 JSON 信息。
+	 * @param root
+	 * @return
+	 */
+	public JSONObject toJSONWithRoot(String root) {
+		String ap = root.toString();
+		if (!ap.endsWith("/"))
+			ap += "/";
+		ap += this.contextPath;
+
+		JSONObject json = this.toJSON();
+		try {
+			// html
+			if (json.has("html")) {
+				json.remove("html");
+				json.put("html", ap + this.htmlFilename);
+			}
+			else if (json.has("tmpl")) {
+				json.remove("tmpl");
+				json.put("tmpl", ap + this.tmplFilename);
+			}
+
+			// 脚本
+			if (null != this.scriptFilenames) {
+				json.remove("scripts");
+
+				JSONArray list = new JSONArray();
+				for (String file : this.scriptFilenames) {
+					list.put(ap + file);
+				}
+				json.put("scripts", list);
+			}
+
+			// 样式表
+			if (null != this.styleFilenames) {
+				json.remove("styles");
+
+				JSONArray list = new JSONArray();
+				for (String file : this.styleFilenames) {
+					list.put(ap + file);
+				}
+				json.put("styles", list);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return json;
 	}
 
 	@Override

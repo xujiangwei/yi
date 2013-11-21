@@ -17,27 +17,26 @@ import yi.core.Mod;
 import yi.core.ModManager;
 
 /**
- * 查询 MOD 信息。
- * 
- * 格式1：mod/${mod name}/${mod version}
+ * MOD 加载器。
  * 
  * @author Jiangwei Xu
+ *
  */
 @WebServlet(
-	name = "mod",
-	urlPatterns = { "/mod", "/mod/*" },
+	name = "modloader",
+	urlPatterns = { "/modloader", "/modloader/*" },
 	loadOnStartup = 1
 )
-public class ModServlet extends AbstractHttpServlet {
+public class ModLoaderServlet extends AbstractHttpServlet {
 
-	private static final long serialVersionUID = 1665855495027080547L;
+	private static final long serialVersionUID = 8769885479938978845L;
 
-	public ModServlet() {
+	public ModLoaderServlet() {
 		super();
 	}
 
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String pathInfo = request.getPathInfo();
 		String[] info = pathInfo.split("/");
@@ -46,7 +45,7 @@ public class ModServlet extends AbstractHttpServlet {
 			String version = info[2];
 			Mod mod = ModManager.getInstance().getMod(modName, version);
 			if (null != mod) {
-				this.wrapResponseWithOk(response, mod.toJSON());
+				this.wrapResponseWithOk(response, mod.toJSONWithRoot(request.getContextPath()));
 			}
 			else {
 				this.wrapResponse(response, HttpServletResponse.SC_NOT_FOUND);

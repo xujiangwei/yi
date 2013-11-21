@@ -12,6 +12,7 @@ if (global.yi) {
 }
 
 var Yi = function() {
+	this.relativePath = "";
 	this.themeManager = null;
 	this.mod = new ModManager();
 
@@ -44,17 +45,22 @@ Yi.prototype.ready = function(callback) {
 /**
  * 自动配置 CommonJS 。
  */
-Yi.prototype.config = function(relativePath) {
+Yi.prototype.config = function(relativePath, addition) {
+	this.relativePath = relativePath;
+	this.mod.context = relativePath;
+
+	var alias = (addition !== undefined) ? addition : {};
+	alias["class"] = "utils/class.js";						// 辅助构建 JS 对象关系
+	alias["map"] = "utils/hashmap.js";						// 实用 Map 实现
+	alias["console"] = "core/console/console.js";			// 可视化控制台
+	alias["dialog"] = "plugins/bootbox.min.js";				// 对话框
+	alias["menu-aim"] = "plugins/jquery.menu-aim.js";		// 改进的浮动菜单
+	alias["fetch"] = "plugins/fetch/jquery.fetch.js";		// 片段截取
+	alias["theme-manager"] = "modules/misc/theme-manager.min.js"	// 主题管理器
+
 	common.config({
 		base: relativePath + "lib/",
-		alias: {"class": "utils/class.js"						// 辅助构建 JS 对象关系
-			, "map": "utils/hashmap.js"							// 实用 Map 实现
-			, "console": "core/console/console.js"				// 可视化控制台
-			, "dialog": "plugins/bootbox.min.js"				// 对话框
-			, "menu-aim": "plugins/jquery.menu-aim.js"			// 改进的浮动菜单
-			, "fetch": "plugins/fetch/jquery.fetch.js"			// 片段截取
-			, "theme-manager": "modules/misc/theme-manager.min.js"		// 主题管理器
-		}
+		alias: alias
 	});
 };
 
@@ -128,14 +134,45 @@ Yi.prototype.dialog = function(options) {
  * ModManager
  */
 var ModManager = function() {
-	
+	this.context = "";
 };
 
 /**
- * 激活 Mod 。 
+ * 加载 Mod 。 
+ * @param container MOD 的容器
+ * @param args MOD 参数
  */
-ModManager.prototype.load = function(name, args) {
-	
+ModManager.prototype.load = function(container, args) {
+	var target = container;
+	if (typeof(target) == 'string') {
+		target = $('#' + container);
+	}
+
+	// 获取 MOD 名
+	var modName = target.data('mod');
+	if (modName === undefined) {
+		console.log('[Yi#Mod] Can not find "data-mod" attribute value.');
+		return;
+	}
+	var version = target.data('modVer');
+	if (version === undefined) {
+		console.log('[Yi#Mod] Can not find "data-mod-ver" attribute value.');
+		return;
+	}
+
+	// 获取 MOD 加载数据
+	var url = this.context + "modloader" + "/" + modName + "/" + version;
+	$.post(url, function(data, textStatus, jqXHR) {
+		// 处理返回数据
+		if (args !== undefined) {
+			data["args"] = args;
+		}
+		// fetch
+		target.fetch(data);
+	}, 'json')
+	.fail(function() {
+		console.log('[Yi#Mod] Failed requests "' + url + '".');
+	});
 };
 
 /**
@@ -145,20 +182,6 @@ ModManager.prototype.debug = function(containerId, mod) {
 	var container = $('#' + containerId);
 	container.fetch(mod);
 };
-
-/*
- * 启用 Mod 。
- */
-/*Yi.prototype.activeMod = function(containerId, args) {
-	var container = $('#' + containerId);
-	var modName = container.data('mod');
-
-	// 以下为技术验证测试代码
-	container.fetch({
-		tmpl: 'mod/helloworld/helloworld.tmpl'
-		, args: args
-	});
-};*/
 
 // Create yi instance
 global.yi = new Yi();

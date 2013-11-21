@@ -1,5 +1,6 @@
 
 var Yi = function() {
+	this.relativePath = "";
 	this.themeManager = null;
 	this.mod = new ModManager();
 
@@ -33,6 +34,9 @@ Yi.prototype.ready = function(callback) {
  * 自动配置 CommonJS 。
  */
 Yi.prototype.config = function(relativePath, addition) {
+	this.relativePath = relativePath;
+	this.mod.context = relativePath;
+
 	var alias = (addition !== undefined) ? addition : {};
 	alias["class"] = "utils/class.js";						// 辅助构建 JS 对象关系
 	alias["map"] = "utils/hashmap.js";						// 实用 Map 实现

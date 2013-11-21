@@ -39,21 +39,6 @@ public class Debugger {
 		if (null == this.mod) {
 			this.mod = new Mod();
 		}
-
-		/* 以下为测试代码 - 20131111
-		String realPath = request.getSession().getServletContext().getRealPath("/");
-		String modPath = (new StringBuilder(realPath)).append("debugger")
-				.append(File.separator).append(path).append(File.separator).toString();
-		String filePath = modPath + MOD_CONFIG_FILE;
-		File file = new File(filePath);
-		try {
-			this.mod = ModReader.readConfig(file);
-		} catch (IOException e) {
-			e.printStackTrace();
-			this.mod = new Mod();
-		}
-		this.mod.setContextPath(path);
-		*/
 	}
 
 	/**

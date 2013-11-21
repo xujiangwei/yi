@@ -2,14 +2,45 @@
  * ModManager
  */
 var ModManager = function() {
-	
+	this.context = "";
 };
 
 /**
- * 激活 Mod 。 
+ * 加载 Mod 。 
+ * @param container MOD 的容器
+ * @param args MOD 参数
  */
-ModManager.prototype.load = function(name, args) {
-	
+ModManager.prototype.load = function(container, args) {
+	var target = container;
+	if (typeof(target) == 'string') {
+		target = $('#' + container);
+	}
+
+	// 获取 MOD 名
+	var modName = target.data('mod');
+	if (modName === undefined) {
+		console.log('[Yi#Mod] Can not find "data-mod" attribute value.');
+		return;
+	}
+	var version = target.data('modVer');
+	if (version === undefined) {
+		console.log('[Yi#Mod] Can not find "data-mod-ver" attribute value.');
+		return;
+	}
+
+	// 获取 MOD 加载数据
+	var url = this.context + "modloader" + "/" + modName + "/" + version;
+	$.post(url, function(data, textStatus, jqXHR) {
+		// 处理返回数据
+		if (args !== undefined) {
+			data["args"] = args;
+		}
+		// fetch
+		target.fetch(data);
+	}, 'json')
+	.fail(function() {
+		console.log('[Yi#Mod] Failed requests "' + url + '".');
+	});
 };
 
 /**
@@ -19,17 +50,3 @@ ModManager.prototype.debug = function(containerId, mod) {
 	var container = $('#' + containerId);
 	container.fetch(mod);
 };
-
-/*
- * 启用 Mod 。
- */
-/*Yi.prototype.activeMod = function(containerId, args) {
-	var container = $('#' + containerId);
-	var modName = container.data('mod');
-
-	// 以下为技术验证测试代码
-	container.fetch({
-		tmpl: 'mod/helloworld/helloworld.tmpl'
-		, args: args
-	});
-};*/

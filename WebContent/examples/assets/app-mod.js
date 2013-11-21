@@ -9,7 +9,9 @@
 	yi.config("../");
 
 	yi.ready(function() {
-		// 激活 helloworld_1
-		yi.activeMod('helloworld_1', {'name':'徐江威', 'address':'海淀区知春路'});
+		// helloworld_1
+		$('#btn_helloworld_1').click(function(e) {
+			yi.mod.load("helloworld_1");
+		});
 	});
 })();

@@ -1,14 +1,7 @@
 html, body {
   height: 100%;
   min-height: 100%;
-}
-
-body {
   font-family: "微软雅黑", "宋体", Verdana, Geneva, sans-serif;
-}
-
-img {
-  font-size: 12px;
 }
 
 /* 页脚 */
@@ -22,6 +15,10 @@ img {
   margin: 10px 0;
 }
 
+.panel-heading button {
+  margin-top: -3px !important;
+}
+
 #helloworld_1 {
-  height: 200px;
+  min-height: 200px;
 }
