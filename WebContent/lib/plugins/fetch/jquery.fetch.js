@@ -13,6 +13,7 @@
  *     scripts: ['modules/dhc/dhc1.js', 'modules/dhc/dhc2.js'],
  *     main: function(parent, args) {},
  *     args: {},
+ *     context: "../",						// 当前站点上下文路径
  *     error: function(el) {}
  * }
  *
@@ -26,6 +27,7 @@
 			, scripts: []
 			, main: null
 			, args: null
+			, context: null
 			, error: function() {}
 		};
 
@@ -36,16 +38,16 @@
 		var options = $.extend(defaults, options);
 
 		this.each(function() {
-			if (options['html'] !== undefined && options['html'] != null) {
-				// 有界面的片段
-				var self = $(this);
-				// 加载样式表文件
-				if (options.styles.length > 0) {
-					for (var i = 0, size = options.styles.length; i < size; ++i) {
-						loadLink(options.styles[i]);
-					}
+			var self = $(this);
+			// 加载样式表文件
+			if (options.styles.length > 0) {
+				for (var i = 0, size = options.styles.length; i < size; ++i) {
+					loadLink(options.styles[i]);
 				}
+			}
 
+			// 判断界面片段
+			if (options['html'] !== undefined && options['html'] != null) {
 				// 加载 HTML 片段
 				self.load(options['html'], function(response, status, xhr) {
 					if (status == 'success') {
@@ -55,6 +57,7 @@
 							var counts = 0;
 							var maxCounts = options.scripts.length;
 							var main = options.main;
+							// 加载完成回调
 							var loadedCallback = function() {
 								++counts;
 								if (maxCounts == counts && null != main) {
@@ -86,12 +89,62 @@
 					, cache: false
 				})
 				.done(function(data) {
-					alert(tmpl(data, options.args));
+					var tmplArgs = (null != options.args) ? options.args : {};
+					if (null != options.context) {
+						// 将 options 设置里的 context 作为模板参数传入模板
+						tmplArgs["context"] = options.context;
+					}
+					var content = tmpl(data, tmplArgs);
+					if (typeof(content) == 'function') {
+						content = content();
+					}
+					// 替换 HTML 代码
+					self.html(content);
+					// 加载脚本
+					if (options.scripts.length > 0) {
+						var counts = 0;
+						var maxCounts = options.scripts.length;
+						var main = options.main;
+						// 加载完成回调
+						var loadedCallback = function() {
+							++counts;
+							if (maxCounts == counts && null != main) {
+								if (typeof(main) == 'string') {
+									var f = eval(main);
+									f.call(null, pself, options.args);
+								}
+								else {
+									main.call(null, pself, options.args);
+								}
+							}
+						};
+						for (var i = 0, size = options.scripts.length; i < size; ++i) {
+							loadScript(options.scripts[i], loadedCallback);
+						}
+					}
 				});
 			}
 			else if (options.scripts.length > 0) {
-				// 无界面、有脚本的片段
-				alert('fetch TODO');
+				// 无界面、有脚本
+				var counts = 0;
+				var maxCounts = options.scripts.length;
+				var main = options.main;
+				// 加载完成回调
+				var loadedCallback = function() {
+					++counts;
+					if (maxCounts == counts && null != main) {
+						if (typeof(main) == 'string') {
+							var f = eval(main);
+							f.call(null, pself, options.args);
+						}
+						else {
+							main.call(null, pself, options.args);
+						}
+					}
+				};
+				for (var i = 0, size = options.scripts.length; i < size; ++i) {
+					loadScript(options.scripts[i], loadedCallback);
+				}
 			}
 			else {
 				options.error.call(null, self);

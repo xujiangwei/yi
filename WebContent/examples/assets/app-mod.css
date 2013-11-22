@@ -4,6 +4,10 @@ html, body {
   font-family: "微软雅黑", "宋体", Verdana, Geneva, sans-serif;
 }
 
+h1, h2, h3, h4, h5, h6 {
+  font-family: "微软雅黑", "宋体", Verdana, Geneva, sans-serif;
+}
+
 /* 页脚 */
 .page-wrapper-footer {
   height: 40px;
@@ -19,6 +23,6 @@ html, body {
   margin-top: -3px !important;
 }
 
-#helloworld_1 {
+.panel-body > div {
   min-height: 200px;
 }

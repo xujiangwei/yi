@@ -18,8 +18,9 @@ builder.start();
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title><%=mod.getName()%> <%=mod.getVersion()%> - 构建器</title>
+<title>构建器 - <%=mod.getName()%> <%=mod.getVersion()%></title>
 <%=Stage.importStyles("../lib/") %>
+<link href="../lib/core/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 <link href="assets/css/app-builder.css" rel="stylesheet" />
 </head>
 
@@ -43,10 +44,13 @@ builder.start();
 </header>
 
 <div class="container">
-  <div class=""></div>
-  <div class="row">
-    <div class="col-md-12">
+  <div class="jumbotron">
+    <h4 class="text-center">当前构建模组：<%=mod.getName()%> <%=mod.getVersion()%></h4>
+    <div class="progress progress-striped active">
+      <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%">
+      </div>
     </div>
+    <h5 id="progress_info" class="text-center text-info">已启动构建线程</h5>
   </div>
 </div>
 
@@ -61,11 +65,6 @@ builder.start();
   </div>
 </div>
 <%=Stage.importScripts("../lib/")%>
-<script type="text/javascript">
-(function() {
-	
-})();
-</script>
 <script src="assets/js/app-builder.js" type="text/javascript"></script>
 </body>
 </html>

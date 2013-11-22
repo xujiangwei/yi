@@ -28,6 +28,7 @@ ModManager.prototype.load = function(container, args) {
 		return;
 	}
 
+	var context = this.context;
 	// 获取 MOD 加载数据
 	var url = this.context + "modloader" + "/" + modName + "/" + version;
 	$.post(url, function(data, textStatus, jqXHR) {
@@ -35,6 +36,8 @@ ModManager.prototype.load = function(container, args) {
 		if (args !== undefined) {
 			data["args"] = args;
 		}
+		// 设置上下文
+		data["context"] = context;
 		// fetch
 		target.fetch(data);
 	}, 'json')
@@ -48,5 +51,6 @@ ModManager.prototype.load = function(container, args) {
  */
 ModManager.prototype.debug = function(containerId, mod) {
 	var container = $('#' + containerId);
+	mod["context"] = this.context;
 	container.fetch(mod);
 };
