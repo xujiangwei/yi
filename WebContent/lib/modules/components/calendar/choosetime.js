@@ -1,9 +1,12 @@
 /**
  * 
  * @author Xiaoyin Song
- * 
+ * v 1.0.0
  * 所有choosetime.XXXX的父类，实现对所有子类的及子类实例化对象的管理。
  * 此类并不可以实例化
+ * 
+ * 
+ *    为子类提供统一的现实和隐藏方法，还有一些接口
  * 
  */
 define(function(require, exports, module) {
@@ -60,11 +63,26 @@ define(function(require, exports, module) {
 	        },		
 	        sign:true
 	    },
+		hideAlert:function(){},
+		showAlert:function(text){},
+		timeSliderHide:function(){},
+		clearInput:function(){},
+		datepickerHide:function(){},
+		/**
+		 * 隐藏日历
+		 */
+		calendarHide:function(){
+			this.calendarGroupObj.hide();
+		},
+		documentClick:function(){
+			this.hide();	
+		},
 		hide:function(){
 			
 			$(document).off("click",this._documentClick);
 			this.elem.style.display="none";
 			this.flag=true;
+			this.datepickerHide();
 			this.options.onHide(this);
 		},
 		inputElemClick:function(e){
@@ -102,6 +120,13 @@ define(function(require, exports, module) {
 				 
 				this.flag=true;
 			}
+		},
+		stopPropagation:function(e){
+	        if (e && e.stopPropagation ){ 
+	            e.stopPropagation();
+	        }else{
+	           window.event.cancelBubble = true;
+	        }
 		},
 	    initialize : function(options) { },
 	    setOptionsValue : function(options) {

@@ -2,6 +2,9 @@
  * 时间选择空间
  * @author Xiaoyin Song
  * 
+ * v 1.0.0
+ * 
+ * 
  * 说明：
  *     SliderDot类为拖动的控制点，
  *     TimeSlider为时间拖动轴，
@@ -139,8 +142,8 @@ define(function(require, exports, module) {
 			this.textElem.style.fontSize=TimeSliderConfig.fontSize;
 			this.textElem.style.color=TimeSliderConfig.fontColor;
 			this.textElem.style.left=this.boundaryText+"px";
-			this.textElem.style.backgroundColor='#F7F7F7';
-			this.textElem.style.top=(TimeSliderConfig.padding+TimeSliderConfig.completeHeight+10)+"px";
+			//this.textElem.style.backgroundColor='#F7F7F7';
+			this.textElem.style.top=(TimeSliderConfig.padding+TimeSliderConfig.completeHeight+17)+"px";
 			if(this.env.ie6){
 				this.textElem.style.width="27px";
 			}
@@ -333,7 +336,7 @@ define(function(require, exports, module) {
 			this.elem.style.marginLeft=TimeSliderConfig["margin-left"]+'px';
 			this.elem.style.marginRight=TimeSliderConfig["margin-right"]+'px';
 			var div=document.createElement("div");
-			div.style.margin="1px";
+			div.style.margin="0px 1px 1px 1px";
 			div.innerHTML='<p class="text-muted credit">起始时间，分钟部分：</p>';
 			this.elem.appendChild(div);
 			this.timeSliderObj1=new this.options.TimeSlider({
@@ -346,7 +349,8 @@ define(function(require, exports, module) {
 				   Container:this.elem
 				});
 			var div=document.createElement("div");
-			div.style.margin="3px";
+			div.style.margin="19px 1px 1px 1px";
+	
 			div.innerHTML='<p class="text-muted credit">结束时间，分钟部分：</p>';
 			this.elem.appendChild(div);
 			this.timeSliderObj2=new this.options.TimeSlider({
@@ -365,17 +369,17 @@ define(function(require, exports, module) {
 			this.setOptionsValue();
 			this.setOptions(options);
         	if(this.options.caleNum==3){
-        		TimeSliderConfig.uitlWidth=10;
-        		TimeSliderConfig["margin-left"]=14;
-        		TimeSliderConfig["margin-right"]=13;
+        		TimeSliderConfig.uitlWidth=13;
+        		TimeSliderConfig["margin-left"]=23;
+        		TimeSliderConfig["margin-right"]=23;
         	}else if(this.options.caleNum==2){
-        		TimeSliderConfig.uitlWidth=7;
-        		TimeSliderConfig["margin-left"]=1;
-        		TimeSliderConfig["margin-right"]=0;
+        		TimeSliderConfig.uitlWidth=9;
+        		TimeSliderConfig["margin-left"]=10;
+        		TimeSliderConfig["margin-right"]=9;
         	}else{
         		TimeSliderConfig.uitlWidth=7;
-        		TimeSliderConfig["margin-left"]=1;
-        		TimeSliderConfig["margin-right"]=0;
+        		TimeSliderConfig["margin-left"]=9;
+        		TimeSliderConfig["margin-right"]=8;
         	}
 			this.createElem();
 			this.eventElem();

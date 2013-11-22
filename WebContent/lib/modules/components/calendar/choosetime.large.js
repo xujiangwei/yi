@@ -1,7 +1,9 @@
 /**
  * 时间选择控件，包含日立及时间轴
  * @author Xiaoyin Song
- *
+ * v 1.0.0
+ * 
+ * 
  *使用说明：
  *	    var ChooseTimeLarge	=require('modules/components/calendar/choosetime.large.js');
  *	    new ChooseTimeLarge({
@@ -15,11 +17,17 @@
 define(function(require, exports, module) {
 	require("modules/components/calendar/calendar.css");
 	var BaseClass=require("modules/components/calendar/choosetime.js");
-
-	var ChooseTime=Class(BaseClass,{	
+   
+	var ChooseTime=Class(BaseClass,{
+		/**
+		 * 销毁模型对象
+		 */
 		destroyModle : function() {
 			delete this.Modle;
 		},
+		/**
+		 * 模型对象，只初始化一次
+		 */
 		Modle : {
 			modle : ['<table border="0" cellspacing="0" cellpadding="0">',
                        '<tr>',
@@ -40,7 +48,7 @@ define(function(require, exports, module) {
                           '</div><form class="form-inline">',
                           '<table border="0" cellspacing="0" cellpadding="0" style="border-spacing: 2px;border-color: gray;" >',
                             '<tr>',
-                               '<td width="109px" style="font-size:12px;"><p class="text-muted credit">起始时间：</p></td>',
+                               '<td width="109px" style="font-size:12px;"><p class="text-muted credit" style="padding-top:21px">起始时间：</p></td>',
                                '<td></td>',
                                '<td width="68px" style="font-size:12px;"></td>',
                             '</tr>',   
@@ -50,7 +58,7 @@ define(function(require, exports, module) {
                                 '<td width="68px"><input   class="form-control"   type="text" id="startMinute@{id}" value=""/></td>',          
                              '</tr>',
                              '<tr>',
-                             '<td width="109px" style="font-size:12px;"><p class="text-muted credit">结束时间：</p></td>',
+                             '<td width="109px" style="font-size:12px;"><p class="text-muted credit" style="padding-top:10px">结束时间：</p></td>',
                              '<td></td>',
                              '<td width="68px" style="font-size:12px;"></td>',
                            '</tr>', 
@@ -60,7 +68,7 @@ define(function(require, exports, module) {
                                 '<td width="68px"><input  class="form-control"   type="text" id="endMinute@{id}" value=""/></td>',
                              '</tr>',
                           '</table>',
-                          '<hr class="dividing">',
+                          '<hr >',
                           '<button  type="button" class="btn btn-primary" style="margin-left:20px;" id="submit@{id}">应用</button>',
                    
                           '<button   type="button" data-bb-handler="cancel" class="btn btn-default" style="margin-left:20px;" id="cancel@{id}">取消</button>',
@@ -80,21 +88,30 @@ define(function(require, exports, module) {
 			},
 			sign : true
 		},	
+		/**
+		 * 隐藏错误提示
+		 */
 		hideAlert:function(){
 			this.$$('alert'+this.id).style.display="none";
 		},
+		/**
+		 * 显示错误提示
+		 */
 		showAlert:function(text){
 	        this.$$('alert'+this.id).style.display="block";
 	        this.$$('alert'+this.id).innerHTML=text;
 		},
+		/**
+		 * 隐藏时间选择
+		 */
 		timeSliderHide:function(){
 			this.doubleTimeSliderObj.hide();
 		},
-		calendarHide:function(){
-			this.calendarGroupObj.hide();
-		},
-		show:function(x,y){
-		
+
+		/**
+		 * triggerElem在点击时调用
+		 */
+		show:function(x,y){	
 			if(this.elem==null){
 				
 	        	this.createElem();
@@ -112,9 +129,11 @@ define(function(require, exports, module) {
 		    }
 			}
 			
-			this.elem.style.display="block";
-		
+			this.elem.style.display="block";	
 		},
+		/**
+		 * 清除input选中状态
+		 */
 		clearInput:function(){	
 			this.$$("startmonth"+this.id).style.borderTop="1px solid #A3A3A3";
 			this.$$("startmonth"+this.id).style.borderLeft="1px solid #A3A3A3";
@@ -133,6 +152,9 @@ define(function(require, exports, module) {
 			this.$$("endMinute"+this.id).style.borderBottom="1px solid #CCC";
 			this.$$("endMinute"+this.id).style.borderRight="1px solid #CCC";
 		},
+		/**
+		 * 被下层次的类调用
+		 */
 		getSubmitButton:function(){
 			return this.$$("submit"+this.id);
 		},
@@ -146,14 +168,14 @@ define(function(require, exports, module) {
 			this.clearInput();
 			elem.style.border="3px solid #86BE2B";
 		},
-		documentClick:function(){
-			this.hide();	
-		},
 		submitClick:function(){
 			this.$$(this.options.inputElem).innerHTML=this.getRange();
 			this.options.onOk(this);
 			this.hide();
 		},
+		/**
+		 * 绑定此类中所有事件
+		 */
 		eventElem:function(){
 			
 			this._inputMonthClick=this.bind(this,this.inputMonthClick);
@@ -173,13 +195,6 @@ define(function(require, exports, module) {
 			$("#submit"+this.id).on("click",this._submitClick);
 			$("#cancel"+this.id).on("click",this._hide);
 			
-		},
-		stopPropagation:function(e){
-	        if (e && e.stopPropagation ){ 
-	            e.stopPropagation();
-	        }else{
-	           window.event.cancelBubble = true;
-	        }
 		},
 		getRange:function(){
 			return this.$$("startmonth"+this.id).value+" "+this.$$("startMinute"+this.id).value+" - "+this.$$("endmonth"+this.id).value+" "+this.$$("endMinute"+this.id).value;

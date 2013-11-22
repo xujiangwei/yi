@@ -1,7 +1,7 @@
 /** 
 *  日立及日历组
  * @author Xiaoyin Song
- *
+ * v 1.0.0
  *使用说明：
  *		var calendarGroupObj=new this.options.CalendarGroup({
  *				caleNum:this.options.caleNum,
@@ -24,7 +24,11 @@
 define(function(require, exports, module) {
 	require('class');
 	var BaseClass=require("modules/components/calendar/base.js");
-
+    /**
+     * 作为组件中一个完整单元的日历类，
+     * 但在范围日历中不可被外部创建
+     * 
+     */
 	var RangeCalendar = Class(BaseClass, {
 
 	    beforeMonth:function(){
@@ -168,14 +172,16 @@ define(function(require, exports, module) {
         		     }
         	    }
 			}
-
         },
+        /**
+         * 改变当前日历的内容，通过manager被next,before外层方法调用
+         */
 	    adjustTable:function(y,m){ 	
-	    	this.button.innerHTML=m+'月 '+y;
+	    	this.button.innerHTML=y+'年'+m+'月';
 	    	var w=0;
-	    	for(var j = 1, firstDay = new Date(y, m - 1, 1).getDay(); j <= firstDay; j++,w++){
-				this.cells[w].className="month-day";
-				this.cells[w].innerHTML="&nbsp;";
+	    	for(var j = 1, firstDay = new Date(y, m - 1, 1).getDay(),lastDate=new Date(y, m - 1, 0).getDate(); j <= firstDay; j++,w++){
+				this.cells[w].className="month-day notday";
+				this.cells[w].innerHTML=lastDate-firstDay+j;
 				this.cells[w].setAttribute("value",0);
 	    	}    	
 	    	for(var i = 1, monthDay = new Date(y, m, 0).getDate(); i <= monthDay; i++,w++){  
@@ -191,13 +197,16 @@ define(function(require, exports, module) {
 				this.cells[w].setAttribute("value",i);
 				this.cells[w].innerHTML=buffer.toString();	    
 	    	}	 
-	    	for(;w<42;w++){
-	    		this.cells[w].className="month-day";
-	    		this.cells[w].innerHTML="&nbsp;";
+	    	for(var m=1;w<42;w++,m++){
+	    		this.cells[w].className="month-day notday";
+	    		this.cells[w].innerHTML=m;
 	    		this.cells[w].setAttribute("value",0);
 	    	} 
 	    	this.adjustSelected();
 	    },
+	    /**
+	     * 初始化创建日历表格
+	     */
 		createTable:function(y,m){
         	var sb=this.stringBuffer();
         	sb.append('<table border="0" cellspacing="0" cellpadding="0">');
@@ -207,7 +216,7 @@ define(function(require, exports, module) {
         	    sb.append('<div><div class="xt"></div></div>');
         	    sb.append('</td>');
         	    sb.append('<td colspan="5" class="month-title">');
-        	    sb.append('<button type="button" style="cursor: pointer;">'+m+'月 '+y+'</button>');
+        	    sb.append('<div id="'+this.elem.id+'all" class="button">'+y+'年'+m+'月 </div>');
         	    sb.append('</td>');
         	    sb.append('<td  id="'+this.elem.id+'next" class="next">');
         	    sb.append('<div><div class="xt"></div></div>');
@@ -216,7 +225,7 @@ define(function(require, exports, module) {
         	}else{
         	    sb.append('<thead><tr class="month-title-tr">');
         	    sb.append('<td colspan="7" class="month-title">');
-        	    sb.append('<button type="button" style="cursor: pointer;">'+m+'月 '+y+'</button>');
+        	    sb.append('<div id="'+this.elem.id+'all" class="button">'+y+'年'+m+'月</div>');
         	    sb.append('</td>');
         	    sb.append('</tr></thead>');
         	}
@@ -233,14 +242,25 @@ define(function(require, exports, module) {
         	sb.append('</tbody>');
         	sb.append('<tbody>');
 	    	var arr = [];    	
-	    	for(var j = 1, firstDay = new Date(y, m - 1, 1).getDay(); j <= firstDay; j++){ arr.push(0); }    	
-	    	for(var i = 1, monthDay = new Date(y, m, 0).getDate(); i <= monthDay; i++){ arr.push(i); }	    
-	    	for(var k=arr.length;k<42;k++){ arr.push(0); } 		    
+	        var arrreal=[];
+	    	for(var j = 1, firstDay = new Date(y, m - 1, 1).getDay(),lastDate=new Date(y, m - 1, 0).getDate(); j <= firstDay; j++){ 
+	    		arr.push(0); 
+	    		arrreal.push(lastDate-firstDay+j);
+	    	}    	
+	    	for(var i = 1, monthDay = new Date(y, m, 0).getDate(); i <= monthDay; i++){ 
+	    		arr.push(i);
+	    		arrreal.push(i);
+	    	}	    
+	    	for(var k=arr.length,m=1;k<42;k++,m++){
+	    		arr.push(0);
+	    		arrreal.push(m);
+	    	} 		    
 	    	while(arr.length){
 	    		sb.append('<tr>');
 	    		for(var i = 1; i <= 7; i++){	    			
 	    			if(arr.length){
 	    				var d = arr.shift();
+	    				var r=arrreal.shift();
 	    				if(d){
 	    					sb.append('<td class="month-day  Mr" value="'+d+'">');
 	    					sb.append('<a href="javascript:void(0)" hidefocus="on"  value="'+d+'" class="calendar-x-date" ');
@@ -251,7 +271,7 @@ define(function(require, exports, module) {
 	    					sb.append(d);
 	    					sb.append('</a>');
 	    				}else{
-	    					sb.append('<td class="month-day"  value="'+d+'">&nbsp;</td>');
+	    					sb.append('<td class="month-day notday"  value="'+d+'">'+r+'</td>');
 	    				}
 	    			}
 	    		}
@@ -260,7 +280,8 @@ define(function(require, exports, module) {
 	    	sb.append('</tbody>');
 	    	sb.append('</table>');
 			this.elem.innerHTML=sb.toString();
-			this.button=this.elem.getElementsByTagName("button")[0];
+		
+			this.button=this.$$(this.elem.id+"all");
 			var tables=this.elem.getElementsByTagName("table");
 			var table=tables[0];
 			var rows=table.tBodies[1].rows;
@@ -286,7 +307,8 @@ define(function(require, exports, module) {
 			this._nextMonth=this.bind(this,this.nextMonth);
 			
 			$(this.elem.getElementsByTagName("table")[0].tBodies[1]).on("click",this._cellClick);
-			$(this.elem.getElementsByTagName("button")[0]).on("click",this._buttonClick);
+		
+			$('#'+this.elem.id+"all").on("click",this._buttonClick);
 			if(this.options.Single){
 			   $("#"+this.elem.id+"before").on("click",this._beforeMonth);
 	    	   $("#"+this.elem.id+"next").on("click",this._nextMonth);
@@ -302,8 +324,9 @@ define(function(require, exports, module) {
 		createElem : function() {
 			this.elem = document.createElement("div");
 			this.elem.id=this.randomId();
-			this.createTable(this.options.year,this.options.month);
 			this.options.Container.appendChild(this.elem);
+			this.createTable(this.options.year,this.options.month);
+		
 		},
 		initialize : function(options) {
 			this.setOptionsValue();
@@ -321,7 +344,7 @@ define(function(require, exports, module) {
 		},
 		destroy:function(){
 			$(this.elem.getElementsByTagName("table")[0].tBodies[1]).off("click",this._cellClick);
-			$(this.elem.getElementsByTagName("button")[0]).off("click",this._buttonClick);
+			$('#'+this.elem.id+"all").off("click",this._buttonClick);
 			if(this.options.Single){
 			   $("#"+this.elem.id+"before").off("click",this._beforeMonth);
 	    	   $("#"+this.elem.id+"next").off("click",this._nextMonth);
@@ -446,12 +469,17 @@ define(function(require, exports, module) {
 			this.elem.cellpadding="0";
 	        
 			this.elem.className="_song_calendar_wrapper";		
+			this.options.Container.appendChild(this.elem);
 			var tr=this.elem.insertRow(0);
 			var i=0;
-			this.before=tr.insertCell(i++);
-			this.before.className="before";
-			this.before.innerHTML='<div><div class="xt"></div></div>';
-			
+			var beforetd=tr.insertCell(i++);
+			beforetd.className="before";
+			this.before=document.createElement("button");
+			this.before.type="button";
+			this.before.className="btn btn-default btn-xs";
+			this.before.innerHTML='<span class="glyphicon glyphicon-chevron-left"></span>';
+			beforetd.appendChild(this.before);
+	
 			for(var j=0,len=this.options.caleNum;j<len;j++){
 			
 				var td=tr.insertCell(1);
@@ -473,11 +501,13 @@ define(function(require, exports, module) {
 			}
 			
 			this.justDate();
-			this.next=tr.insertCell(i++);
-			this.next.className="next";
-			this.next.innerHTML='<div><div class="xt"></div></div>';
-			
-			this.options.Container.appendChild(this.elem);
+			var nexttd=tr.insertCell(i++);
+			nexttd.className="next";
+			this.next=document.createElement("button");
+			this.next.type="button";
+			this.next.className="btn btn-default btn-xs";
+			this.next.innerHTML='<span class="glyphicon glyphicon-chevron-right"></span>';
+			nexttd.appendChild(this.next);
 			
 			this.objList[0].Manager.setStartDate(this.options.Start.year,this.options.Start.month,this.options.Start.day);
 			this.objList[0].Manager.setEndDate(this.options.End.year,this.options.End.month,this.options.End.day);

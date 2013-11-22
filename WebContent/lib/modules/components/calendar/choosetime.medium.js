@@ -2,6 +2,8 @@
  * 时间选择控件
  * @author Xiaoyin Song
  * 
+ *  v 1.0.0
+ * 
  * 对范围日历的另外一个包装，继承与choosetime.js，
  * 
  * 使用说明：
@@ -17,9 +19,7 @@
 define(function(require, exports, module) {
 	require("modules/components/calendar/calendar.css");
 	var BaseClass=require("modules/components/calendar/choosetime.js");
-	
 
-	
 	var ChooseTime=Class(BaseClass,{	
 		destroyModle : function() {
 			delete this.Modle;
@@ -44,19 +44,19 @@ define(function(require, exports, module) {
                           '</div><form class="form-inline">',
                           '<table border="0" cellspacing="0" cellpadding="0" style="border-spacing: 2px;border-color: gray;" >',
                             '<tr>',
-                               '<td width="109px" style="font-size:12px;"><p class="text-muted credit">起始时间：</p></td>',                         
+                               '<td width="109px" style="font-size:12px;"><p class="text-muted credit"  style="padding-top:21px">起始时间：</p></td>',                         
                             '</tr>',   
                             '<tr>',
                                 '<td width="109px"><input  class="form-control"  type="text" id="startmonth@{id}" value="" /></td>',                                 
                              '</tr>',
                              '<tr>',
-                             '<td width="109px" style="font-size:12px;"><p class="text-muted credit">结束时间：</p></td>',              
+                             '<td width="109px" style="font-size:12px;"><p class="text-muted credit" style="padding-top:10px">结束时间：</p></td>',              
                            '</tr>', 
                              '<tr>',
                                 '<td width="109px"><input class="form-control"  type="text" id="endmonth@{id}" value=""  /></td>',//disabled="disabled"                           
                              '</tr>',
                           '</table>',
-                          '<hr class="dividing">',
+                          '<hr>',
                           '<button  type="button" class="btn btn-primary" style="margin-left:0px;" id="submit@{id}">应用</button>',              
                           '<button   type="button" data-bb-handler="cancel" class="btn btn-default" style="margin-left:5px;" id="cancel@{id}">取消</button>',
                         '</div>',
@@ -82,12 +82,6 @@ define(function(require, exports, module) {
 		showAlert:function(text){
 	        this.$$('alert'+this.id).style.display="block";
 	        this.$$('alert'+this.id).innerHTML=text;
-		},
-		timeSliderHide:function(){
-		
-		},
-		calendarHide:function(){
-			this.calendarGroupObj.hide();
 		},
 		show:function(x,y){
             if(this.elem==null){
@@ -117,8 +111,6 @@ define(function(require, exports, module) {
 			this.$$("endmonth"+this.id).style.borderLeft="1px solid #A3A3A3";
 			this.$$("endmonth"+this.id).style.borderBottom="1px solid #CCC";
 			this.$$("endmonth"+this.id).style.borderRight="1px solid #CCC";
-
-
 		},
 		getSubmitButton:function(){
 			return this.$$("submit"+this.id);
@@ -132,9 +124,6 @@ define(function(require, exports, module) {
 			var elem = e.target || e.srcElement;
 			this.clearInput();
 			elem.style.border="3px solid #86BE2B";
-		},
-		documentClick:function(){
-			this.hide();	
 		},
 		submitClick:function(){
 			this.$$(this.options.inputElem).innerHTML=this.getRange();
@@ -153,13 +142,6 @@ define(function(require, exports, module) {
 			$("#cancel"+this.id).on("click",this._hide);
 			
 		},
-		stopPropagation:function(e){
-	        if (e && e.stopPropagation ){ 
-	            e.stopPropagation();
-	        }else{
-	           window.event.cancelBubble = true;
-	        }
-		},
 		getRange:function(){
 			return this.$$("startmonth"+this.id).value+" - "+this.$$("endmonth"+this.id).value;
 		},
@@ -171,7 +153,7 @@ define(function(require, exports, module) {
 		},
         createElem:function(){
         	this.id=this.randomId();
-        	this.elem = document.body.insertBefore(document.createElement("div"), document.body.childNodes[0]);
+        	this.elem =document.body.appendChild(document.createElement("div"));
         	this.elem.id=this.id;
         	this.elem.className="panel panel-info _song_choosetime";
         	this.elem.style.display="none";

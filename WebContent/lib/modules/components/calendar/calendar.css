@@ -2,19 +2,14 @@
 
 ._song_choosetime {
 	position: absolute;
-
-
 	margin-left: 1px;
 	margin-top: -1px;
-
-
 	z-index: 1000;
-
 }
 ._song_choosetime .label-slider{
 	font-size:12px;
 	color:#333;
-	}
+}
 ._song_choosetime .error {
 	color: red;
 	font-size: 12px;
@@ -54,10 +49,7 @@
 	vertical-align: middle;
 	height: 19px;
 }
-._song_choosetime .dividing {
-	margin: 3px;
-    border-top: #666 dotted 1px;
-}
+
 ._song_choosetime .cancel {
 	font-size: 13px;
 	color: #07C;
@@ -65,47 +57,10 @@
 	cursor: pointer;
 }
 ._song_calendar_wrapper{
-	margin-top:10px;
-	border-spacing:2px;
-	border-color:"gray";
 }
 
 ._song_calendar_wrapper .next, .before {
 vertical-align: top;
-}
-._song_calendar_wrapper .next div, .before div {
-border: #CCC solid 1px;
-background-color: #DDD;
-cursor: pointer;
-padding: 3px 5px;
-}
-._song_calendar_wrapper .before div {
-border-radius: 3px 0 0 3px;
--moz-border-radius: 3px 0 0 3px;
--webkit-border-top-left-radius: 3px;
--webkit-border-top-right-radius: 0;
--webkit-border-bottom-left-radius: 3px;
--webkit-border-bottom-right-radius: 0;
-}
-._song_calendar_wrapper .next div {
-border-radius: 0 3px 3px 0;
--moz-border-radius: 0 3px 3px 0;
--webkit-border-top-left-radius: 0;
--webkit-border-top-right-radius: 3px;
--webkit-border-bottom-left-radius: 0;
--webkit-border-bottom-right-radius: 3px;
-}
-._song_calendar_wrapper .next div .xt, .before div .xt {
-height: 7px;
-padding: 0px;
-width: 4px;
-;
-}
-._song_calendar_wrapper .before .xt {
-background: url(../img/button_arrow_prev_ltr.gif) no-repeat;
-}
-._song_calendar_wrapper .next .xt {
-background: url(../img/button_arrow_next_ltr.gif) no-repeat;
 }
 ._song_calendar_wrapper .wrapper-td {
 border-radius: 5px;
@@ -120,35 +75,42 @@ font-size: 13px;
 height: 15px;
 white-space: nowrap;
 }
-._song_calendar_wrapper .month-title button{
+._song_calendar_wrapper .month-title .button{
+	font-weight:bold;
 width:100%;
 border: white none 0px;
-color: #07C;
 font-size: 14px;
-background-color: #DDD;
+line-height: 22px;
+color: #333333;
+cursor: pointer;
+text-align: center;
 }
 ._song_calendar_wrapper .month-day-td {
 	font-size: 15px;
-border-bottom:1px solid #CCC;
+	text-align: center;
 }
 ._song_calendar_wrapper .month-day {
 text-align: center;
 vertical-align: middle;
-font-size: 14px;
-border-bottom:1px solid #F7F7F7;
-border-right:1px solid #F7F7F7;
-background-color: white;
-width:24px;
+font-size: 13px;
 }
 ._song_calendar_wrapper .Mr {
 cursor: pointer;
 }
+._song_calendar_wrapper .notday {
+color: #999999;
+cursor:default;
+}
 ._song_calendar_wrapper .calendar-x-date{
 display:block;
 width:100%;
+padding: 6px 7px;
 text-decoration: none;
-color:#000;
-background-color:white;
+color:rgb(51, 51, 51);
+-webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+border-radius: 4px;
+width:31px;
 }
 ._song_calendar_wrapper .calendar-x-date:hover{
 background-color: #FC3;
@@ -156,10 +118,15 @@ background-color: #FC3;
 ._song_calendar_wrapper .calendar-x-tq{
 width:100%;
 display:block;
+padding: 6px 7px;
 background-color: #07C;
 color: white;
 cursor: pointer;
 text-decoration: none;
+-webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+border-radius: 4px;
+width:31px;
 }
 ._song_calendar_wrapper .calendar-x-tq:hover{
 background-color: #FC3;

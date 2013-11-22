@@ -2,6 +2,9 @@
  * 时间选择控件
  *  @author Xiaoyin Song
  *  
+ *  v 1.0.0
+ *  
+ *  
  *  对范围日历的一个包装，继承与choosetime.js，
  *  没有确定取消按钮
  * 	new ChooseTimeSmall({
@@ -50,18 +53,6 @@ define(function(require, exports, module) {
 			},
 			sign : true
 		},	
-		hideAlert:function(){
-
-		},
-		showAlert:function(text){
-
-		},
-		timeSliderHide:function(){
-		
-		},
-		calendarHide:function(){
-			this.calendarGroupObj.hide();
-		},
 		show:function(x,y){
             if(this.elem==null){
 				
@@ -81,8 +72,7 @@ define(function(require, exports, module) {
 			}
 			this.elem.style.display="block";
 		},
-		clearInput:function(){	
-		},
+
 		getSubmitButton:function(){
 			return this.$$("submit"+this.id);
 		},
@@ -96,9 +86,6 @@ define(function(require, exports, module) {
 			this.clearInput();
 			elem.style.border="3px solid #86BE2B";
 		},
-		documentClick:function(){
-			this.hide();	
-		},
 		submitClick:function(){
 			this.$$(this.options.inputElem).innerHTML=this.getRange();
 			this.options.onOk();
@@ -110,15 +97,7 @@ define(function(require, exports, module) {
 			this._submitClick=this.bind(this,this.submitClick);
 			this._hide=	this.bind(this,this.hide);
 			$("#submit"+this.id).on("click",this._submitClick);
-			$("#cancel"+this.id).on("click",this._hide);
-			
-		},
-		stopPropagation:function(e){
-	        if (e && e.stopPropagation ){ 
-	            e.stopPropagation();
-	        }else{
-	           window.event.cancelBubble = true;
-	        }
+			$("#cancel"+this.id).on("click",this._hide);		
 		},
 		getRange:function(){
 			return this.$$("startmonth"+this.id).value+" - "+this.$$("endmonth"+this.id).value;

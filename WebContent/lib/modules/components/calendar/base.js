@@ -1,3 +1,14 @@
+/**
+ * @author Xiaoyin Song
+ * v 1.0.0
+ * 功能：
+ *    对class进行简单的功能增加，使子类中有如下功能：
+ *       $$：DOM引用获取
+ *       randomId：产生随机不重复的id
+ *       extend：参数继承
+ *       template：简单模板
+ *       bind：函数对象绑定
+ */
 define(function(require, exports, module) {
 	require('class');
 	var slice = Array.prototype.slice;
@@ -10,15 +21,13 @@ define(function(require, exports, module) {
 	StringBuffer.prototype.toString=function(){
 		return this._strings_.join("");
 	};
-	String.prototype.Trim = function(){
-		return this.replace(/(^\s*)|(\s*$)/g,""); 
-	};
+
 	var Template = function(template, pattern) {
 		this.template = String(template);
 		this.pattern = pattern || Template.Pattern;
 	};
 	Template.Pattern = /@\{([^}]*)\}/mg;
-	Template.trim = String.trim || function(str) {
+	Template.trim =  function(str) {
 		return str.replace(/^\s+|\s+$/g, '');
 	};
 	Template.prototype = {
@@ -31,12 +40,14 @@ define(function(require, exports, module) {
 			});
 		}
 	};
+
 	var BaseClass = Class( {
 		env :{
 				ie : /MSIE/i.test(navigator.userAgent),
 				ie6 : /MSIE 6/i.test(navigator.userAgent),
 				ie7 : /MSIE 7/i.test(navigator.userAgent),
 				ie8 : /MSIE 8/i.test(navigator.userAgent),
+				ie9 : /MSIE 9/i.test(navigator.userAgent),
 				firefox : /Firefox/i.test(navigator.userAgent),
 				opera : /Opera/i.test(navigator.userAgent),
 				webkit : /Webkit/i.test(navigator.userAgent),

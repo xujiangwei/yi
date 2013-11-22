@@ -118,7 +118,14 @@
                          </div>
                       </div>
                     </div>    
-                    
+                   <div class="col-md-4">
+                      <div class="panel panel-success">
+                            <div class="panel-heading"><div class="panel-title">单选时期按钮-触发元素为Button </div></div>
+                            <div class="panel-body">
+                                 <button type="button" class="btn btn-default" id="buttontime11">2013-10-11</button>
+                            </div>          
+                      </div>
+                    </div> 
                     <div class="col-md-4">
                       <div class="panel panel-success">
                          <div class="panel-heading"><div class="panel-title">通过onOk或onHide向旁边的textarea写值</div></div>
@@ -135,7 +142,37 @@
                              </div>          
                       </div>
                     </div> 
-                                                   
+
+                    <div class="col-md-4">
+                      <div class="panel panel-success">
+                            <div class="panel-heading"><div class="panel-title">单选时期按钮-触发元素为Input </div></div>
+                            <div class="panel-body">
+                                 <p>
+                                    当触发元素为Input时间是可手动输入的，但须进行格式验证，格式验证之后实现
+                                 </p>
+                                 <input type="text" class="form-control"  value="2013-10-11" id="inputtime1">
+                            </div>          
+                      </div>
+                    </div>      
+                    
+                    <div class="col-md-4">
+                      <div class="panel panel-success">
+                            <div class="panel-heading"><div class="panel-title">单选时期按钮- inputElem参数和triggerElem参数 </div></div>
+                            <div class="panel-body">
+                                 <p>
+                                   inputElem参数和triggerElem参数的功能及其区别;inputElem为存储2013-10-11的元素，triggerElem为触发元素，将两分开是有意义的如下：
+                                 </p>
+                                 <div class="input-group">
+                                     <input type="text" class="form-control" value="2013-10-11" id="inputtime2">
+                                     <span class="input-group-btn">
+                                         <button type="button" class="btn btn-default"  id="buttontime12" ><span class="glyphicon glyphicon-th"></span></button>
+                                     </span>
+                                 
+                                 </div>     
+                            </div>          
+                      </div>
+                    </div>   
+                       
                 </div>
             </div>
         </div>
@@ -158,7 +195,8 @@ common.config({
 	alias: {"class": "utils/class.js",
 		    "calendar.large":"modules/components/calendar/choosetime.large.min.js",
 		    "calendar.medium":"modules/components/calendar/choosetime.medium.min.js",
-		    "calendar.small":"modules/components/calendar/choosetime.small.min.js"
+		    "calendar.small":"modules/components/calendar/choosetime.small.min.js",
+		    "datepicker":"modules/components/calendar/datepicker.min.js"
 	}
 });
 common.use("calendar.large",function(app){
@@ -271,5 +309,24 @@ common.use("calendar.small",function(app){
 		triggerElem:document.getElementById("buttontime8")
 	});
 });
+common.use("datepicker",function(app){
+	var DatePicker=app;
+	new DatePicker({
+		location:"left",
+		inputElem:document.getElementById("buttontime11"),
+		triggerElem:document.getElementById("buttontime11")
+	});
+	
+	new DatePicker({
+		location:"left",
+		inputElem:document.getElementById("inputtime1"),
+		triggerElem:document.getElementById("inputtime1")
+	});
+	new DatePicker({
+		location:"right",
+		inputElem:document.getElementById("inputtime2"),
+		triggerElem:document.getElementById("buttontime12")
+	});
+})
 </script>
 </html>
