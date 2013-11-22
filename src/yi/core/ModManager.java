@@ -67,7 +67,7 @@ public final class ModManager extends AbstractLifeCycle {
 	/**
 	 * 作废刷新周期。
 	 */
-	public void invalid() {
+	public synchronized void invalid() {
 		if (null != this.timer)
 			this.timer.cancel();
 		this.timer = new Timer();
@@ -97,6 +97,10 @@ public final class ModManager extends AbstractLifeCycle {
 		this.timer = null;
 	}
 
+	/**
+	 * 添加 MOD 到管理器。
+	 * @param mod
+	 */
 	protected void addMod(Mod mod) {
 		synchronized (this.mods) {
 			HashMap<String, Mod> map = this.mods.get(mod.getName());
@@ -108,6 +112,39 @@ public final class ModManager extends AbstractLifeCycle {
 				map.put(mod.getVersion(), mod);
 				this.mods.put(mod.getName(), map);
 			}
+		}
+	}
+
+	/**
+	 * 从管理器内移除指定的 MOD 。
+	 * @param name
+	 * @param version
+	 */
+	public Mod removeMod(String name, String version) {
+		synchronized (this.mods) {
+			HashMap<String, Mod> map = this.mods.get(name);
+			if (null != map) {
+				return map.remove(version);
+			}
+
+			return null;
+		}
+	}
+
+	/**
+	 * 返回指定的 MOD 是否已经添加。
+	 * @param name
+	 * @param version
+	 * @return
+	 */
+	public boolean existMod(String name, String version) {
+		synchronized (this.mods) {
+			HashMap<String, Mod> map = this.mods.get(name);
+			if (null != map && map.containsKey(version)) {
+				return true;
+			}
+
+			return false;
 		}
 	}
 

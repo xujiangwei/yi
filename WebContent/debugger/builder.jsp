@@ -19,7 +19,6 @@ builder.start();
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>构建器 - <%=mod.getName()%> <%=mod.getVersion()%></title>
-<%=Stage.importStyles("../lib/") %>
 <link href="../lib/core/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 <link href="assets/css/app-builder.css" rel="stylesheet" />
 </head>
@@ -50,7 +49,7 @@ builder.start();
       <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%">
       </div>
     </div>
-    <h5 id="progress_info" class="text-center text-info">已启动构建线程</h5>
+    <h5 id="progress_info" class="text-center"><p class="text-info">已启动构建线程</p></h5>
   </div>
 </div>
 
@@ -65,6 +64,14 @@ builder.start();
   </div>
 </div>
 <%=Stage.importScripts("../lib/")%>
+<script type="text/javascript">
+(function(){
+	this.mod = {
+		name: "<%=name%>"
+		, version: "<%=version%>"
+	};
+})();
+</script>
 <script src="assets/js/app-builder.js" type="text/javascript"></script>
 </body>
 </html>

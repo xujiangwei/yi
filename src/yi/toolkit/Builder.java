@@ -71,12 +71,19 @@ public final class Builder extends AbstractLifeCycle {
 
 		File file = new File(this.projectPath + this.subDir + "mod.xml");
 		this.mod = ModReader.readConfig(file);
+
+		// 删除旧 MOD
+		ModManager.getInstance().removeMod(this.mod.getName(), this.mod.getVersion());
 	}
 
 	/**
 	 * 打包。
 	 */
 	protected File pack() throws IOException {
+		if (null == this.mod) {
+			return null;
+		}
+
 		String temp = this.tempPath + "mod_" + this.mod.getName() + ".tmp";
 		File destFile = new File(temp);
 		if (destFile.exists() && destFile.isFile())
@@ -154,14 +161,15 @@ public final class Builder extends AbstractLifeCycle {
 					// 编译
 					compile();
 
-					// 整包
+					// 打包
 					File file = pack();
+					if (null != file) {
+						// 部署
+						deploy(file);
 
-					// 部署
-					deploy(file);
-
-					// 作废管理器任务，以便刷新
-					ModManager.getInstance().invalid();
+						// 作废管理器任务，以便刷新
+						ModManager.getInstance().invalid();
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				} finally {
