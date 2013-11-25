@@ -24,7 +24,7 @@ builder.start();
 </head>
 
 <body>
-<header class="navbar navbar-inverse">
+<header class="navbar navbar-default">
   <div class="container">
     <div class="navbar-header">
       <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-collapse">
@@ -33,11 +33,7 @@ builder.start();
       	<span class="icon-bar"></span>
       	<span class="icon-bar"></span>
       </button>
-      <a href="javascript:;" class="navbar-brand">构建器</a>
-    </div>
-    <div class="navbar-collapse collapse">
-      <ul class="nav navbar-nav navbar-right">
-      </ul>
+      <div class="navbar-brand">构建器</div>
     </div>
   </div>
 </header>

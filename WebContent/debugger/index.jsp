@@ -9,12 +9,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>模组调试管理器</title>
-<%=Stage.importStyles("../lib/") %>
+<link href="../lib/core/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 <link href="assets/css/index.css" rel="stylesheet" />
 </head>
 
 <body>
-<header class="navbar navbar-inverse">
+<div class="navbar navbar-default" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-collapse">
@@ -23,14 +23,16 @@
       	<span class="icon-bar"></span>
       	<span class="icon-bar"></span>
       </button>
-      <a href="#" class="navbar-brand">模组调试管理器</a>
+      <div class="navbar-brand">模组调试管理器</div>
     </div>
-    <div class="navbar-collapse collapse">
-      <ul class="nav navbar-nav navbar-right">
+    <div class="collapse navbar-collapse">
+      <ul class="nav navbar-nav nav-pills pull-right">
+        <li><button id="btn_new" class="btn btn-default">新建</button></li>
+        <li><button id="btn_help" class="btn btn-default">帮助</button></li>
       </ul>
-    </div>
+    </div><!--/.nav-collapse -->
   </div>
-</header>
+</div>
 
 <div class="container">
   <div class="row">
@@ -40,37 +42,38 @@
           <div class="panel-title">模组列表</div>
         </div>
         <div class="panel-body">
-          <table class="table table-striped table-hover table-bordered">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>名称</th>
-                <th>版本</th>
-                <th>上下文路径</th>
-                <th>操作</th>
-              </tr>
-            </thead>
+          <div class="table-responsive">
+            <table class="table table-striped table-hover table-bordered">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>名称</th>
+                  <th>版本</th>
+                  <th>上下文路径</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
 <%
 List<Mod> list = DebuggerDirector.getInstance().getModList();
 for (Mod mod : list) {
 %>
-              <tr>
-                <td><input type="checkbox" class="checkbox" /></td>
-                <td><%=mod.getName() %></td>
-                <td><%=mod.getVersion() %></td>
-                <td><%=mod.getContextPath() %></td>
-                <td>
-                  <a id="btn_debug_<%=mod.getName()%>" class="btn btn-sm btn-primary" href="debugger.jsp?name=<%=mod.getName()%>&version=<%=mod.getVersion()%>" target="_blank">调试</a>
-                  <a id="btn_build_<%=mod.getName()%>" class="btn btn-sm btn-info" href="builder.jsp?name=<%=mod.getName()%>&version=<%=mod.getVersion()%>" target="_blank">构建</a>
-                </td>
-              </tr>
+                <tr>
+                  <td><input type="checkbox" class="checkbox" /></td>
+                  <td><%=mod.getName() %></td>
+                  <td><%=mod.getVersion() %></td>
+                  <td><%=mod.getContextPath() %></td>
+                  <td>
+                    <a id="btn_debug_<%=mod.getName()%>" class="btn btn-sm btn-primary" href="debugger.jsp?name=<%=mod.getName()%>&version=<%=mod.getVersion()%>" target="_blank">调试</a>
+                    <a id="btn_build_<%=mod.getName()%>" class="btn btn-sm btn-info" href="builder.jsp?name=<%=mod.getName()%>&version=<%=mod.getVersion()%>" target="_blank">构建</a>
+                  </td>
+                </tr>
 <%
 }
 %>
-            <tbody>
-              
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

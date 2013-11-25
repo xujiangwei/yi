@@ -57,11 +57,10 @@
 		startProgressBar();
 	});
 
-	var timer;
+	var pbTimer;
 	var startProgressBar = function() {
 		var bar = $('.progress-bar');
 		var progress = 0;
-		
 
 		var task = function() {
 			progress += 2;
@@ -70,15 +69,15 @@
 
 			if (progress >= 100) {
 				progress = 0;
-				clearInterval(timer);
+				clearInterval(pbTimer);
 			}
 		};
 
-		timer = setInterval(task, 210);
+		pbTimer = setInterval(task, 210);
 	};
 
 	var stopProgressBar = function(value) {
-		clearInterval(timer);
+		clearInterval(pbTimer);
 		$('.progress-bar').css('width', value + '%');
 	}
 })();

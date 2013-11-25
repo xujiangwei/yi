@@ -28,22 +28,60 @@ public abstract class AbstractHttpServlet extends HttpServlet {
 		super();
 	}
 
+	/**
+	 * 设置指定响应的状态码。
+	 * @param response
+	 * @param statusCode
+	 */
 	protected void wrapResponse(HttpServletResponse response, int statusCode) {
 		response.setContentType("text/html");
 		response.setCharacterEncoding("utf-8");
 		response.setStatus(statusCode);
 	}
 
+	/**
+	 * 设置指定响应的状态为 200 。
+	 * @param response
+	 */
 	protected void wrapResponseWithOk(HttpServletResponse response) {
 		response.setContentType("text/html");
 		response.setCharacterEncoding("utf-8");
 		response.setStatus(HttpServletResponse.SC_OK);
 	}
 
+	/**
+	 * 设置指定响应的数据，并返回状态码 200 。
+	 * @param response
+	 * @param json
+	 */
 	protected void wrapResponseWithOk(HttpServletResponse response, JSONObject json) {
 		response.setContentType("text/html");
 		response.setCharacterEncoding("utf-8");
 		response.setStatus(HttpServletResponse.SC_OK);
+
+		try {
+			response.getWriter().print(json.toString());
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				response.getWriter().close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	/**
+	 * 设置指定响应的数据和状态码。
+	 * @param response
+	 * @param statusCode
+	 * @param json
+	 */
+	protected void wrapResponseWithOk(HttpServletResponse response, int statusCode, JSONObject json) {
+		response.setContentType("text/html");
+		response.setCharacterEncoding("utf-8");
+		response.setStatus(statusCode);
 
 		try {
 			response.getWriter().print(json.toString());
