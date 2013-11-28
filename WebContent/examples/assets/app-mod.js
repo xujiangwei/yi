@@ -27,5 +27,10 @@
 				}
 			});
 		});
+
+		// helloworld_3
+		$('#btn_helloworld_3').click(function(e) {
+			yi.mod.load('helloworld_3');
+		});
 	});
 })();

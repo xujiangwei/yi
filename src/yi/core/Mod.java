@@ -35,6 +35,9 @@ public final class Mod implements Serializable, Comparable<Mod> {
 	private ArrayList<String> scriptFilenames;
 	private ArrayList<String> styleFilenames;
 
+	private ArrayList<String> depsAliases;
+	private ArrayList<String> depsFiles;
+
 	// 入口函数名
 	private String main;
 
@@ -45,8 +48,6 @@ public final class Mod implements Serializable, Comparable<Mod> {
 	public Mod(String name, String version) {
 		this.name = name;
 		this.version = version;
-		this.scriptFilenames = null;
-		this.styleFilenames = null;
 	}
 
 	/**
@@ -181,12 +182,42 @@ public final class Mod implements Serializable, Comparable<Mod> {
 	}
 
 	/**
+	 * 添加依赖的空间别名。
+	 * @param alias
+	 */
+	public void addDepsAliases(String alias) {
+		if (null == this.depsAliases) {
+			this.depsAliases = new ArrayList<String>(1);
+		}
+
+		this.depsAliases.add(alias);
+	}
+
+	/**
+	 * 添加依赖的文件名。
+	 * @param filename
+	 */
+	public void addDepsFile(String filename) {
+		if (null == this.depsFiles) {
+			this.depsFiles = new ArrayList<String>(1);
+		}
+
+		this.depsFiles.add(filename);
+	}
+
+	/**
 	 * 返回 MOD JSON 格式对象。
 	 * @return
 	 */
 	public JSONObject toJSON() {
 		JSONObject json = new JSONObject();
 		try {
+			json.put("name", this.name);
+			json.put("version", this.version);
+
+			// 上下文路径
+			json.put("path", this.contextPath);
+
 			// 界面文件
 			if (this.existHtmlFile()) {
 				json.put("html", this.contextPath + this.htmlFilename);
@@ -216,6 +247,33 @@ public final class Mod implements Serializable, Comparable<Mod> {
 			// 入口函数
 			if (null != this.main) {
 				json.put("main", this.main);
+			}
+
+			// 前置依赖
+			JSONObject deps = null;
+			if (null != this.depsAliases) {
+				deps = new JSONObject();
+				JSONArray list = new JSONArray();
+				for (String alias : this.depsAliases) {
+					list.put(alias);
+				}
+				// "aliases" 数组
+				deps.put("aliases", list);
+			}
+			if (null != this.depsFiles) {
+				if (null == deps) {
+					deps = new JSONObject();
+				}
+
+				JSONArray list = new JSONArray();
+				for (String filename : this.depsFiles) {
+					list.put(filename);
+				}
+				// "files" 数组
+				deps.put("files", list);
+			}
+			if (null != deps) {
+				json.put("deps", deps);
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();

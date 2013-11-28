@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Yi Framework
+Copyright (c) 2013,2014 DHC Software Research Department
+-->
+<mod>
+	<!-- 模块名 -->
+	<name>HelloWorld_C</name>
+	<!-- 模块版本 -->
+	<version>1.0.0</version>
+	<!-- 模块描述 -->
+	<description>简单的加载 HTML 片段、脚本和样式</description>
+
+	<!-- 普通文件 -->
+	<files>
+		<html>helloworld.jsp</html>
+		<script>helloworld3.js</script>
+		<style>helloworld3.css</style>
+	</files>
+
+	<!-- 入口函数 -->
+	<main>demo.helloworld3</main>
+
+	<!-- 前置依赖 -->
+	<dependents>
+		<alias>holder</alias>
+	</dependents>
+
+	<!-- 共享文件 -->
+	<shared-files>
+	</shared-files>
+</mod>

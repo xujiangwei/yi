@@ -44,7 +44,8 @@ Yi.prototype.config = function(relativePath, addition) {
 	alias["dialog"] = "plugins/bootbox.min.js";				// 对话框
 	alias["menu-aim"] = "plugins/jquery.menu-aim.js";		// 改进的浮动菜单
 	alias["fetch"] = "plugins/fetch/jquery.fetch.js";		// 片段截取
-	alias["theme-manager"] = "modules/misc/theme-manager.min.js"	// 主题管理器
+	alias["theme-manager"] = "modules/misc/theme-manager.min.js";	// 主题管理器
+	alias["holder"] = "utils/holder.js";						// 图片占位符
 
 	common.config({
 		base: relativePath + "lib/",

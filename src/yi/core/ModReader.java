@@ -183,11 +183,29 @@ public final class ModReader {
 			}
 
 			// 主函数入口名
-			NodeList tmp = root.getElementsByTagName("main");
-			if (null != tmp && tmp.getLength() > 0) {
-				Node nodeMain = tmp.item(0);
+			NodeList nl = root.getElementsByTagName("main");
+			if (null != nl && nl.getLength() > 0) {
+				Node nodeMain = nl.item(0);
 				mod.setMainFunction(nodeMain.getTextContent());
 			}
+
+			// 前置依赖
+			nl = root.getElementsByTagName("dependents");
+			if (null != nl && nl.getLength() > 0) {
+				Node dependents = nl.item(0);
+				// 别名
+				nl = dependents.getChildNodes();
+				for (int i = 0, size = nl.getLength(); i < size; ++i) {
+					Node node = nl.item(i);
+					String name = node.getNodeName();
+					if (name.equals("alias")) {
+						mod.addDepsAliases(node.getTextContent());
+					}
+				}
+				// TODO 文件
+			}
+
+			// 共享文件
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
 		} catch (SAXException e) {

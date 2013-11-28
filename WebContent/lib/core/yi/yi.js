@@ -56,7 +56,8 @@ Yi.prototype.config = function(relativePath, addition) {
 	alias["dialog"] = "plugins/bootbox.min.js";				// 对话框
 	alias["menu-aim"] = "plugins/jquery.menu-aim.js";		// 改进的浮动菜单
 	alias["fetch"] = "plugins/fetch/jquery.fetch.js";		// 片段截取
-	alias["theme-manager"] = "modules/misc/theme-manager.min.js"	// 主题管理器
+	alias["theme-manager"] = "modules/misc/theme-manager.min.js";	// 主题管理器
+	alias["holder"] = "utils/holder.js";						// 图片占位符
 
 	common.config({
 		base: relativePath + "lib/",
@@ -132,6 +133,13 @@ Yi.prototype.dialog = function(options) {
 };
 /*
  * ModManager
+ * 
+ * MOD Format:
+ *   // 前置依赖
+ *   "deps": {
+ *       "aliases": []
+ *       "files": []
+ *   }
  */
 var ModManager = function() {
 	this.context = "";
@@ -161,8 +169,9 @@ ModManager.prototype.load = function(container, args) {
 	}
 
 	var context = this.context;
+	var self = this;
 	// 获取 MOD 加载数据
-	var url = this.context + "modloader" + "/" + modName + "/" + version;
+	var url = context + "modloader" + "/" + modName + "/" + version;
 	$.post(url, function(data, textStatus, jqXHR) {
 		// 处理返回数据
 		if (args !== undefined) {
@@ -170,8 +179,28 @@ ModManager.prototype.load = function(container, args) {
 		}
 		// 设置上下文
 		data["context"] = context;
-		// fetch
-		target.fetch(data);
+		// 设置 params
+		var params = {
+			"_n": data["name"]
+			, "_v": data["version"]
+			, "_d": false
+		};
+		data["params"] = params;
+		// 上下文路径
+		data["contextPath"] = context + data.path;
+
+		// 判断前置条件
+		var deps = data["deps"];
+		if (deps !== undefined) {
+			self._predeps(deps, function(){
+				// 执行 Fetch
+				target.fetch(data, data);
+			});
+		}
+		else {
+			// 执行 Fetch
+			target.fetch(data, data);
+		}
 	}, 'json')
 	.fail(function() {
 		console.log('[Yi#Mod] Failed requests "' + url + '".');
@@ -183,9 +212,52 @@ ModManager.prototype.load = function(container, args) {
  */
 ModManager.prototype.debug = function(containerId, mod) {
 	var container = $('#' + containerId);
+	// 上下文
 	mod["context"] = this.context;
-	container.fetch(mod);
+	// URL 参数
+	var params = {
+		"_n": mod["name"]
+		, "_v": mod["version"]
+		, "_d": true
+	};
+	mod["params"] = params;
+
+	// 上下文路径
+	mod["contextPath"] = this.context + "debugger/" + mod.path;
+
+	// 判断前置条件
+	var deps = mod["deps"];
+	if (deps !== undefined) {
+		this._predeps(deps, function(){
+			container.fetch(mod, mod);
+		});
+	}
+	else {
+		container.fetch(mod, mod);
+	}
 };
+
+/**
+ * 处理前置条件。
+ */
+ModManager.prototype._predeps = function(deps, callback) {
+	var checkCount = 0;
+	var aliases = deps["aliases"];
+	var check = function() {
+		++checkCount;
+		if (checkCount == aliases.length) {
+			callback.call(null);
+		}
+	}
+
+	if (aliases !== undefined) {
+		for (var i = 0; i < aliases.length; ++i) {
+			common.use(aliases[i], function() {
+				check();
+			});
+		}
+	}
+}
 
 // Create yi instance
 global.yi = new Yi();

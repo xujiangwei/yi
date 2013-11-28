@@ -2,7 +2,7 @@ Version records
 
 Name          Version             Modified
 --------------------------------------------------------------------------------
-Bootstrap     3.0.0               No
+Bootstrap     3.0.2               No
 Bootflat      1.0.1               No
 jQuery        1.10.2 & 2.0.3      No
 jQuery UI     1.10.3              No

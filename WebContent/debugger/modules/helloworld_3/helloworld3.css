@@ -1,0 +1,40 @@
+/**
+ * Hello world 示例 3
+ */
+
+.carousel-caption {
+  color: #000;
+}
+.carousel-indicators {
+  color: #000;
+}
+
+.carousel-indicators li {
+  background-color: #999;
+  background-color: rgba(70,70,70,.1);
+}
+
+.carousel-indicators .active {
+  background-color: #444;
+}
+
+.carousel-android-container {
+  position: relative;
+  text-align: center;
+  width: 100% !important;
+}
+
+.carousel-android-content {
+  text-align: center;
+  vertical-align: middle;
+  background-color: #FFF;
+  height: 300px;
+}
+.carousel-android-content img {
+  padding: 0px;
+  margin: 12px 0px 0px 0px;
+}
+
+#carousel-android-captions {
+  height: 300px;
+}

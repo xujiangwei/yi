@@ -7,23 +7,25 @@
  * 
  * @param {Object} options
  * {
+ *     context: "../",						// 当前站点上下文路径
  *     html: 'modules/dhc/dhc.html',		// html 文件
  *     tmpl: 'modules/dhc/dhc.tmpl',		// html 模板
+ *     params: {},							// URL 参数
  *     styles: ['modules/dhc/dhc1.css', 'modules/dhc/dhc2.css'],
  *     scripts: ['modules/dhc/dhc1.js', 'modules/dhc/dhc2.js'],
  *     main: function(parent, args) {},
  *     args: {},
- *     context: "../",						// 当前站点上下文路径
- *     error: function(el) {}
+ *     error: function(el) {}				// 错误处理函数
  * }
  *
  * @note html 和 tmpl 两个参数只能二选一使用。
  */
 
 (function($){
-	$.fn.fetch = function(options) {
+	$.fn.fetch = function(options, payload) {
 		var defaults = {
-			styles: []
+			params: null
+			, styles: []
 			, scripts: []
 			, main: null
 			, args: null
@@ -33,9 +35,26 @@
 
 		// 容器自己
 		var pself = $(this);
+		// 附加额外数据
+		if (payload !== undefined) {
+			pself.data("payload", payload);
+		}
 
 		// 属性与参数
 		var options = $.extend(defaults, options);
+
+		// 解析 args 为 URL 格式
+		var params = options.params;
+		if (null != params) {
+			var p = new Array();
+			for (var o in params) {
+				if (params.hasOwnProperty(o)) {
+					p.push(o + "=" + params[o]);
+				}
+			}
+			// 拼接参数串
+			params = p.join('&');
+		}
 
 		this.each(function() {
 			var self = $(this);
@@ -49,7 +68,10 @@
 			// 判断界面片段
 			if (options['html'] !== undefined && options['html'] != null) {
 				// 加载 HTML 片段
-				self.load(options['html'], function(response, status, xhr) {
+				var url = options['html'];
+				if (null != params)
+					url += "?" + params;
+				self.load(url, function(response, status, xhr) {
 					if (status == 'success') {
 						// 加载成功
 						// 加载脚本文件
@@ -63,10 +85,10 @@
 								if (maxCounts == counts && null != main) {
 									if (typeof(main) == 'string') {
 										var f = eval(main);
-										f.call(null, pself, options.args);
+										f.call(null, pself, options.args, payload);
 									}
 									else {
-										main.call(null, pself, options.args);
+										main.call(null, pself, options.args, payload);
 									}
 								}
 							};
@@ -83,7 +105,10 @@
 			}
 			else if (options['tmpl'] !== undefined) {
 				// 模板界面
-				$.ajax(options['tmpl'], {
+				var url = options['tmpl'];
+				if (null != params)
+					url += "?" + params;
+				$.ajax(url, {
 					async: true
 					, mimeType: 'text/plain; charset=utf-8'
 					, cache: false
@@ -111,10 +136,10 @@
 							if (maxCounts == counts && null != main) {
 								if (typeof(main) == 'string') {
 									var f = eval(main);
-									f.call(null, pself, options.args);
+									f.call(null, pself, options.args, payload);
 								}
 								else {
-									main.call(null, pself, options.args);
+									main.call(null, pself, options.args, payload);
 								}
 							}
 						};
@@ -135,10 +160,10 @@
 					if (maxCounts == counts && null != main) {
 						if (typeof(main) == 'string') {
 							var f = eval(main);
-							f.call(null, pself, options.args);
+							f.call(null, pself, options.args, payload);
 						}
 						else {
-							main.call(null, pself, options.args);
+							main.call(null, pself, options.args, payload);
 						}
 					}
 				};
@@ -158,7 +183,7 @@
 			var link = document.createElement("link");
 			link.type = "text/css";
 			link.rel  = "stylesheet";
-			link.href  = url;
+			link.href  = url;// + "?_=" + (new Date()).getTime();
 			var head = document.getElementsByTagName("head")[0];
 			head.appendChild(link);
 		}
@@ -169,7 +194,7 @@
 		if (!cache.checkScriptCached(url)) {
 			var script = document.createElement("script");
 			script.type = "text/javascript";
-			script.src = url;
+			script.src = url;// + "?_=" + (new Date()).getTime();
 			if (loadedCallback !== undefined) {
 				script.onload = function() {
 					loadedCallback.call(null);

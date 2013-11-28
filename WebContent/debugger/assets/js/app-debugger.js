@@ -37,5 +37,11 @@
             $('#input_args').val('');
         });
 		$('#btn_clear').tooltip({container:'body'});
+
+		// 如果直接加载则进行加载
+		if (direct) {
+			// 调试
+			yi.mod.debug("mod", mod);
+		}
 	});
 })();

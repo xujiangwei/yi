@@ -78,6 +78,10 @@
 
 	var stopProgressBar = function(value) {
 		clearInterval(pbTimer);
-		$('.progress-bar').css('width', value + '%');
+		var bar = $('.progress-bar');
+		bar.css('width', value + '%');
+		setTimeout(function() {
+			bar.parent().removeClass('active');
+		}, 500);
 	}
 })();

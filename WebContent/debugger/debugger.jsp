@@ -4,6 +4,9 @@
 <%
 Debugger debugger = DebuggerPage.newDebugger(request);
 Mod mod = debugger.getMod();
+// 是否直接载入
+String load = request.getParameter("load");
+boolean direct = (null != load && (load.equals("1") || load.equals("true")));
 %>
 <!doctype html>
 <html lang="zh-CN">
@@ -54,9 +57,7 @@ Mod mod = debugger.getMod();
         <div class="panel-heading">
           <div class="panel-title"><%=mod.getName()%> <%=mod.getVersion()%> - 预览</div>
         </div>
-        <div class="panel-body">
-          <div id="mod">
-          </div>
+        <div id="mod" class="panel-body">
         </div>
       </div>
     </div>
@@ -77,6 +78,7 @@ Mod mod = debugger.getMod();
 <script type="text/javascript">
 (function() {
 	this.mod = <%=mod.toJSONString()%>;
+	this.direct = <%=direct%>;
 })();
 </script>
 <script src="assets/js/app-debugger.js" type="text/javascript"></script>

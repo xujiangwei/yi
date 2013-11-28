@@ -155,6 +155,9 @@ public final class DebuggerDirector extends AbstractLifeCycle {
 						try {
 							// 读取配置文件
 							Mod mod = ModReader.readConfig(f);
+							if (null == mod) {
+								continue;
+							}
 
 							// 分析上下文路径
 							int index = f.getParent().indexOf(managedDir);
