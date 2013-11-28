@@ -5,21 +5,21 @@ Copyright (c) 2013,2014 DHC Software Research Department
 -->
 <mod>
 	<!-- 模块名 -->
-	<name>HelloWorld_C</name>
+	<name>AndroidCarousel</name>
 	<!-- 模块版本 -->
 	<version>1.0.0</version>
 	<!-- 模块描述 -->
-	<description>简单的加载 HTML 片段、脚本和样式</description>
+	<description>使用 Carousel 展示 Android 系统开发名</description>
 
 	<!-- 普通文件 -->
 	<files>
-		<html>helloworld.jsp</html>
-		<script>helloworld3.js</script>
-		<style>helloworld3.css</style>
+		<html>android_carousel.jsp</html>
+		<style>android_carousel.css</style>
+		<script>main.js</script>
 	</files>
 
 	<!-- 入口函数 -->
-	<main>demo.helloworld3</main>
+	<main>tutorial.runAndroidCarousel</main>
 
 	<!-- 前置依赖 -->
 	<dependents>

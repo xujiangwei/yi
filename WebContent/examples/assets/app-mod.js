@@ -28,9 +28,9 @@
 			});
 		});
 
-		// helloworld_3
-		$('#btn_helloworld_3').click(function(e) {
-			yi.mod.load('helloworld_3');
+		// beginner_1
+		$('#btn_beginner_1').click(function(e) {
+			yi.mod.load('beginner_1');
 		});
 	});
 })();

@@ -1,5 +1,5 @@
 /**
- * 定义一个简单的 Carousel 组件
+ * 定义一个简单的 Carousel 组件。
  */
 define(function(require, exports, module) {
 

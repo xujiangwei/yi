@@ -10,6 +10,7 @@
  */
 var ModManager = function() {
 	this.context = "";
+	
 };
 
 /**

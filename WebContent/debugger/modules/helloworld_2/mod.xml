@@ -5,7 +5,7 @@ Copyright (c) 2013,2014 DHC Software Research Department
 -->
 <mod>
 	<!-- 模块名 -->
-	<name>HelloWorld_B</name>
+	<name>HelloWorld_2</name>
 	<!-- 模块版本 -->
 	<version>1.0.0</version>
 	<!-- 模块描述 -->
@@ -14,13 +14,9 @@ Copyright (c) 2013,2014 DHC Software Research Department
 	<!-- 普通文件 -->
 	<files>
 		<tmpl>helloworld.tmpl</tmpl>
-		<script>helloworld2.js</script>
+		<script>helloworld.js</script>
 	</files>
 
-	<!-- 入口方法 -->
-	<!-- 入口方法参数：
-	container {Object} 组件容器 jQuery 对象。
-	args {Object} 组件附件的其他参数 
-	-->
-	<main>demo.helloworld2</main>
+	<!-- 入口函数名 -->
+	<main>tutorial.helloworld</main>
 </mod>
