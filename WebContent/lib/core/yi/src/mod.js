@@ -1,16 +1,30 @@
 /*
  * ModManager
  * 
- * MOD Format:
+ * MOD Format: {
  *   // 前置依赖
  *   "deps": {
  *       "aliases": []
  *       "files": []
  *   }
+ * }
+ * 
+ * DOM 节点属性：
+ * data-mod - MOD 名称
+ * data-ver - MOD 版本
+ * data-auto - 是否自动加载，默认 false
+ * data-args - 自动加载时的参数
  */
+
+var ModEvent = {
+	LOAD: "load"
+};
+
 var ModManager = function() {
 	this.context = "";
-	
+	this.mods = {};
+	// Key：Event name， Value：List
+	this.listeners = new HashMap();
 };
 
 /**
@@ -30,9 +44,9 @@ ModManager.prototype.load = function(container, args) {
 		console.log('[Yi#Mod] Can not find "data-mod" attribute value.');
 		return;
 	}
-	var version = target.data('modVer');
+	var version = target.data('ver');
 	if (version === undefined) {
-		console.log('[Yi#Mod] Can not find "data-mod-ver" attribute value.');
+		console.log('[Yi#Mod] Can not find "data-ver" attribute value.');
 		return;
 	}
 
@@ -56,6 +70,10 @@ ModManager.prototype.load = function(container, args) {
 		data["params"] = params;
 		// 上下文路径
 		data["contextPath"] = context + data.path;
+		// 完成回调
+		data["done"] = function(c, m) {
+			self._done(c, m);
+		};
 
 		// 判断前置条件
 		var deps = data["deps"];
@@ -76,6 +94,13 @@ ModManager.prototype.load = function(container, args) {
 };
 
 /**
+ * 卸载 MOD 。
+ */
+ModManager.prototype.unload = function(container) {
+	// TODO
+};
+
+/**
  * 调试 MOD 。
  */
 ModManager.prototype.debug = function(containerId, mod) {
@@ -92,6 +117,12 @@ ModManager.prototype.debug = function(containerId, mod) {
 
 	// 上下文路径
 	mod["contextPath"] = this.context + "debugger/" + mod.path;
+
+	var self = this;
+	// 完成回调
+	mod["done"] = function(c, m) {
+		self._done(c, m);
+	};
 
 	// 判断前置条件
 	var deps = mod["deps"];
@@ -125,4 +156,72 @@ ModManager.prototype._predeps = function(deps, callback) {
 			});
 		}
 	}
-}
+};
+
+/**
+ * Fetch 执行完毕的回调函数。
+ */
+ModManager.prototype._done = function(container, mod) {
+	this.addMod(mod);
+};
+
+/**
+ * 检索当前页的所有可自动装载的 MOD 。
+ */
+ModManager.prototype._search = function() {
+	var self = this;
+	$(".mod").each(function(index, element) {
+		var el = $(this);
+		var auto = el.attr("data-auto");
+        if (auto !== undefined && auto == "true") {
+			var args = el.data('args');
+			if (args !== undefined) {
+				try {
+					var obj = eval(args);
+					args = obj;
+				} catch (e) {
+					// Nothing
+				}
+				self.load(el, args);
+			}
+			else {
+				self.load(el);
+			}
+		}
+    });
+};
+
+/**
+ * 添加 MOD 。
+ */
+ModManager.prototype.addMod = function(mod) {
+	this.mods[mod.name] = mod;
+};
+
+/**
+ * 删除 MOD 。
+ */
+ModManager.prototype.removeMod = function(name) {
+	delete this.mods[name];
+};
+
+/**
+ * 添加监听器。
+ */
+ModManager.prototype.addListener = function(event, listener) {
+	if (this.listeners.containsKey(event)) {
+		var list = this.listeners.get(event);
+		if (list.indexOf(listener) < 0) {
+			list.push(listener);
+		}
+	}
+	else {
+		this.listeners.put(event, [listener]);
+	}
+};
+
+/**
+ * 删除监听器。
+ */
+ModManager.prototype.removeListener = function(event, listener) {
+};

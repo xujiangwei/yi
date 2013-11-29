@@ -1,6 +1,5 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="yi.util.*" %>
-<!-- Hello World 演示，轮播组件 -->
 <div class="container carousel-android-container">
   <div class="center-block">
     <div id="carousel-android-captions" class="carousel slide" data-ride="carousel">

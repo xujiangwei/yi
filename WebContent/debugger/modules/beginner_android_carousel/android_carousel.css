@@ -1,5 +1,5 @@
 /**
- * Hello world 示例 3
+ * 简单轮播组件。
  */
 
 .carousel-caption {
@@ -10,12 +10,12 @@
 }
 
 .carousel-indicators li {
-  background-color: #999;
-  background-color: rgba(70,70,70,.1);
+  background-color: #777;
+  background-color: rgba(119,119,119,.1);
 }
 
 .carousel-indicators .active {
-  background-color: #444;
+  background-color: #333;
 }
 
 .carousel-android-container {

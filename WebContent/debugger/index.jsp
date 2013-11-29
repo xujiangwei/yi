@@ -8,8 +8,9 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>模组调试管理器</title>
+<title>调试管理器</title>
 <link href="../lib/core/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<link href="../lib/core/yi/yi.css" rel="stylesheet" />
 <link href="assets/css/index.css" rel="stylesheet" />
 </head>
 
@@ -23,11 +24,12 @@
       	<span class="icon-bar"></span>
       	<span class="icon-bar"></span>
       </button>
-      <div class="navbar-brand">模组调试管理器</div>
+      <div class="navbar-brand">调试管理器</div>
     </div>
     <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav nav-pills pull-right">
         <li><button id="btn_new" class="btn btn-default">新建</button></li>
+        <li><button id="btn_import" class="btn btn-default">导入</button></li>
         <li><button id="btn_help" class="btn btn-default">帮助</button></li>
       </ul>
     </div><!--/.nav-collapse -->
@@ -67,6 +69,14 @@ for (Mod mod : list) {
                     <a id="btn_debug_<%=mod.getName()%>" class="btn btn-sm btn-primary" href="debugger.jsp?name=<%=mod.getName()%>&version=<%=mod.getVersion()%>" target="_blank">调试</a>
                     <a id="btn_build_<%=mod.getName()%>" class="btn btn-sm btn-info" href="builder.jsp?name=<%=mod.getName()%>&version=<%=mod.getVersion()%>" target="_blank">构建</a>
                     <button id="btn_config_<%=mod.getName()%>" class="btn btn-sm btn-default">配置</button>
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">更多 <span class="caret"></span></button>
+                      <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">刷新</a></li>
+                        <li><a href="#">导出</a></li>
+                        <li><a href="#">删除</a></li>
+                      </ul>
+                    </div>
                   </td>
                 </tr>
 <%

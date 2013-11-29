@@ -17,31 +17,39 @@
 
 	yi.ready(function() {
 		// 绑定事件
-		$('#btn_run').click(function(e) {
-			var input = $('#input_args');
-			var val = input.val().toString();
-			var args = null;
-			if (val.length > 1) {
-				args = JSON.parse(val);
-			}
-
-			// 设置参数
-			mod.args = args;
-
-			// 调试
-			yi.mod.debug("mod", mod);
-		});
-		$('#btn_run').tooltip({container:'body'});
-
-		$('#btn_clear').click(function(e) {
-            $('#input_args').val('');
-        });
-		$('#btn_clear').tooltip({container:'body'});
+		window.debugger.bindButton($('#mod_area_0'));
 
 		// 如果直接加载则进行加载
 		if (direct) {
 			// 调试
-			yi.mod.debug("mod", mod);
+			yi.mod.debug("mod_area_0", mod);
 		}
 	});
+
+	this.debugger = {
+		bindButton: function(area) {
+			// 运行按钮
+			area.find('#btn_run').click(function(e) {
+				var input = area.find('#input_args');
+				var val = input.val().toString();
+				var args = null;
+				if (val.length > 1) {
+					args = JSON.parse(val);
+				}
+
+				// 设置参数
+				mod.args = args;
+
+				// 调试
+				yi.mod.debug("mod_container_0", mod);
+			});
+			area.find('#btn_run').tooltip({container:'body'});
+
+			// 清空按钮
+			area.find('#btn_clear').click(function(e) {
+				area.find('#input_args').val('');
+			});
+			area.find('#btn_clear').tooltip({container:'body'});
+		}
+	};
 })();

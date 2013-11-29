@@ -20,6 +20,7 @@ builder.start();
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>构建器 - <%=mod.getName()%> <%=mod.getVersion()%></title>
 <link href="../lib/core/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<link href="../lib/core/yi/yi.css" rel="stylesheet" />
 <link href="assets/css/app-builder.css" rel="stylesheet" />
 </head>
 

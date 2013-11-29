@@ -34,6 +34,8 @@ Yi.prototype.ready = function(callback) {
  * 自动配置 CommonJS 。
  */
 Yi.prototype.config = function(relativePath, addition) {
+	if (relativePath.lastIndexOf("/") != (relativePath.length - 1))
+		relativePath += "/";
 	this.relativePath = relativePath;
 	this.mod.context = relativePath;
 
@@ -95,6 +97,9 @@ Yi.prototype._setup = function() {
 					cb.call(null, self);
 				}
 			}
+
+			// 处理 MOD 自动化
+			self.mod._search();
 		}
 	}
 };

@@ -15,7 +15,8 @@
  *     scripts: ['modules/dhc/dhc1.js', 'modules/dhc/dhc2.js'],
  *     main: function(parent, args) {},
  *     args: {},
- *     error: function(el) {}				// 错误处理函数
+ *     error: function(el) {},				// 错误处理函数
+ *     done: function(container, payload) {}	// 处理完成回调
  * }
  *
  * @note html 和 tmpl 两个参数只能二选一使用。
@@ -31,6 +32,7 @@
 			, args: null
 			, context: null
 			, error: function() {}
+			, done: function() {}
 		};
 
 		// 容器自己
@@ -90,6 +92,9 @@
 									else {
 										main.call(null, pself, options.args, payload);
 									}
+
+									// 完成加载
+									options.done.call(null, pself, payload);
 								}
 							};
 							for (var i = 0, size = options.scripts.length; i < size; ++i) {
@@ -141,6 +146,9 @@
 								else {
 									main.call(null, pself, options.args, payload);
 								}
+
+								// 完成加载
+								options.done.call(null, pself, payload);
 							}
 						};
 						for (var i = 0, size = options.scripts.length; i < size; ++i) {
@@ -165,6 +173,9 @@
 						else {
 							main.call(null, pself, options.args, payload);
 						}
+
+						// 完成加载
+						options.done.call(null, pself, payload);
 					}
 				};
 				for (var i = 0, size = options.scripts.length; i < size; ++i) {

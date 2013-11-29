@@ -42,7 +42,8 @@ public final class Stage extends AbstractLifeCycle {
 			, "core/seajs/sea.js"
 			, "utils/store.js"
 			, "utils/json2.js"
-			, "core/yi/yi.js"
+			, "utils/hashmap.js"
+			, "core/yi/yi.min.js"
 		};
 
 		StringBuilder ret = new StringBuilder();
@@ -66,7 +67,9 @@ public final class Stage extends AbstractLifeCycle {
 		if (!contextPath.endsWith("/"))
 			contextPath += "/";
 
-		String[] list = new String[] {"core/bootstrap/css/bootstrap.min.css"};
+		String[] list = new String[] {"core/bootstrap/css/bootstrap.min.css"
+			, "core/yi/yi.css"
+		};
 
 		StringBuilder ret = new StringBuilder();
 		for (String file : list) {
