@@ -30,10 +30,14 @@ public final class Mod implements Serializable, Comparable<Mod> {
 	private String contextPath;
 
 	private String htmlFilename;
+	private long htmlFileSize;
 	private String tmplFilename;
+	private long tmplFileSize;
 
 	private ArrayList<String> scriptFilenames;
+	private ArrayList<Long> scriptFileSizes;
 	private ArrayList<String> styleFilenames;
+	private ArrayList<Long> styleFileSizes;
 
 	private ArrayList<String> depsAliases;
 	private ArrayList<String> depsFiles;
@@ -102,11 +106,20 @@ public final class Mod implements Serializable, Comparable<Mod> {
 	}
 
 	/**
+	 * 返回 HTML 文件大小。
+	 * @return
+	 */
+	public long getHtmlFileSize() {
+		return this.htmlFileSize;
+	}
+
+	/**
 	 * 注册 HTML 页面。
 	 * @param filename
 	 */
-	public void registerHtmlFile(String filename) {
+	public void registerHtmlFile(String filename, long size) {
 		this.htmlFilename = filename;
+		this.htmlFileSize = size;
 	}
 
 	/**
@@ -126,11 +139,20 @@ public final class Mod implements Serializable, Comparable<Mod> {
 	}
 
 	/**
+	 * 返回模板文件大小。
+	 * @return
+	 */
+	public long getTmplFileSize() {
+		return this.tmplFileSize;
+	}
+
+	/**
 	 * 注册模板页面。
 	 * @param filename
 	 */
-	public void registerTmplFile(String filename) {
+	public void registerTmplFile(String filename, long size) {
 		this.tmplFilename = filename;
+		this.tmplFileSize = size;
 	}
 
 	/**
@@ -142,15 +164,34 @@ public final class Mod implements Serializable, Comparable<Mod> {
 	}
 
 	/**
+	 * 返回指定脚本文件的大小。
+	 * @param name
+	 * @return
+	 */
+	public long getScriptFileSize(String name) {
+		if (null == this.scriptFilenames) {
+			return -1;
+		}
+
+		int index = this.scriptFilenames.indexOf(name);
+		if (index >= 0) {
+			return this.scriptFileSizes.get(index).longValue();
+		}
+		return -1;
+	}
+
+	/**
 	 * 添加脚本文件。
 	 * @param filename
 	 */
-	public void addScriptFile(String filename) {
+	public void addScriptFile(String filename, long size) {
 		if (null == this.scriptFilenames) {
 			this.scriptFilenames = new ArrayList<String>(1);
+			this.scriptFileSizes = new ArrayList<Long>(1);
 		}
 
 		this.scriptFilenames.add(filename);
+		this.scriptFileSizes.add(size);
 	}
 
 	/**
@@ -162,15 +203,34 @@ public final class Mod implements Serializable, Comparable<Mod> {
 	}
 
 	/**
+	 * 返回指定样式文件的大小。
+	 * @param name
+	 * @return
+	 */
+	public long getStyleFileSize(String name) {
+		if (null == this.styleFilenames) {
+			return -1;
+		}
+
+		int index = this.styleFilenames.indexOf(name);
+		if (index >= 0) {
+			return this.styleFileSizes.get(index).longValue();
+		}
+		return -1;
+	}
+
+	/**
 	 * 添加样式文件。
 	 * @param filename
 	 */
-	public void addStyleFile(String filename) {
+	public void addStyleFile(String filename, long size) {
 		if (null == this.styleFilenames) {
 			this.styleFilenames = new ArrayList<String>(1);
+			this.styleFileSizes = new ArrayList<Long>(1);
 		}
 
 		this.styleFilenames.add(filename);
+		this.styleFileSizes.add(size);
 	}
 
 	/**
@@ -221,9 +281,11 @@ public final class Mod implements Serializable, Comparable<Mod> {
 			// 界面文件
 			if (this.existHtmlFile()) {
 				json.put("html", this.contextPath + this.htmlFilename);
+				json.put("htmlSize", this.htmlFileSize);
 			}
 			else if (this.existTmplFile()) {
 				json.put("tmpl", this.contextPath + this.tmplFilename);
+				json.put("tmplSize", this.tmplFileSize);
 			}
 
 			// 脚本
@@ -233,6 +295,12 @@ public final class Mod implements Serializable, Comparable<Mod> {
 					list.put(this.contextPath + file);
 				}
 				json.put("scripts", list);
+
+				list = new JSONArray();
+				for (Long size : this.scriptFileSizes) {
+					list.put(size.longValue());
+				}
+				json.put("scriptFileSizeList", list);
 			}
 
 			// 样式表
@@ -242,6 +310,12 @@ public final class Mod implements Serializable, Comparable<Mod> {
 					list.put(this.contextPath + file);
 				}
 				json.put("styles", list);
+
+				list = new JSONArray();
+				for (Long size : this.styleFileSizes) {
+					list.put(size.longValue());
+				}
+				json.put("styleFileSizeList", list);
 			}
 
 			// 入口函数

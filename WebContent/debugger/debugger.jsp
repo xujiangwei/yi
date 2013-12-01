@@ -53,11 +53,11 @@ boolean direct = (null != load && (load.equals("1") || load.equals("true")));
             <div class="col-md-12">
               <form class="form-horizontal" role="form">
                 <div class="form-group">
-                  <label class="col-sm-2 control-label" for="input_args">模组参数</label>
-                  <div class="col-sm-8">
+                  <label class="col-sm-1 control-label" for="input_args">参数</label>
+                  <div class="col-sm-7">
                     <input type="text" class="form-control" id="input_args" placeholder="输入模组参数" maxlength="512" />
                   </div>
-                  <div class="col-sm-2">
+                  <div class="col-sm-4">
                     <button id="btn_run" type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="加载调试"><span class="glyphicon glyphicon-play"></span></button>
                     <button id="btn_clear" type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="清空参数"><span class="glyphicon glyphicon-trash"></span></button>
                   </div>
@@ -66,7 +66,65 @@ boolean direct = (null != load && (load.equals("1") || load.equals("true")));
             </div>
           </div>
           <hr />
-          <div id="mod_container_0" class="mod-container"></div>
+          <div id="mod_container_0" class="mod-container mod"></div>
+          <hr />
+          <div class="debug-info">
+            <div class="row">
+              <div class="col-md-4 col-sm-4">
+                <div class="text-center col-title">评估流程</div>
+                <div class="text-center"><h4><div class="glyphicon glyphicon-chevron-down"></div></h4></div>
+                <div class="alert alert-info text-center">准备阶段<br/>（脚本执行 + 网络 I/O<sup>*</sup>）</div>
+                <div class="text-center"><h2><div class="glyphicon glyphicon-arrow-down"></div></h2></div>
+                <div class="alert alert-info text-center">加载 HTML 数据<br/>（网络 I/O + 渲染）</div>
+                <div class="text-center"><h2><div class="glyphicon glyphicon-arrow-down"></div></h2></div>
+                <div class="alert alert-info text-center">加载脚本数据<br/>（网络 I/O + 解释执行）</div>
+                <div class="text-center"><h2><div class="glyphicon glyphicon-arrow-down"></div></h2></div>
+                <div class="alert alert-info text-center">执行回调函数<br/>（脚本执行）</div>
+              </div>
+              <div class="col-md-4 col-sm-4">
+                <div class="text-center col-title">评估成绩</div>
+                <div class="text-center"><h4><div class="glyphicon glyphicon-chevron-down"></div></h4></div>
+                <div id="step_1" class="alert alert-success text-center">未执行<br/><span class="glyphicon glyphicon-question-sign"></span></div>
+                <div class="text-center"><h2><div class="glyphicon glyphicon-arrow-down"></div></h2></div>
+                <div id="step_2" class="alert alert-success text-center">未执行<br/><span class="glyphicon glyphicon-question-sign"></span></div>
+                <div class="text-center"><h2><div class="glyphicon glyphicon-arrow-down"></div></h2></div>
+                <div id="step_3" class="alert alert-success text-center">未执行<br/><span class="glyphicon glyphicon-question-sign"></span></div>
+                <div class="text-center"><h2><div class="glyphicon glyphicon-arrow-down"></div></h2></div>
+                <div id="step_4" class="alert alert-success text-center">未执行<br/><span class="glyphicon glyphicon-question-sign"></span></div>
+              </div>
+              <div class="col-md-4 col-sm-4">
+                <div class="text-center col-title">评估注解</div>
+                <div class="text-center"><h4><div class="glyphicon glyphicon-chevron-down"></div></h4></div>
+                <div id="step_1_explain" class="alert alert-warning text-center">
+                  <span class="text">未执行</span>
+                  <div class="raty" data-toggle="tooltip" data-placement="left" title="评价等级"><span class="glyphicon glyphicon-question-sign"></span></div>
+                </div>
+                <div class="text-center"><h2><div class="glyphicon glyphicon-arrow-down"></div></h2></div>
+                <div id="step_2_explain" class="alert alert-warning text-center">
+                  <span class="text">未执行</span>
+                  <div class="raty" data-toggle="tooltip" data-placement="left" title="评价等级"><span class="glyphicon glyphicon-question-sign"></span></div>
+                </div>
+                <div class="text-center"><h2><div class="glyphicon glyphicon-arrow-down"></div></h2></div>
+                <div id="step_3_explain" class="alert alert-warning text-center">
+                  <span class="text">未执行</span>
+                  <div class="raty" data-toggle="tooltip" data-placement="left" title="评价等级"><span class="glyphicon glyphicon-question-sign"></span></div>
+                </div>
+                <div class="text-center"><h2><div class="glyphicon glyphicon-arrow-down"></div></h2></div>
+                <div id="step_4_explain" class="alert alert-warning text-center">
+                  <span class="text">未执行</span>
+                  <div class="raty" data-toggle="tooltip" data-placement="left" title="评价等级"><span class="glyphicon glyphicon-question-sign"></span></div>
+                </div>
+              </div>
+            </div><!-- /.row -->
+            <div class="row">
+              <div class="col-md-12">
+                <ul>
+                  <li><sup>*</sup> <span class="text-muted">只有配置了前置依赖项的项目需要在首次加载时执行网络 I/O 操作来下载对应的组件脚本文件。</span></li>
+                  <li><span class="text-muted">评价等级由“五星”等级构成，从低到高依次为：极差、差、合格、好、极好。评价不作为最终判定模组工作能力的依据，仅供横向比较。</span></li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -86,7 +144,7 @@ boolean direct = (null != load && (load.equals("1") || load.equals("true")));
 <%=Stage.importScripts("../lib/")%>
 <script type="text/javascript">
 (function() {
-	this.mod = <%=mod.toJSONString()%>;
+	this.currentMod = <%=mod.toJSONString()%>;
 	this.direct = <%=direct%>;
 })();
 </script>

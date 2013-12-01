@@ -67,7 +67,7 @@ for (Mod mod : list) {
                   <td><%=mod.getContextPath() %></td>
                   <td>
                     <a id="btn_debug_<%=mod.getName()%>" class="btn btn-sm btn-primary" href="debugger.jsp?name=<%=mod.getName()%>&version=<%=mod.getVersion()%>" target="_blank">调试</a>
-                    <a id="btn_build_<%=mod.getName()%>" class="btn btn-sm btn-info" href="builder.jsp?name=<%=mod.getName()%>&version=<%=mod.getVersion()%>" target="_blank">构建</a>
+                    <button id="btn_build_<%=mod.getName()%>" class="btn btn-sm btn-info" onClick="javascript:window.build('builder.jsp?name=<%=mod.getName()%>&version=<%=mod.getVersion()%>');">构建</button>
                     <button id="btn_config_<%=mod.getName()%>" class="btn btn-sm btn-default">配置</button>
                     <div class="btn-group">
                       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">更多 <span class="caret"></span></button>

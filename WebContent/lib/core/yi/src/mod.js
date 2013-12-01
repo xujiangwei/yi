@@ -14,10 +14,15 @@
  * data-ver - MOD 版本
  * data-auto - 是否自动加载，默认 false
  * data-args - 自动加载时的参数
+ *
+ * Event 属性：
+ * event - {String} 事件名
+ * container - {Object} MOD 容器的 jQuery对象
+ * mod - {Object} MOD 对象
  */
 
-var ModEvent = {
-	LOAD: "load"
+global.ModEvent = {
+	LOADED: "loaded"
 };
 
 var ModManager = function() {
@@ -104,6 +109,10 @@ ModManager.prototype.unload = function(container) {
  * 调试 MOD 。
  */
 ModManager.prototype.debug = function(containerId, mod) {
+	var _debug = {
+		startTime: new Date()
+	};
+
 	var container = $('#' + containerId);
 	// 上下文
 	mod["context"] = this.context;
@@ -124,15 +133,27 @@ ModManager.prototype.debug = function(containerId, mod) {
 		self._done(c, m);
 	};
 
+	// 启用调试
+	mod.debug = true;
+
+	// 调试数据
+	mod._debug = _debug;
+
 	// 判断前置条件
 	var deps = mod["deps"];
 	if (deps !== undefined) {
 		this._predeps(deps, function(){
 			container.fetch(mod, mod);
+
+			// 结束时间
+			_debug.endTime = new Date();
 		});
 	}
 	else {
 		container.fetch(mod, mod);
+
+		// 结束时间
+		_debug.endTime = new Date();
 	}
 };
 
@@ -163,6 +184,9 @@ ModManager.prototype._predeps = function(deps, callback) {
  */
 ModManager.prototype._done = function(container, mod) {
 	this.addMod(mod);
+
+	// 停止 LOADED 事件
+	this.notifyEvent(ModEvent.LOADED, container, mod);
 };
 
 /**
@@ -224,4 +248,29 @@ ModManager.prototype.addListener = function(event, listener) {
  * 删除监听器。
  */
 ModManager.prototype.removeListener = function(event, listener) {
+	if (this.listeners.containsKey(event)) {
+		var list = this.listeners.get(event);
+		var index = list.indexOf(listener);
+		if (index >= 0) {
+			list.split(index, 1);
+			// 如果列表空，则从 Map 中删除列表
+			if (list.length == 0) {
+				this.listeners.remove(event);
+			}
+		}
+	}
+};
+
+/**
+ * 通知事件。
+ */
+ModManager.prototype.notifyEvent = function(event, container, mod) {
+	if (this.listeners.containsKey(event)) {
+		var list = this.listeners.get(event);
+		var obj = {event:event, container:container, mod:mod};
+		for (var i = 0; i < list.length; ++i) {
+			var listener = list[i];
+			listener.call(null, obj);
+		}
+	}
 };

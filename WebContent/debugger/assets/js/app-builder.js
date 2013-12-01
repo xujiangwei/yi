@@ -45,6 +45,7 @@
 			}).done(function(data) {
 				stopProgressBar(100);
 				info.html('<p class="text-success">构建并部署模组完成</p>');
+				end();
 			}).fail(function() {
 				// Nothing
 			});
@@ -56,6 +57,26 @@
 		// 简单进度条动画
 		startProgressBar();
 	});
+
+	// 结束
+	var end = function() {
+		var handle = window.handle;
+		if (handle === undefined) {
+			return;
+		}
+
+		var info = $('#action_info');
+		info.html("3 秒后窗口自动关闭");
+		var count = 3;
+		var t = setInterval(function() {
+			--count;
+			info.html(count + " 秒后窗口自动关闭");
+			if (count == 0) {
+				clearInterval(t);
+				handle.close();
+			}
+		}, 1000);
+	}
 
 	var pbTimer;
 	var startProgressBar = function() {

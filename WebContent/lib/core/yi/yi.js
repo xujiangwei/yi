@@ -57,14 +57,18 @@ Yi.prototype.config = function(relativePath, addition) {
 	alias["console"] = "core/console/console.js";			// 可视化控制台
 	alias["dialog"] = "plugins/bootbox.min.js";				// 对话框
 	alias["menu-aim"] = "plugins/jquery.menu-aim.js";		// 改进的浮动菜单
+	alias["rating"] = "plugins/raty/jquery.raty.min.js";	// 评分插件
 	alias["fetch"] = "plugins/fetch/jquery.fetch.js";		// 片段截取
 	alias["theme-manager"] = "modules/misc/theme-manager.min.js";	// 主题管理器
-	alias["holder"] = "utils/holder.js";						// 图片占位符
+	alias["holder"] = "utils/holder.js";					// 图片占位符
 
 	common.config({
 		base: relativePath + "lib/",
 		alias: alias
 	});
+
+	// Raty 图片路径
+	this.ratyImgPath = relativePath + "lib/plugins/raty/img";
 };
 
 /*
@@ -72,7 +76,7 @@ Yi.prototype.config = function(relativePath, addition) {
  */
 Yi.prototype._setup = function() {
 	var readyCount = 0;
-	var readyConst = 3;
+	var readyConst = 4;
 	var self = this;
 
 	// 创建主题管理器
@@ -94,6 +98,15 @@ Yi.prototype._setup = function() {
 
 	// 启用 fetch
 	common.use('fetch', function() {
+		// 检查就绪状态
+		checkReady();
+	});
+
+	// Rating 插件
+	common.use('rating', function() {
+		// 设置路径
+		$.fn.raty.defaults.path = self.ratyImgPath;
+		$.fn.raty.defaults.hints = ['极差', '差', '合格', '好', '极好'];
 		// 检查就绪状态
 		checkReady();
 	});
@@ -152,10 +165,15 @@ Yi.prototype.dialog = function(options) {
  * data-ver - MOD 版本
  * data-auto - 是否自动加载，默认 false
  * data-args - 自动加载时的参数
+ *
+ * Event 属性：
+ * event - {String} 事件名
+ * container - {Object} MOD 容器的 jQuery对象
+ * mod - {Object} MOD 对象
  */
 
-var ModEvent = {
-	LOAD: "load"
+global.ModEvent = {
+	LOADED: "loaded"
 };
 
 var ModManager = function() {
@@ -235,12 +253,17 @@ ModManager.prototype.load = function(container, args) {
  * 卸载 MOD 。
  */
 ModManager.prototype.unload = function(container) {
-}
+	// TODO
+};
 
 /**
  * 调试 MOD 。
  */
 ModManager.prototype.debug = function(containerId, mod) {
+	var _debug = {
+		startTime: new Date()
+	};
+
 	var container = $('#' + containerId);
 	// 上下文
 	mod["context"] = this.context;
@@ -261,15 +284,27 @@ ModManager.prototype.debug = function(containerId, mod) {
 		self._done(c, m);
 	};
 
+	// 启用调试
+	mod.debug = true;
+
+	// 调试数据
+	mod._debug = _debug;
+
 	// 判断前置条件
 	var deps = mod["deps"];
 	if (deps !== undefined) {
 		this._predeps(deps, function(){
 			container.fetch(mod, mod);
+
+			// 结束时间
+			_debug.endTime = new Date();
 		});
 	}
 	else {
 		container.fetch(mod, mod);
+
+		// 结束时间
+		_debug.endTime = new Date();
 	}
 };
 
@@ -300,6 +335,9 @@ ModManager.prototype._predeps = function(deps, callback) {
  */
 ModManager.prototype._done = function(container, mod) {
 	this.addMod(mod);
+
+	// 停止 LOADED 事件
+	this.notifyEvent(ModEvent.LOADED, container, mod);
 };
 
 /**
@@ -339,6 +377,7 @@ ModManager.prototype.addMod = function(mod) {
  * 删除 MOD 。
  */
 ModManager.prototype.removeMod = function(name) {
+	delete this.mods[name];
 };
 
 /**
@@ -353,6 +392,37 @@ ModManager.prototype.addListener = function(event, listener) {
 	}
 	else {
 		this.listeners.put(event, [listener]);
+	}
+};
+
+/**
+ * 删除监听器。
+ */
+ModManager.prototype.removeListener = function(event, listener) {
+	if (this.listeners.containsKey(event)) {
+		var list = this.listeners.get(event);
+		var index = list.indexOf(listener);
+		if (index >= 0) {
+			list.split(index, 1);
+			// 如果列表空，则从 Map 中删除列表
+			if (list.length == 0) {
+				this.listeners.remove(event);
+			}
+		}
+	}
+};
+
+/**
+ * 通知事件。
+ */
+ModManager.prototype.notifyEvent = function(event, container, mod) {
+	if (this.listeners.containsKey(event)) {
+		var list = this.listeners.get(event);
+		var obj = {event:event, container:container, mod:mod};
+		for (var i = 0; i < list.length; ++i) {
+			var listener = list[i];
+			listener.call(null, obj);
+		}
 	}
 };
 

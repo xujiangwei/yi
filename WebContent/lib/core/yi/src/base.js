@@ -45,14 +45,18 @@ Yi.prototype.config = function(relativePath, addition) {
 	alias["console"] = "core/console/console.js";			// 可视化控制台
 	alias["dialog"] = "plugins/bootbox.min.js";				// 对话框
 	alias["menu-aim"] = "plugins/jquery.menu-aim.js";		// 改进的浮动菜单
+	alias["rating"] = "plugins/raty/jquery.raty.min.js";	// 评分插件
 	alias["fetch"] = "plugins/fetch/jquery.fetch.js";		// 片段截取
 	alias["theme-manager"] = "modules/misc/theme-manager.min.js";	// 主题管理器
-	alias["holder"] = "utils/holder.js";						// 图片占位符
+	alias["holder"] = "utils/holder.js";					// 图片占位符
 
 	common.config({
 		base: relativePath + "lib/",
 		alias: alias
 	});
+
+	// Raty 图片路径
+	this.ratyImgPath = relativePath + "lib/plugins/raty/img";
 };
 
 /*
@@ -60,7 +64,7 @@ Yi.prototype.config = function(relativePath, addition) {
  */
 Yi.prototype._setup = function() {
 	var readyCount = 0;
-	var readyConst = 3;
+	var readyConst = 4;
 	var self = this;
 
 	// 创建主题管理器
@@ -82,6 +86,15 @@ Yi.prototype._setup = function() {
 
 	// 启用 fetch
 	common.use('fetch', function() {
+		// 检查就绪状态
+		checkReady();
+	});
+
+	// Rating 插件
+	common.use('rating', function() {
+		// 设置路径
+		$.fn.raty.defaults.path = self.ratyImgPath;
+		$.fn.raty.defaults.hints = ['极差', '差', '合格', '好', '极好'];
 		// 检查就绪状态
 		checkReady();
 	});

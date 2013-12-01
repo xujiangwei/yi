@@ -14,6 +14,11 @@ h1, h2, h3, h4, h5, h6 {
   font-family: "微软雅黑", "宋体", Verdana, Geneva, sans-serif;
 }
 
+.jumbotron {
+  padding-top: 40px !important;
+  padding-bottom: 28px !important;
+}
+
 /* 页脚 */
 .page-wrapper-footer {
   height: 50px;

@@ -21,6 +21,10 @@ hr {
   border-color: #428bca;
 }
 
+sup {
+  color: #F00 !important;
+}
+
 .collapse li {
   padding-top: 8px;
 }
@@ -43,4 +47,20 @@ hr {
 
 .mod-container {
   min-height: 300px;
+}
+
+.debug-info {
+}
+
+.col-title {
+  font-size: 16px;
+  font-weight: normal;
+}
+
+.raty {
+  width: 100%;
+  left: auto;
+  right: auto;
+  text-align: center;
+  margin: 0px auto;
 }

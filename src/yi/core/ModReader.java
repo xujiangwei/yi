@@ -46,72 +46,6 @@ public final class ModReader {
 	public static Mod read(File file, String outputDirectory) throws FileNotFoundException, IOException {
 		// 将所有文件解压到发布路径下
 
-		/* 测试用代码：
-		ZipInputStream zis = null;
-		try {
-			zis = new ZipInputStream(new BufferedInputStream(new FileInputStream(file)));
-		} catch (FileNotFoundException e) {
-			throw e;
-		}
-
-		// 创建临时目录
-		String tempDir = relesePath + "temp" + File.separator;
-		File td = new File(tempDir);
-		if (!td.exists()) {
-			td.mkdir();
-		}
-		td = null;
-		// 删除临时文件
-		File cf = new File(tempDir + MOD_CONFIG_FILE);
-		if (cf.exists()) {
-			cf.delete();
-		}
-		cf = null;
-
-		ZipEntry entry = null;
-		BufferedOutputStream bos = null;
-
-		// 先解压配置文件
-		try {
-			while (null != (entry = zis.getNextEntry())) {
-				if (entry.getName().equals(MOD_CONFIG_FILE)) {
-					String entryName = entry.getName();
-					bos = new BufferedOutputStream(new FileOutputStream(tempDir + entryName));
-					byte[] buf = new byte[128];
-					int readedBytes = -1;
-					while ((readedBytes = zis.read(buf)) != -1) {
-						bos.write(buf, 0, readedBytes);
-					}
-					bos.flush();
-					bos.close();
-
-					// 解析配置文件
-					mod = readConfig(new File(tempDir + entryName));
-
-					break;
-				}
-			}
-		} catch (IOException e) {
-			throw e;
-		} finally {
-			try {
-				zis.closeEntry();
-			} catch (Exception e) {
-				// Nothing
-			}
-		}
-
-		if (null == mod) {
-			// 没有找对正确的配置文件
-			try {
-				zis.close();
-			} catch (Exception e) {
-				// Nothing
-			}
-
-			return null;
-		}*/
-
 		ZipInputStream zis = new ZipInputStream(new FileInputStream(file));
 		ZipEntry entry;
 		while ((entry = zis.getNextEntry())!= null) {
@@ -149,6 +83,9 @@ public final class ModReader {
 	public static Mod readConfig(File file) throws IOException {
 		Mod mod = null;
 
+		String path = file.getPath();
+		path = path.substring(0, path.length() - MOD_CONFIG_FILE.length());
+
 		try {
 			DocumentBuilder builder = ModReader.builderFactory.newDocumentBuilder();
 			Document document = builder.parse(file);
@@ -169,16 +106,20 @@ public final class ModReader {
 				Node n = list.item(i);
 				String name = n.getNodeName();
 				if (name.equals("html")) {
-					mod.registerHtmlFile(n.getTextContent());
+					File f = new File(path + n.getTextContent());
+					mod.registerHtmlFile(n.getTextContent(), f.length());
 				}
 				else if (name.equals("tmpl")) {
-					mod.registerTmplFile(n.getTextContent());
+					File f = new File(path + n.getTextContent());
+					mod.registerTmplFile(n.getTextContent(), f.length());
 				}
 				else if (name.equals("script")) {
-					mod.addScriptFile(n.getTextContent());
+					File f = new File(path + n.getTextContent());
+					mod.addScriptFile(n.getTextContent(), f.length());
 				}
 				else if (name.equals("style")) {
-					mod.addStyleFile(n.getTextContent());
+					File f = new File(path + n.getTextContent());
+					mod.addStyleFile(n.getTextContent(), f.length());
 				}
 			}
 

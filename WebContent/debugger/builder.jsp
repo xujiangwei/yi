@@ -46,7 +46,8 @@ builder.start();
       <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%">
       </div>
     </div>
-    <h5 id="progress_info" class="text-center"><p class="text-info">已启动构建线程</p></h5>
+    <h4 id="progress_info" class="text-center"><p class="text-info">已启动构建线程</p></h4>
+    <h6 id="action_info" class="text-center text-muted">&nbsp;</h6>
   </div>
 </div>
 

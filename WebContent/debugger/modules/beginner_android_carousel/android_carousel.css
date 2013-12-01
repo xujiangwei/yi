@@ -11,7 +11,7 @@
 
 .carousel-indicators li {
   background-color: #777;
-  background-color: rgba(119,119,119,.1);
+  background-color: rgba(70,70,70,.25);
 }
 
 .carousel-indicators .active {
