@@ -49,7 +49,7 @@ boolean direct = (null != load && (load.equals("1") || load.equals("true")));
           <div class="panel-title"><%=mod.getName()%> <%=mod.getVersion()%></div>
         </div>
         <div class="panel-body">
-          <div class="row">
+          <div class="row toolbar">
             <div class="col-md-12">
               <form class="form-horizontal" role="form">
                 <div class="form-group">
@@ -71,7 +71,7 @@ boolean direct = (null != load && (load.equals("1") || load.equals("true")));
           <div class="debug-info">
             <div class="row">
               <div class="col-md-4 col-sm-4">
-                <div class="text-center col-title">评估流程</div>
+                <div class="text-center col-title">评测流程</div>
                 <div class="text-center"><h4><div class="glyphicon glyphicon-chevron-down"></div></h4></div>
                 <div class="alert alert-info text-center">准备阶段<br/>（脚本执行 + 网络 I/O<sup>*</sup>）</div>
                 <div class="text-center"><h2><div class="glyphicon glyphicon-arrow-down"></div></h2></div>
@@ -82,7 +82,7 @@ boolean direct = (null != load && (load.equals("1") || load.equals("true")));
                 <div class="alert alert-info text-center">执行回调函数<br/>（脚本执行）</div>
               </div>
               <div class="col-md-4 col-sm-4">
-                <div class="text-center col-title">评估成绩</div>
+                <div class="text-center col-title">评测成绩</div>
                 <div class="text-center"><h4><div class="glyphicon glyphicon-chevron-down"></div></h4></div>
                 <div id="step_1" class="alert alert-success text-center">未执行<br/><span class="glyphicon glyphicon-question-sign"></span></div>
                 <div class="text-center"><h2><div class="glyphicon glyphicon-arrow-down"></div></h2></div>
@@ -93,7 +93,7 @@ boolean direct = (null != load && (load.equals("1") || load.equals("true")));
                 <div id="step_4" class="alert alert-success text-center">未执行<br/><span class="glyphicon glyphicon-question-sign"></span></div>
               </div>
               <div class="col-md-4 col-sm-4">
-                <div class="text-center col-title">评估注解</div>
+                <div class="text-center col-title">评测评价</div>
                 <div class="text-center"><h4><div class="glyphicon glyphicon-chevron-down"></div></h4></div>
                 <div id="step_1_explain" class="alert alert-warning text-center">
                   <span class="text">未执行</span>
