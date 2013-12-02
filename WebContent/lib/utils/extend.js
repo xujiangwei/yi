@@ -7,44 +7,37 @@
  * 
  * Sp: Super, Sb: Sub
  * 
+ * 1.
  * var Sb = extend(Sp, overrides);
  * 
+ * or
+ * 
+ * 2.
+ * var Sb = function(){
+ * // my constructor codes before super' constructor
+ * 
+ * Sb.superclass.constructor.call(this);
+ *  // my constructor codes after super' constructor
+ * }
+ * 
+ * extend(Sb, Sp, overrides);
+ * 
+ * 3.
  * for Sb(which is extended by extend())' Sb, you can also use:
  * 
  * var Ssb = Sb.extend(overrides);
  */
-define(function(/* require */) {
-			var oc = Object.prototype.constructor;
+define(function(require) {
+			'require:nomunge,exports:nomunge,module:nomunge';
 
-			var isIE = !!window.ActiveXObject;
+			var cu = require('./coreUtil');
+
+			var oc = Object.prototype.constructor;
 
 			// inline overrides
 			function io(o) {
 				for (var m in o) {
 					this[m] = o[m];
-				}
-			};
-
-			function apply(o, c, defaults) {
-				// no "this" reference for friendly out of scope calls
-				if (defaults) {
-					apply(o, defaults);
-				}
-				if (o && c && typeof c == 'object') {
-					for (var p in c) {
-						o[p] = c[p];
-					}
-				}
-				return o;
-			};
-
-			function override(origclass, overrides) {
-				if (overrides) {
-					var p = origclass.prototype;
-					apply(p, overrides);
-					if (isIE && overrides.hasOwnProperty('toString')) {
-						p.toString = overrides.toString;
-					}
 				}
 			};
 
@@ -69,13 +62,13 @@ define(function(/* require */) {
 					spp.constructor = sp;
 				}
 				sb.override = function(o) {
-					override(sb, o);
+					cu.override(sb, o);
 				};
 				sbp.superclass = sbp.supr = (function() {
 					return spp;
 				});
 				sbp.override = io;
-				override(sb, overrides);
+				cu.override(sb, overrides);
 				sb.extend = function(o) {
 					return extend(sb, o);
 				};
