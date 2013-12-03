@@ -30,7 +30,7 @@
 define(function(require) {
 			'require:nomunge,exports:nomunge,module:nomunge';
 
-			var cu = require('./coreUtil');
+			var utils = require('./utils');
 
 			var oc = Object.prototype.constructor;
 
@@ -62,13 +62,13 @@ define(function(require) {
 					spp.constructor = sp;
 				}
 				sb.override = function(o) {
-					cu.override(sb, o);
+					utils.override(sb, o);
 				};
 				sbp.superclass = sbp.supr = (function() {
 					return spp;
 				});
 				sbp.override = io;
-				cu.override(sb, overrides);
+				utils.override(sb, overrides);
 				sb.extend = function(o) {
 					return extend(sb, o);
 				};

@@ -6,7 +6,7 @@
 define(function(require, exports, module) {
 	'require:nomunge,exports:nomunge,module:nomunge';
 
-	var DelayedTask = require('./delayedTask');
+	var DelayedTask = require('./delayed-task');
 
 	var TRUE = true, FALSE = false;
 

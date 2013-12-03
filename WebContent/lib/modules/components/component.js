@@ -4,13 +4,13 @@
 define(function(require, exports, module) {
 	'require:nomunge,exports:nomunge,module:nomunge';
 
-	var cu = require('lib/utils/coreUtil');
-	var extend = require('lib/utils/extend');
-	var Map = require('lib/utils/hashmap-cmd');
-	var Observable = require('lib/utils/observable');
+	require('./component.css');
+	var utils = require('utils/utils');
+	var extend = require('utils/extend');
+	var Observable = require('utils/observable');
 
 	// 组件管理
-	var components = new Map();
+	var components = new HashMap();
 
 	// 处理style
 	var cssRe = /([a-z0-9-]+)\s*:\s*([^;\s]+(?:\s*[^;\s]+)*);?/gi;
@@ -18,11 +18,11 @@ define(function(require, exports, module) {
 	function applyStyles(el, styles) {
 		if (styles) {
 			el = $(el);
-			if (cu.isObject(styles)) {
+			if (utils.isObject(styles)) {
 				el.css(styles);
 			}
 			var matches;
-			if (cu.isString(styles)) {
+			if (utils.isString(styles)) {
 				/**
 				 * Since we're using the g flag on the regex, we need to set the
 				 * lastIndex. This automatically happens on some
@@ -69,7 +69,7 @@ define(function(require, exports, module) {
 			 * @property initialConfig
 			 */
 			this.initialConfig = config;
-			cu.apply(this, config);
+			utils.apply(this, config);
 
 			this.addEvents('render',
 
@@ -196,10 +196,10 @@ define(function(require, exports, module) {
 					 * 返回组件id
 					 */
 					getId : function() {
-						return this.id || (this.id = cu.id('comp'));
+						return this.id || (this.id = utils.id('comp'));
 					},
 					// 扩展点
-					initComponent : cu.emptyFn,
+					initComponent : utils.emptyFn,
 					applyToMarkup : function(applyTo) {
 						var selector = '#' + applyTo;
 						this.allowDomMove = false;
@@ -223,7 +223,7 @@ define(function(require, exports, module) {
 							// }
 							this.rendered = true;
 							if (position !== undefined) {
-								if (cu.isNumber(position)) {
+								if (utils.isNumber(position)) {
 									position = this.container[0].childNodes[position];
 								} else {
 									position = $(position)[0];
@@ -270,7 +270,7 @@ define(function(require, exports, module) {
 					// 扩展点
 					onRender : function(ct, position) {
 						if (!this.el) {
-							if (cu.isString(this.baseHtml)) {
+							if (utils.isString(this.baseHtml)) {
 								this.el = $(this.baseHtml);
 							} else {
 								this.el = $('<div></div');
@@ -287,7 +287,7 @@ define(function(require, exports, module) {
 						}
 					},
 					// 扩展点
-					afterRender : cu.emptyFn,
+					afterRender : utils.emptyFn,
 					/**
 					 * 隐藏组件
 					 */
@@ -460,9 +460,9 @@ define(function(require, exports, module) {
 						}
 					},
 					// 扩展点
-					beforeDestroy : cu.emptyFn,
+					beforeDestroy : utils.emptyFn,
 					// 扩展点
-					onDestroy : cu.emptyFn
+					onDestroy : utils.emptyFn
 				});
 
 		// manage components

@@ -6,7 +6,7 @@
 define(function(require, exports, module) {
 	'require:nomunge,exports:nomunge,module:nomunge';
 
-	var cu = require('./coreUtil');
+	var utils = require('./utils');
 	var Event = require('./event');
 
 	var TRUE = true, FALSE = false;
@@ -149,7 +149,7 @@ define(function(require, exports, module) {
 					me.events[a[i]] = me.events[a[i]] || TRUE;
 				}
 			} else {
-				cu.applyIf(me.events, o);
+				utils.applyIf(me.events, o);
 			}
 		},
 
@@ -190,7 +190,7 @@ define(function(require, exports, module) {
 			var me = this, queued = me.eventQueue || [];
 			me.eventsSuspended = FALSE;
 			delete me.eventQueue;
-			cu.each(queued, function(e) {
+			utils.each(queued, function(e) {
 						me.fireEvent.apply(me, e);
 					});
 		}
