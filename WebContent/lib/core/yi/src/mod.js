@@ -96,14 +96,14 @@ ModManager.prototype.load = function(container, args) {
 	.fail(function() {
 		console.log('[Yi#Mod] Failed requests "' + url + '".');
 	});
-};
+}
 
 /**
  * 卸载 MOD 。
  */
 ModManager.prototype.unload = function(container) {
 	// TODO
-};
+}
 
 /**
  * 调试 MOD 。
@@ -155,7 +155,7 @@ ModManager.prototype.debug = function(containerId, mod) {
 		// 结束时间
 		_debug.endTime = new Date();
 	}
-};
+}
 
 /**
  * 处理前置条件。
@@ -177,7 +177,7 @@ ModManager.prototype._predeps = function(deps, callback) {
 			});
 		}
 	}
-};
+}
 
 /**
  * Fetch 执行完毕的回调函数。
@@ -187,7 +187,7 @@ ModManager.prototype._done = function(container, mod) {
 
 	// 停止 LOADED 事件
 	this.notifyEvent(ModEvent.LOADED, container, mod);
-};
+}
 
 /**
  * 检索当前页的所有可自动装载的 MOD 。
@@ -213,21 +213,21 @@ ModManager.prototype._search = function() {
 			}
 		}
     });
-};
+}
 
 /**
  * 添加 MOD 。
  */
 ModManager.prototype.addMod = function(mod) {
 	this.mods[mod.name] = mod;
-};
+}
 
 /**
  * 删除 MOD 。
  */
 ModManager.prototype.removeMod = function(name) {
 	delete this.mods[name];
-};
+}
 
 /**
  * 添加监听器。
@@ -242,7 +242,7 @@ ModManager.prototype.addListener = function(event, listener) {
 	else {
 		this.listeners.put(event, [listener]);
 	}
-};
+}
 
 /**
  * 删除监听器。
@@ -259,7 +259,7 @@ ModManager.prototype.removeListener = function(event, listener) {
 			}
 		}
 	}
-};
+}
 
 /**
  * 通知事件。
@@ -273,4 +273,4 @@ ModManager.prototype.notifyEvent = function(event, container, mod) {
 			listener.call(null, obj);
 		}
 	}
-};
+}

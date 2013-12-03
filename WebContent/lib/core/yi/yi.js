@@ -33,14 +33,14 @@ var Yi = function() {
 		window.addEventListener('load', ready, false);
 	else
 		window.attachEvent('onload', ready);
-};
+}
 
 /**
  * 注册就绪回调函数。 
  */
 Yi.prototype.ready = function(callback) {
 	this._readyCallbacks.push(callback);
-};
+}
 
 /**
  * 自动配置 CommonJS 。
@@ -53,14 +53,20 @@ Yi.prototype.config = function(relativePath, addition) {
 
 	var alias = (addition !== undefined) ? addition : {};
 	alias["class"] = "utils/class.js";						// 辅助构建 JS 对象关系
+	alias["utils"] = "utils/utils.js";						// 实用函数库
 	alias["map"] = "utils/hashmap.js";						// 实用 Map 实现
+	alias["extend"] = "utils/extend.js";					// 对象继承实现
+	alias["observable"] = "utils/observable.js";			// 观察者实现
+	alias["delayedtask"] = "utils/delayed-task.js";			// 延迟任务
+	alias["event"] = "utils/event.js";						// 事件
+	alias["holder"] = "utils/holder.js";					// 图片占位符
 	alias["console"] = "core/console/console.js";			// 可视化控制台
 	alias["dialog"] = "plugins/bootbox.min.js";				// 对话框
 	alias["menu-aim"] = "plugins/jquery.menu-aim.js";		// 改进的浮动菜单
 	alias["rating"] = "plugins/raty/jquery.raty.min.js";	// 评分插件
 	alias["fetch"] = "plugins/fetch/jquery.fetch.js";		// 片段截取
 	alias["theme-manager"] = "modules/misc/theme-manager.min.js";	// 主题管理器
-	alias["holder"] = "utils/holder.js";					// 图片占位符
+	alias["component"] = "modules/components/component.js";	// 组件基类
 
 	common.config({
 		base: relativePath + "lib/",
@@ -69,7 +75,7 @@ Yi.prototype.config = function(relativePath, addition) {
 
 	// Raty 图片路径
 	this.ratyImgPath = relativePath + "lib/plugins/raty/img";
-};
+}
 
 /*
  * 配置框架。
@@ -127,28 +133,28 @@ Yi.prototype._setup = function() {
 			self.mod._search();
 		}
 	}
-};
+}
 
 /** 模态模式显示 Alert 对话框。
  */
 Yi.prototype.alert = function(message, callback) {
 	bootbox.alert(message, callback);
-};
+}
 /** 模态模式显示 Confirm 对话框。
  */
 Yi.prototype.confirm = function(message, callback) {
 	bootbox.confirm(message, callback);
-};
+}
 /** 模态模式显示 Prompt 对话框。
  */
 Yi.prototype.prompt = function(title, callback) {
 	bootbox.prompt(title, callback);
-};
+}
 /** 显示指定配置的对话框。
  */
 Yi.prototype.dialog = function(options) {
 	bootbox.dialog(options);
-};
+}
 /*
  * ModManager
  * 
@@ -247,14 +253,14 @@ ModManager.prototype.load = function(container, args) {
 	.fail(function() {
 		console.log('[Yi#Mod] Failed requests "' + url + '".');
 	});
-};
+}
 
 /**
  * 卸载 MOD 。
  */
 ModManager.prototype.unload = function(container) {
 	// TODO
-};
+}
 
 /**
  * 调试 MOD 。
@@ -306,7 +312,7 @@ ModManager.prototype.debug = function(containerId, mod) {
 		// 结束时间
 		_debug.endTime = new Date();
 	}
-};
+}
 
 /**
  * 处理前置条件。
@@ -328,7 +334,7 @@ ModManager.prototype._predeps = function(deps, callback) {
 			});
 		}
 	}
-};
+}
 
 /**
  * Fetch 执行完毕的回调函数。
@@ -338,7 +344,7 @@ ModManager.prototype._done = function(container, mod) {
 
 	// 停止 LOADED 事件
 	this.notifyEvent(ModEvent.LOADED, container, mod);
-};
+}
 
 /**
  * 检索当前页的所有可自动装载的 MOD 。
@@ -364,21 +370,21 @@ ModManager.prototype._search = function() {
 			}
 		}
     });
-};
+}
 
 /**
  * 添加 MOD 。
  */
 ModManager.prototype.addMod = function(mod) {
 	this.mods[mod.name] = mod;
-};
+}
 
 /**
  * 删除 MOD 。
  */
 ModManager.prototype.removeMod = function(name) {
 	delete this.mods[name];
-};
+}
 
 /**
  * 添加监听器。
@@ -393,7 +399,7 @@ ModManager.prototype.addListener = function(event, listener) {
 	else {
 		this.listeners.put(event, [listener]);
 	}
-};
+}
 
 /**
  * 删除监听器。
@@ -410,7 +416,7 @@ ModManager.prototype.removeListener = function(event, listener) {
 			}
 		}
 	}
-};
+}
 
 /**
  * 通知事件。
@@ -424,7 +430,7 @@ ModManager.prototype.notifyEvent = function(event, container, mod) {
 			listener.call(null, obj);
 		}
 	}
-};
+}
 
 // Create yi instance
 global.yi = new Yi();
