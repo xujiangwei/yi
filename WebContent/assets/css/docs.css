@@ -246,8 +246,8 @@ body {
 @media screen and (min-width: 768px) {
   .bs-masthead {
     text-align: left;
-    padding-top:    100px;
-    padding-bottom: 100px;
+    padding-top:    120px;
+    padding-bottom: 120px;
   }
   .bs-masthead h1 {
     font-size: 100px;

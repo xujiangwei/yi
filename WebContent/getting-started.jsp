@@ -14,31 +14,31 @@
 <!-- 主导航 -->
 <header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
   <div class="container">
-  <div class="navbar-header">
-    <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
-      <span class="sr-only">Toggle navigation</span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-    </button>
-    <a href="index.jsp" class="navbar-brand">壹框</a>
-  </div>
-  <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
-    <ul class="nav navbar-nav">
-      <li class="active">
-        <a href="getting-started.jsp">起步</a>
+    <div class="navbar-header">
+      <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a href="index.jsp" class="navbar-brand">壹框</a>
+    </div>
+    <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+      <ul class="nav navbar-nav">
+        <li class="active">
+          <a href="getting-started.jsp">起步</a>
         </li>
         <li>
-          <a href="javascript:yi.alert('正在制作中……');">组件</a>
+          <a href="api.jsp">API</a>
         </li>
         <li>
-          <a href="javascript:yi.alert('正在制作中……');">模组</a>
+          <a href="components.jsp">组件</a>
         </li>
         <li>
-          <a href="javascript:yi.alert('正在制作中……');">教程</a>
+          <a href="modules.jsp">模组</a>
         </li>
         <li>
-          <a href="javascript:yi.alert('正在制作中……');">实用库</a>
+          <a href="utility-library.jsp">实用库</a>
         </li>
       </ul>
     </nav>
@@ -60,11 +60,15 @@
           <li>
             <a href="#download">下载壹框</a>
             <ul class="nav">
-              <li><a href="#download-compiled"></a></li>
+              <li><a href="#download-compiled">编译后的文件</a></li>
+              <li><a href="#download-sources">源代码文件</a></li>
             </ul>
           </li>
           <li>
             <a href="#whats-included">包含了哪些文件</a>
+          </li>
+          <li>
+            <a href="#base-setting">基础环境需求</a>
           </li>
           <li>
             <a href="#template">基本模板</a>
@@ -86,6 +90,14 @@
     </div>
     <div class="col-md-9" role="main">
       <div class="bs-docs-section">
+        <div class="page-header">
+          <h1 id="download">下载壹框</h1>
+          <p class="lead">壹框提供了几种可以帮你快速上手的方式，每种方式针对具有不同技能等级的开发者和不同的使用场景。继续阅读下面的内容，看看哪种方式适合你的需求吧。</p>
+
+          <h3 id="download-compiled">编译后的文件</h3>
+          <p>获取壹框最快速的方式就是下载经过编译的Jar、CSS、JavaScript文件，另外还包含字体文件。但是不包含文档和源码文件。</p>
+          <p><a class="btn btn-lg btn-primary disabled" href="#" >下载壹框</a></p>
+        </div>
       </div>
     </div>
   </div>
