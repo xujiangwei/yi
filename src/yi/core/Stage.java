@@ -21,6 +21,8 @@ public final class Stage extends AbstractLifeCycle {
 
 	private String deployPath;
 
+	private static String version = "1.0.0";
+
 	private Stage() {
 	}
 
@@ -80,6 +82,14 @@ public final class Stage extends AbstractLifeCycle {
 		}
 
 		return ret.toString();
+	}
+
+	/**
+	 * 返回版本号。
+	 * @return
+	 */
+	public static String getVersion() {
+		return Stage.version;
 	}
 
 	/**

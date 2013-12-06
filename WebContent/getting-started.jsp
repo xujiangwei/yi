@@ -89,6 +89,8 @@
       </div>
     </div>
     <div class="col-md-9" role="main">
+      <!-- 下载说明
+      ================================================== -->
       <div class="bs-docs-section">
         <div class="page-header">
           <h1 id="download">下载壹框</h1>
@@ -96,12 +98,80 @@
 
           <h3 id="download-compiled">编译后的文件</h3>
           <p>获取壹框最快速的方式就是下载经过编译的Jar、CSS、JavaScript文件，另外还包含字体文件。但是不包含文档和源码文件。</p>
-          <p><a class="btn btn-lg btn-primary disabled" href="#" >下载壹框</a></p>
+          <p><a class="btn btn-lg btn-primary" href="https://github.com/xujiangwei/yi/archive/master.zip">下载壹框</a></p>
+          
+          <h3 id="download-sources">源代码文件</h3>
+          <div class="bs-docs-dl-options">
+            <h4>
+              <a href="https://github.com/xujiangwei/yi/archive/master.zip">下载源码</a>
+            </h4>
+          </div>
+        </div>
+      </div>
+
+      <!-- 文件结构
+      ================================================== -->
+      <div class="bs-docs-section">
+        <div class="page-header">
+          <h1 id="whats-included">包含了哪些文件</h1>
+        </div>
+        <p class="lead">壹框提供了前端（浏览器）和后端（Java Servlet）工程，在下载下来的压缩包内可以看到以下目录和文件，这些文件按照类别放到了不同的目录内，并且前端提供了压缩与未压缩两种版本，后端代码全都在 src 目录下。</p>
+
+        <div class="bs-callout bs-callout-warning" id="jquery-required">
+          <h4>Yi 前端库依赖 jQuery、Bootstrap 和 Seajs</h4>
+          <p>请注意，使用 <strong>Stage</strong> 的 <code>importScripts()</code> 方法将帮助你自动导入脚本依赖， 就像在<a href="#template">基础模版</a>中所展示的一样。</p>
+        </div>
+
+        <div class="highlight">
+<pre><code class="language-bash">yi/
+├── src
+│── WebContent
+│   ├── assets/
+│   │   ├── bootstrap.css
+│   │   ├── bootstrap.min.css
+│   │   ├── bootstrap-theme.css
+│   │   └── bootstrap-theme.min.css
+│   ├── debugger/
+│   │   ├── bootstrap.js
+│   │   └── bootstrap.min.js
+│   └── examples/
+│   │  ├── glyphicons-halflings-regular.eot
+│   │  ├── glyphicons-halflings-regular.svg
+│   │  ├── glyphicons-halflings-regular.ttf
+│   │  └── glyphicons-halflings-regular.woff
+│   └── lib/
+│   └── modules/
+│   └── scripts/
+│   └── tools/
+│
+│
+└── versions.txt
+</code></pre>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<!-- 页脚
+================================================== -->
+<footer class="bs-footer" role="contentinfo">
+  <div class="container">
+    <p>Copyright &copy; 2013,2014 DHC Software Research Department.</p>
+    <p>Code licensed under <a href="http://www.gnu.org/licenses/gpl.html" target="_blank">GPL License Version 3</a>, documentation under <a href="http://creativecommons.org/licenses/by/3.0/" target="_blank">CC BY 3.0</a>.</p>
+    <ul class="footer-links">
+      <li>当前版本： v<%=Stage.getVersion()%></li>
+      <li class="muted">&middot;</li>
+      <li><a href="http://www.java.com/" target="_blank">Java</a></li>
+      <li class="muted">&middot;</li>
+      <li><a href="http://jquery.com" target="_blank">jQuery</a></li>
+      <li class="muted">&middot;</li>
+      <li><a href="http://getbootstrap.com" target="_blank">Bootstrap</a></li>
+      <li class="muted">&middot;</li>
+      <li><a href="https://github.com/xujiangwei/yi/issues" target="_blank">Issues</a></li>
+    </ul>
+  </div>
+</footer>
 
 </body>
 

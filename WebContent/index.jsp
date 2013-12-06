@@ -63,7 +63,7 @@
 <footer class="container" role="contentinfo">
   <ul class="bs-masthead-links pull-right">
     <li class="current-version">
-    当前版本：1.0.0
+    当前版本：<%=Stage.getVersion()%>
     </li>
   </ul>
 </footer>
