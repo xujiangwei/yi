@@ -70,11 +70,10 @@
       <div class="bs-docs-section">
         <div class="page-header">
           <h1 id="object">JavaScript 对象</h1>
-          <p class="lead"></p>
-
-          <h3 id="object-extend">Extend</h3>
-          <p>TODO</p>
         </div>
+        <p class="lead"></p>
+        <h3 id="object-extend">Extend</h3>
+        <p>TODO</p>
       </div>
     </div>
   </div>

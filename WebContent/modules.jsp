@@ -48,7 +48,7 @@
 <div class="bs-header" id="content">
   <div class="container">
     <h1>模组</h1>
-    <p>TODO。</p>
+    <p>TODO</p>
   </div>
 </div>
 
@@ -71,11 +71,10 @@
       <div class="bs-docs-section">
         <div class="page-header">
           <h1 id="item">项目</h1>
-          <p class="lead"></p>
-
-          <h3 id="sub-item">子项目</h3>
-          <p>TODO</p>
         </div>
+        <p class="lead"></p>
+        <h3 id="sub-item">子项目</h3>
+        <p>TODO</p>
       </div>
     </div>
   </div>
