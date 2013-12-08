@@ -27,6 +27,9 @@
       <div class="navbar-brand">调试管理器</div>
     </div>
     <div class="collapse navbar-collapse">
+      <ul class="nav navbar-nav">
+        <li><a href="../modules/manager.jsp">模组管理器</a></li>
+      </ul>
       <ul class="nav navbar-nav nav-pills pull-right">
         <li><button id="btn_new" class="btn btn-default">新建</button></li>
         <li><button id="btn_import" class="btn btn-default">导入</button></li>

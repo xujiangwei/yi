@@ -17,36 +17,45 @@ import yi.core.Mod;
 import yi.core.ModManager;
 
 /**
- * 查询 MOD 信息。
+ * 进行 MOD 管理。
  * 
- * 格式1：mod/${mod_name}/${mod_version}
+ * 格式1：modmgm/${action}/${mod_name}/${mod_version}
+ * action: delete/remove
  * 
  * @author Jiangwei Xu
  */
 @WebServlet(
-	name = "mod",
-	urlPatterns = { "/mod", "/mod/*" },
+	name = "modmgm",
+	urlPatterns = { "/modmgm", "/modmgm/*" },
 	loadOnStartup = 1
 )
-public class ModServlet extends AbstractHttpServlet {
+public class ModManagementServlet extends AbstractHttpServlet {
 
 	private static final long serialVersionUID = 1665855495027080547L;
 
-	public ModServlet() {
+	public ModManagementServlet() {
 		super();
 	}
 
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String pathInfo = request.getPathInfo();
 		String[] info = pathInfo.split("/");
-		if (info.length >= 3) {
-			String modName = info[1];
-			String version = info[2];
-			Mod mod = ModManager.getInstance().getMod(modName, version);
-			if (null != mod) {
-				this.wrapResponseWithOk(response, mod.toJSON());
+		if (info.length >= 4) {
+			String action = info[1];
+			String modName = info[2];
+			String version = info[3];
+
+			if (ModManager.getInstance().existMod(modName, version)) {
+				if (action.equals("delete")) {
+					// 执行删除
+					Mod mod = ModManager.getInstance().deleteMod(modName, version);
+					this.wrapResponseWithOk(response, mod.toJSON());
+				}
+				else {
+					this.wrapResponse(response, HttpServletResponse.SC_NOT_IMPLEMENTED);
+				}
 			}
 			else {
 				this.wrapResponse(response, HttpServletResponse.SC_NOT_FOUND);

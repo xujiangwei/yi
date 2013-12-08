@@ -1,6 +1,8 @@
 @echo off
 rem Author Ambrose Xu (Xu Jiangwei)
 
+echo Start compile yi ...
+
 java -jar ../tools/splicer.jar ../lib/core/yi/yi.js ../lib/core/yi/src/intro.js ../lib/core/yi/src/base.js ../lib/core/yi/src/mod.js ../lib/core/yi/src/outro.js
 
 rem WHITESPACE_ONLY | SIMPLE_OPTIMIZATIONS | ADVANCED_OPTIMIZATIONS

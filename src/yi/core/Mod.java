@@ -26,6 +26,7 @@ public final class Mod implements Serializable, Comparable<Mod> {
 
 	private String name;
 	private String version;
+	private String description;
 
 	private String contextPath;
 
@@ -79,6 +80,18 @@ public final class Mod implements Serializable, Comparable<Mod> {
 		if (!this.contextPath.endsWith("/")) {
 			this.contextPath += "/";
 		}
+	}
+
+	protected void setDescription(String description) {
+		this.description = description;
+	}
+
+	/**
+	 * 返回描述。
+	 * @return
+	 */
+	public String getDescription() {
+		return this.description;
 	}
 
 	/**

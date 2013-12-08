@@ -128,9 +128,11 @@
 │── WebContent/
 │   ├── assets/
 │   │   ├── css/
+│   │   │   ├── app-manager.css
 │   │   │   ├── docs.css
 │   │   │   ├── theme.css
 │   │   └── js/
+│   │       └── app-manager.js
 │   │       └── docs.js
 │   ├── debugger/
 │   │   ├── assets/
@@ -175,8 +177,9 @@
 │   │   ├── extensions/
 │   │   ├── modules/
 │   │   ├── plugins/
-│   │   ├── utils/
+│   │   └── utils/
 │   ├── modules/
+│   │   └── manager.jsp
 │   ├── scripts/
 │   └── tools/
 └── versions.txt

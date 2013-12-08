@@ -8,7 +8,7 @@
  * 控制台命令对象格式：
  * {
  *   name: "version",
- *   short: "ver",
+ *   shortName: "ver",
  *   desc: "Print console version.",
  *   usage: "version|ver",
  *   exec: function(console, name, args) { console.println("v1.0"); }
@@ -17,7 +17,7 @@
 define(function(require, exports, module) {
 
 	// 需求样式表
-	require("core/console/console.css");
+	require("core/console/console.min.css");
 
 	/** 控制台构造函数。
 	 */
@@ -196,7 +196,7 @@ define(function(require, exports, module) {
 	 */
 	Console.prototype.register = function(cmd) {
 		this.cmdNameMap[cmd.name] = cmd;
-		this.cmdShortMap[cmd.short] = cmd;
+		this.cmdShortMap[cmd.shortName] = cmd;
 	};
 
 	/** 内置命令。
@@ -204,7 +204,7 @@ define(function(require, exports, module) {
 	Console.prototype._buildIn = function() {
 		// help
 		this.register({name: "help"
-				, short: "help"
+				, shortName: "help"
 				, desc: "打印控制台帮助信息及命令清单。"
 				, usage: "help"
 				, exec: function(console, name, args) {
@@ -223,7 +223,7 @@ define(function(require, exports, module) {
 
 		// version/ver
 		this.register({name: "version"
-				, short: "ver"
+				, shortName: "ver"
 				, desc: "打印控制台版本信息。"
 				, usage: "version|ver"
 				, exec: function(console, name, args) {
@@ -235,7 +235,7 @@ define(function(require, exports, module) {
 
 		// clear/cls
 		this.register({name: "clear"
-				, short: "cls"
+				, shortName: "cls"
 				, desc: "清空控制台界面内的所有打印信息。"
 				, usage: "clear|cls"
 				, exec: function(console, name, args) {

@@ -8,7 +8,10 @@ package yi.core;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -62,6 +65,19 @@ public final class ModManager extends AbstractLifeCycle {
 
 			return null;
 		}
+	}
+
+	/**
+	 * 返回 Mod 列表。
+	 * @return
+	 */
+	public List<Mod> getModList() {
+		ArrayList<Mod> list = new ArrayList<Mod>(this.mods.size());
+		for (HashMap<String, Mod> map : this.mods.values()) {
+			list.addAll(map.values());
+		}
+		Collections.sort(list);
+		return list;
 	}
 
 	/**
@@ -124,7 +140,46 @@ public final class ModManager extends AbstractLifeCycle {
 		synchronized (this.mods) {
 			HashMap<String, Mod> map = this.mods.get(name);
 			if (null != map) {
-				return map.remove(version);
+				Mod mod = map.remove(version);
+				if (map.isEmpty()) {
+					this.mods.remove(name);
+				}
+				return mod;
+			}
+
+			return null;
+		}
+	}
+
+	/**
+	 * 删除 MOD 数据文件。
+	 * @param name
+	 * @param version
+	 * @return
+	 */
+	public Mod deleteMod(String name, String version) {
+		synchronized (this.mods) {
+			HashMap<String, Mod> map = this.mods.get(name);
+			if (null != map) {
+				Mod mod = map.get(version);
+				if (null != mod) {
+					// 工作路径
+					String path = this.workPath + this.modSubPath;
+					File file = new File(path + File.separator + name + "_" + version + ".mod");
+					if (file.exists()) {
+						// 删除文件
+						file.delete();
+					}
+
+					// 删除工作目录
+					path = this.workPath + this.deploySubPath + File.separator;
+					this.deleteWorkFiles(path, name, version);
+
+					// 移除数据
+					this.removeMod(name, version);
+				}
+
+				return mod;
 			}
 
 			return null;
@@ -145,6 +200,48 @@ public final class ModManager extends AbstractLifeCycle {
 			}
 
 			return false;
+		}
+	}
+
+	/**
+	 * 删除模组工作目录下的所有文件。
+	 */
+	private void deleteWorkFiles(String path, String name, String version) {
+		// 删除所有子目录及文件
+		this.deleteDir(new File(path + name + File.separator + version));
+
+		// 如果是空目录，则删除空目录
+		File dir = new File(path + name + File.separator);
+		if (dir.listFiles().length == 0) {
+			dir.delete();
+		}
+	}
+
+	private void deleteDir(File dir) {
+		if (!dir.isDirectory()) {
+			return;
+		}
+
+		File[] files = dir.listFiles();
+		ArrayList<File> list = new ArrayList<File>(files.length);
+		for (File file : files) {
+			if (file.isDirectory()) {
+				this.deleteDir(file);
+			}
+			else {
+				list.add(file);
+			}
+		}
+
+		if (!list.isEmpty()) {
+			for (File file : list) {
+				file.delete();
+			}
+		}
+
+		File newDir = new File(dir.getAbsolutePath());
+		if (newDir.listFiles().length == 0) {
+			newDir.delete();
 		}
 	}
 

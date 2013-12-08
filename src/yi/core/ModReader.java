@@ -95,9 +95,12 @@ public final class ModReader {
 			NodeList nlName = root.getElementsByTagName("name");
 			// version 节点
 			NodeList nlVersion = root.getElementsByTagName("version");
+			// description 节点
+			NodeList nlDesc = root.getElementsByTagName("description");
 
 			// 创建 Mod 实例
 			mod = new Mod(nlName.item(0).getTextContent(), nlVersion.item(0).getTextContent());
+			mod.setDescription(nlDesc.item(0).getTextContent());
 
 			// 获取文件列表
 			Node nodeFiles = root.getElementsByTagName("files").item(0);

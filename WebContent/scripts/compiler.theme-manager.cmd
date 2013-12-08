@@ -1,7 +1,7 @@
 @echo off
 rem author: Ambrose Xu (Xu Jiangwei)
 
-echo Start compile files...
+echo Start compile theme manager ...
 
 rem Splice source files
 rem java -jar ../tools/splicer.jar ../lib/modules/misc/theme-manager.js

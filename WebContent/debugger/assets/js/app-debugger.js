@@ -32,6 +32,18 @@
 	/** Debugger 对象。
 	 */
 	var Debugger = function() {
+		var self = this;
+		// 激活控制台
+		common.use('console', function(Console){
+			self.console = new Console();
+			self.console.start();
+			self._registerCmd(console);
+		});
+	}
+
+	/** 注册调试命令 */
+	Debugger.prototype._registerCmd = function(console) {
+		
 	}
 
 	Debugger.prototype.initArea = function(area, index, mod) {
@@ -58,10 +70,10 @@
 		});
 		area.find('#btn_clear').tooltip({container:'body'});
 
-		area.find('#step_1_explain .raty').tooltip({container:'body'});
-		area.find('#step_2_explain .raty').tooltip({container:'body'});
-		area.find('#step_3_explain .raty').tooltip({container:'body'});
-		area.find('#step_4_explain .raty').tooltip({container:'body'});
+		area.find('#step_1_explain .rating').tooltip({container:'body'});
+		area.find('#step_2_explain .rating').tooltip({container:'body'});
+		area.find('#step_3_explain .rating').tooltip({container:'body'});
+		area.find('#step_4_explain .rating').tooltip({container:'body'});
 	}
 
 	Debugger.prototype.onModLoaded = function(param) {
@@ -137,7 +149,7 @@
 		}
 
 		content.find('.text').html(text);
-		var rating = content.find('.raty');
+		var rating = content.find('.rating');
 		rating.html("");
 		rating.raty({ score: score, readOnly: true });
 	}
@@ -166,7 +178,7 @@
 		}
 
 		content.find('.text').html(text);
-		var rating = content.find('.raty');
+		var rating = content.find('.rating');
 		if (score > -1) {
 			rating.html("");
 			rating.raty({ score: score, readOnly: true });
@@ -205,7 +217,7 @@
 		}
 
 		content.find('.text').html(text);
-		var rating = content.find('.raty');
+		var rating = content.find('.rating');
 		if (score > -1) {
 			rating.html("");
 			rating.raty({ score: score, readOnly: true });
@@ -237,7 +249,7 @@
 		}
 
 		content.find('.text').html(text);
-		var rating = content.find('.raty');
+		var rating = content.find('.rating');
 		if (score > -1) {
 			rating.html("");
 			rating.raty({ score: score, readOnly: true });

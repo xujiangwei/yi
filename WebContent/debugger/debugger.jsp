@@ -97,22 +97,22 @@ boolean direct = (null != load && (load.equals("1") || load.equals("true")));
                 <div class="text-center"><h4><div class="glyphicon glyphicon-chevron-down"></div></h4></div>
                 <div id="step_1_explain" class="alert alert-warning text-center">
                   <span class="text">未执行</span>
-                  <div class="raty" data-toggle="tooltip" data-placement="left" title="评价等级"><span class="glyphicon glyphicon-question-sign"></span></div>
+                  <div class="rating" data-toggle="tooltip" data-placement="left" title="评价等级"><span class="glyphicon glyphicon-question-sign"></span></div>
                 </div>
                 <div class="text-center"><h2><div class="glyphicon glyphicon-arrow-down"></div></h2></div>
                 <div id="step_2_explain" class="alert alert-warning text-center">
                   <span class="text">未执行</span>
-                  <div class="raty" data-toggle="tooltip" data-placement="left" title="评价等级"><span class="glyphicon glyphicon-question-sign"></span></div>
+                  <div class="rating" data-toggle="tooltip" data-placement="left" title="评价等级"><span class="glyphicon glyphicon-question-sign"></span></div>
                 </div>
                 <div class="text-center"><h2><div class="glyphicon glyphicon-arrow-down"></div></h2></div>
                 <div id="step_3_explain" class="alert alert-warning text-center">
                   <span class="text">未执行</span>
-                  <div class="raty" data-toggle="tooltip" data-placement="left" title="评价等级"><span class="glyphicon glyphicon-question-sign"></span></div>
+                  <div class="rating" data-toggle="tooltip" data-placement="left" title="评价等级"><span class="glyphicon glyphicon-question-sign"></span></div>
                 </div>
                 <div class="text-center"><h2><div class="glyphicon glyphicon-arrow-down"></div></h2></div>
                 <div id="step_4_explain" class="alert alert-warning text-center">
                   <span class="text">未执行</span>
-                  <div class="raty" data-toggle="tooltip" data-placement="left" title="评价等级"><span class="glyphicon glyphicon-question-sign"></span></div>
+                  <div class="rating" data-toggle="tooltip" data-placement="left" title="评价等级"><span class="glyphicon glyphicon-question-sign"></span></div>
                 </div>
               </div>
             </div><!-- /.row -->

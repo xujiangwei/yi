@@ -94,7 +94,7 @@ ModManager.prototype.load = function(container, args) {
 		}
 	}, 'json')
 	.fail(function() {
-		console.log('[Yi#Mod] Failed requests "' + url + '".');
+		console.log('[Yi#Mod] Failed requests "' + url + '"');
 	});
 }
 
@@ -103,6 +103,22 @@ ModManager.prototype.load = function(container, args) {
  */
 ModManager.prototype.unload = function(container) {
 	// TODO
+}
+
+/**
+ * 删除服务器上的 MOD 数据。
+ */
+ModManager.prototype.deleteRemoteMod = function(name, version, callback, fail) {
+	var url = this.context + "modmgm" + "/delete/" + name + "/" + version;
+	$.post(url, function(data, textStatus, jqXHR) {
+		callback.call(null, data);
+	}, 'json')
+	.fail(function() {
+		console.log('[Yi#Mod] Failed requests "' + url + '"');
+		if (fail !== undefined) {
+			fail.call(null, name, version);
+		}
+	});
 }
 
 /**

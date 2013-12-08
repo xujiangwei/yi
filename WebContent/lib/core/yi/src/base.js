@@ -48,7 +48,7 @@ Yi.prototype.config = function(relativePath, addition) {
 	alias["delayedtask"] = "utils/delayed-task.js";			// 延迟任务
 	alias["event"] = "utils/event.js";						// 事件
 	alias["holder"] = "utils/holder.js";					// 图片占位符
-	alias["console"] = "core/console/console.js";			// 可视化控制台
+	alias["console"] = "core/console/console.min.js";		// 可视化控制台
 	alias["dialog"] = "plugins/bootbox.min.js";				// 对话框
 	alias["menu-aim"] = "plugins/jquery.menu-aim.js";		// 改进的浮动菜单
 	alias["rating"] = "plugins/raty/jquery.raty.min.js";	// 评分插件
@@ -73,7 +73,7 @@ Yi.prototype._setup = function() {
 	var readyConst = 4;
 	var self = this;
 
-	// 创建主题管理器
+	// 启用主题管理器
 	common.use('theme-manager', function(ThemeManager) {
 		self.themeManager = new ThemeManager();
 		// 检查就绪状态
@@ -90,13 +90,13 @@ Yi.prototype._setup = function() {
 		checkReady();
 	});
 
-	// 启用 fetch
+	// 启用 Fetch 插件
 	common.use('fetch', function() {
 		// 检查就绪状态
 		checkReady();
 	});
 
-	// Rating 插件
+	// 启用 Rating 插件
 	common.use('rating', function() {
 		// 设置路径
 		$.fn.raty.defaults.path = self.ratyImgPath;
@@ -142,4 +142,9 @@ Yi.prototype.prompt = function(title, callback) {
  */
 Yi.prototype.dialog = function(options) {
 	bootbox.dialog(options);
+}
+/** 隐藏所有对话框。
+ */
+Yi.prototype.hideDialog = function() {
+	bootbox.hideAll();
 }
