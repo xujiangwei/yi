@@ -1,0 +1,73 @@
+/* 1.typography */
+* {
+	font-family: "Helvetica Neue", Helvetica, "微软雅黑", "Microsoft YaHei",
+		Arial, sans-serif;
+}
+
+/* 2.form */
+.yi-form {
+	border: 1px solid #dddddd;
+	padding: 15px 25px;
+	background-color: white;
+}
+
+.yi-form-label {
+	font-weight: normal; /* override */
+}
+
+/* X.styels for both statics and components */
+.yi-timeline {
+	position: relative;
+	height: 40px;
+}
+
+.yi-timeline-sm {
+	height: 32px;
+}
+
+.yi-timeline>.yi-timeline-axis {
+	position: relative;
+	top: 8px;
+	border-width: 0 1px 1px;
+	border-style: solid;
+	border-color: #cccccc;
+	height: 7px;
+	width: 100%;
+	float: left;
+}
+
+.yi-timeline-sm>.yi-timeline-axis {
+	top: 7px;
+	height: 6px;
+}
+
+.yi-timeline>.yi-timeline-start,.yi-timeline>.yi-timeline-end {
+	position: relative;
+	top: 23px; /* 30 - 7 */
+	line-height: 9px;
+	color: #8a8a8a;
+	font-size: 12px;
+	float: left;
+}
+
+.yi-timeline>.yi-timeline-end {
+	float: right;
+}
+
+.yi-timeline-sm>.yi-timeline-start,.yi-timeline-sm>.yi-timeline-end {
+	top: 16px; /* 22 - 6 */
+}
+
+.yi-timeline>.yi-timeline-point {
+	position: absolute;
+	top: 0;
+	left: -9px;
+	width: 18px;
+	height: 22px;
+	background: url(default/timeline/point.png) no-repeat;
+	font-size: 0;
+}
+
+.yi-timeline-readonly>.yi-timeline-point {
+	background-image: url(default/timeline/point_readonly.png)
+}

@@ -273,7 +273,7 @@ define(function(require, exports, module) {
 							if (utils.isString(this.baseHtml)) {
 								this.el = $(this.baseHtml);
 							} else {
-								this.el = $('<div></div');
+								this.el = $('<div></div>');
 							}
 							if (!this.el.attr('id')) {
 								this.el.attr('id', this.getId());

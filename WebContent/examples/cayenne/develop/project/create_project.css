@@ -1,0 +1,13 @@
+#create_project_steps {
+	border: 1px solid #dddddd;
+	height: 90px;
+	background-color: #f6f6f6;
+}
+
+#create_project_form {
+	margin-top: 9px;
+}
+
+#create_project_pre_btn,#create_project_next_btn {
+	width: 99px;
+}
