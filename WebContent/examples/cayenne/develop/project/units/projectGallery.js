@@ -8,12 +8,6 @@ define(function(require, exports, module) {
 	var Timeline = require('modules/components/timeline/timeline');
 
 	var ProjectGallery = extend(Gallery, {
-		onRender : function(container, position) {
-			ProjectGallery.superclass.onRender.call(this);
-		},
-		afterRender : function() {
-			ProjectGallery.superclass.afterRender.call(this);
-		},
 		onItemRender : function($item, item) {
 			var timelineId = item.id + '_timeline';
 
@@ -80,9 +74,6 @@ define(function(require, exports, module) {
 					});
 
 			return ''
-		},
-		beforeDestroy : function() {
-			ProjectGallery.superclass.beforeDestroy.call(this);
 		}
 	});
 

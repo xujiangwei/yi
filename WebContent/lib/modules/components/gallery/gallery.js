@@ -224,9 +224,6 @@ define(function(require, exports, module) {
 						.get(cmpId);
 				galleryComponent.fillList(data);
 				galleryComponent = null;
-			},
-			beforeDestroy : function() {
-				Gallery.superclass.beforeDestroy.call(this);
 			}
 		});
 
