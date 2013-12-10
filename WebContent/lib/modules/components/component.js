@@ -217,6 +217,9 @@ define(function(require, exports, module) {
 								container = this.el[0].parentNode;
 								this.allowDomMove = false;
 							}
+							if (utils.isString(container)) {
+								container = '#' + container;
+							}
 							this.container = $(container);
 							// if (this.ctCls) {
 							// this.container.addClass(this.ctCls);
