@@ -25,7 +25,7 @@
 		// 如果直接加载则进行加载
 		if (direct) {
 			// 调试
-			yi.mod.debug("mod_area_0", currentMod);
+			yi.mod.debug("mod_container_0", currentMod);
 		}
 	});
 
@@ -47,28 +47,90 @@
 	}
 
 	Debugger.prototype.initArea = function(area, index, mod) {
+		var self = this;
+		// 清空输入框按钮
+		area.find('#btn_clear_args').click(function(e) {
+			area.find('#input_args').val('');
+		});
+		area.find('#btn_clear_params').click(function(e) {
+			area.find('#input_params').val('');
+		});
+		// 设置预置数据按钮
+		area.find('a[id^="btn_preset_arg_"]').click(function(e) {
+			var btn = $(this);
+			area.find('#input_args').val(btn.attr('data-value'));
+		});
+		area.find('a[id^="btn_preset_param_"]').click(function(e) {
+			var btn = $(this);
+			area.find('#input_params').val(btn.attr('data-value'));
+		});
+
 		// 运行按钮
 		area.find('#btn_run').click(function(e) {
-			var input = area.find('#input_args');
-			var val = input.val().toString();
-			var args = null;
-			if (val.length > 1) {
-				args = JSON.parse(val);
-			}
+			// 显示正在加载
+			area.find('.preview').html('<img src="assets/img/loading_128x128.gif" />');
 
-			// 设置参数
-			mod.args = args;
+			var t = setTimeout(function() {
+				clearTimeout(t);
 
-			// 调试
-			yi.mod.debug("mod_container_" + index, mod);
+				var input = area.find('#input_args');
+				var val = input.val().toString();
+				var args = null;
+				if (val.length > 1) {
+					try {
+						args = JSON.parse(val);
+					} catch (e) {
+						yi.alert('解析参数错误: ' + e.toString());
+						return;
+					}
+				}
+
+				// 设置主函数参数
+				mod.args = args;
+
+				input = area.find('#input_params');
+				val = input.val().toString();
+				var params = null;
+				if (val.length > 1) {
+					try {
+						params = JSON.parse(val);
+					} catch (e) {
+						yi.alert('解析参数错误: ' + e.toString());
+						return;
+					}
+				}
+
+				// 调试
+				yi.mod.debug("mod_container_" + index, mod, params);
+			}, 500);
 		});
 		area.find('#btn_run').tooltip({container:'body'});
 
-		// 清空按钮
-		area.find('#btn_clear').click(function(e) {
-			area.find('#input_args').val('');
+		// 清理按钮
+		area.find('#btn_reset').click(function(e) {
+			area.find('#btn_run').attr("disabled", "disabled");
+			area.find('#btn_reset').attr("disabled", "disabled");
+			area.find('.mod').html('<div class="preview text-center"><img src="assets/img/loading_128x128.gif" /></div>');
+
+			// 重置评分区
+			self.resetMark(area);
+
+			yi.mod.redeployDebug(mod.name, mod.version
+				, function(data) {
+					var t = setTimeout(function() {
+						clearTimeout(t);
+						area.find('#btn_run').removeAttr("disabled");
+						area.find('#btn_reset').removeAttr("disabled");
+						area.find('.mod').html('<div class="preview text-center"><h3>预览区域</h3></div>');
+					}, 500);
+				}
+				, function() {
+					area.find('#btn_run').removeAttr("disabled");
+					area.find('#btn_reset').removeAttr("disabled");
+					area.find('.mod').html('<div class="preview text-center"><h3>预览区域</h3></div>');
+				});
 		});
-		area.find('#btn_clear').tooltip({container:'body'});
+		area.find('#btn_reset').tooltip({container:'body'});
 
 		area.find('#step_1_explain .rating').tooltip({container:'body'});
 		area.find('#step_2_explain .rating').tooltip({container:'body'});
@@ -257,6 +319,24 @@
 		else {
 			rating.html("此项无评分");
 		}
+	}
+
+	Debugger.prototype.resetMark = function(area) {
+		var c = '未执行<br/><span class="glyphicon glyphicon-question-sign"></span>';
+		area.find('#step_1').html(c);
+		area.find('#step_2').html(c);
+		area.find('#step_3').html(c);
+		area.find('#step_4').html(c);
+		c = '未执行';
+		var r = '<span class="glyphicon glyphicon-question-sign"></span>';
+		area.find('#step_1_explain').find('.text').html(c);
+		area.find('#step_1_explain').find('.rating').html(r);
+		area.find('#step_2_explain').find('.text').html(c);
+		area.find('#step_2_explain').find('.rating').html(r);
+		area.find('#step_3_explain').find('.text').html(c);
+		area.find('#step_3_explain').find('.rating').html(r);
+		area.find('#step_4_explain').find('.text').html(c);
+		area.find('#step_4_explain').find('.rating').html(r);
 	}
 
 	Debugger.prototype.formatSize = function(size) {

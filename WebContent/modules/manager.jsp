@@ -62,15 +62,17 @@ if (list.isEmpty()) {
 }
 else {
 	for (Mod mod : list) {
+		String name = mod.getName();
+		String version = mod.getVersion();
 %>
-            <tr id="<%=mod.getName()%>-<%=mod.getVersion()%>">
-              <td><input type="checkbox" class="checkbox" /></td>
-              <td><%=mod.getName()%></td>
-              <td><%=mod.getVersion()%></td>
+            <tr id="<%=name%>-<%=version%>">
+              <td><input type="checkbox" class="checkbox" /><input class="mod" type="hidden" name="<%=name%>" value="<%=version%>" data-mod="ModDetail" data-ver="1.0.0" data-auto="true" data-params='{"name":"<%=name%>","version":"<%=version%>"}' /></td>
+              <td><%=name%></td>
+              <td><%=version%></td>
               <td><%=mod.getDescription()%></td>
               <td>
-                <button id="btn_detail_<%=mod.getName()%>" class="btn btn-sm btn-primary">详情</button>
-                <button id="btn_delete_<%=mod.getName()%>" class="btn btn-sm btn-info" data-loading-text="正在删除..." data-name="<%=mod.getName()%>" data-version="<%=mod.getVersion()%>">删除</button>
+                <button id="btn_detail_<%=name%>" class="btn btn-sm btn-primary" data-name="<%=name%>" data-version="<%=version%>">详情</button>
+                <button id="btn_delete_<%=name%>" class="btn btn-sm btn-info" data-loading-text="正在删除..." data-name="<%=name%>" data-version="<%=version%>">删除</button>
               </td>
             </tr>
 <%

@@ -114,9 +114,21 @@
 										debug.scriptsEndTime = new Date();
 									}
 
-									if (typeof(main) == 'string') {
+									if (null != main && typeof(main) == 'string') {
 										var f = eval(main);
-										f.call(null, pself, options.args, payload);
+										// 这里有一个 BUG：
+										// 在 FF 里连续调用 eval 时，浏览器不能正确返回结果，而返回 undefined
+										if (f !== undefined) {
+											f.call(null, pself, options.args, payload);
+										}
+										else {
+											var timer = setTimeout(function() {
+												clearTimeout(timer);
+												f = eval(main);
+												if (f !== undefined)
+													f.call(null, pself, options.args, payload);
+											}, 20);
+										}
 									}
 									else {
 										main.call(null, pself, options.args, payload);
@@ -208,9 +220,19 @@
 									debug.scriptsEndTime = new Date();
 								}
 
-								if (typeof(main) == 'string') {
+								if (null != main && typeof(main) == 'string') {
 									var f = eval(main);
-									f.call(null, pself, options.args, payload);
+									if (f !== undefined) {
+										f.call(null, pself, options.args, payload);
+									}
+									else {
+										var timer = setTimeout(function() {
+											clearTimeout(timer);
+											f = eval(main);
+											if (f !== undefined)
+												f.call(null, pself, options.args, payload);
+										}, 20);
+									}
 								}
 								else {
 									main.call(null, pself, options.args, payload);
@@ -260,9 +282,19 @@
 							debug.scriptsEndTime = new Date();
 						}
 
-						if (typeof(main) == 'string') {
+						if (null != main && typeof(main) == 'string') {
 							var f = eval(main);
-							f.call(null, pself, options.args, payload);
+							if (f !== undefined) {
+								f.call(null, pself, options.args, payload);
+							}
+							else {
+								var timer = setTimeout(function() {
+									clearTimeout(timer);
+									f = eval(main);
+									if (f !== undefined)
+										f.call(null, pself, options.args, payload);
+								}, 20);
+							}
 						}
 						else {
 							main.call(null, pself, options.args, payload);

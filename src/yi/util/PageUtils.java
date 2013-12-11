@@ -59,7 +59,51 @@ public final class PageUtils {
 	}
 
 	/**
-	 * 返回共享文件目录的上下文路径。
+	 * 返回 MOD 的名称。
+	 * @param request
+	 * @return
+	 */
+	public static String getModName(HttpServletRequest request) {
+		return request.getParameter("_n");
+	}
+
+	/**
+	 * 返回 MOD 的版本号。
+	 * @param request
+	 * @return
+	 */
+	public static String getModVersion(HttpServletRequest request) {
+		return request.getParameter("_v");
+	}
+
+	/**
+	 * 是否调试模式。
+	 * @param request
+	 * @return
+	 */
+	public static boolean isDebug(HttpServletRequest request) {
+		return Boolean.parseBoolean(request.getParameter("_d"));
+	}
+
+	/**
+	 * 返回 MOD 对象实例。
+	 * @param request
+	 * @return
+	 */
+	public static Mod getMod(HttpServletRequest request) {
+		String name = request.getParameter("_n");
+		String version = request.getParameter("_v");
+		boolean debug = Boolean.parseBoolean(request.getParameter("_d"));
+		if (debug) {
+			return DebuggerDirector.getInstance().getMod(name, version);
+		}
+		else {
+			return ModManager.getInstance().getMod(name, version);
+		}
+	}
+
+	/**
+	 * TODO 返回共享文件目录的上下文路径。
 	 * @param request
 	 * @return
 	 */

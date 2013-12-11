@@ -150,6 +150,33 @@ public final class ModReader {
 			}
 
 			// 共享文件
+			// TODO
+
+			// 调试预置数据
+			nl = root.getElementsByTagName("debug");
+			if (null != nl && nl.getLength() > 0) {
+				nl = nl.item(0).getChildNodes();
+				for (int i = 0, size = nl.getLength(); i < size; ++i) {
+					Node node = nl.item(i);
+					String nodeName = node.getNodeName();
+					if (nodeName.equals("args")) {
+						NodeList presetList = node.getChildNodes();
+						for (int n = 0; n < presetList.getLength(); ++n) {
+							Node presetNode = presetList.item(n);
+							if (presetNode.getNodeName().equals("preset"))
+								mod.addDebugPresetArg(presetNode.getTextContent());
+						}
+					}
+					else if (nodeName.equals("params")) {
+						NodeList presetList = node.getChildNodes();
+						for (int n = 0; n < presetList.getLength(); ++n) {
+							Node presetNode = presetList.item(n);
+							if (presetNode.getNodeName().equals("preset"))
+								mod.addDebugPresetParam(presetNode.getTextContent());
+						}
+					}
+				}
+			}
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
 		} catch (SAXException e) {

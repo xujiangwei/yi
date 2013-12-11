@@ -24,10 +24,14 @@ public final class Mod implements Serializable, Comparable<Mod> {
 
 	private static final long serialVersionUID = -1259621851477001920L;
 
+	// 名称
 	private String name;
+	// 版本号
 	private String version;
+	// 描述
 	private String description;
 
+	// 上下文路径
 	private String contextPath;
 
 	private String htmlFilename;
@@ -46,8 +50,12 @@ public final class Mod implements Serializable, Comparable<Mod> {
 	// 入口函数名
 	private String main;
 
+	// Debug 数据
+	private Debug debugData;
+
 	public Mod() {
-		this("Unknown", "unknown version");
+		this("Unknown", "Unknown version");
+		this.description = "Unknown mod";
 	}
 
 	public Mod(String name, String version) {
@@ -82,6 +90,10 @@ public final class Mod implements Serializable, Comparable<Mod> {
 		}
 	}
 
+	/**
+	 * 设置描述信息。
+	 * @param description
+	 */
 	protected void setDescription(String description) {
 		this.description = description;
 	}
@@ -255,6 +267,14 @@ public final class Mod implements Serializable, Comparable<Mod> {
 	}
 
 	/**
+	 * 返回主函数名。
+	 * @return
+	 */
+	public String getMainFunction() {
+		return this.main;
+	}
+
+	/**
 	 * 添加依赖的空间别名。
 	 * @param alias
 	 */
@@ -276,6 +296,46 @@ public final class Mod implements Serializable, Comparable<Mod> {
 		}
 
 		this.depsFiles.add(filename);
+	}
+
+	/**
+	 * 返回预置调试主函数参数列表。
+	 * @return
+	 */
+	public List<String> getPresetDebugArgs() {
+		if (null != this.debugData) {
+			return this.debugData.args;
+		}
+
+		return null;
+	}
+
+	/**
+	 * 返回预置调试URL参数列表。
+	 * @return
+	 */
+	public List<String> getPresetDebugParams() {
+		if (null != this.debugData) {
+			return this.debugData.params;
+		}
+
+		return null;
+	}
+
+	protected void addDebugPresetArg(String arg) {
+		if (null == this.debugData) {
+			this.debugData = new Debug();
+		}
+
+		this.debugData.addArg(arg);
+	}
+
+	protected void addDebugPresetParam(String param) {
+		if (null == this.debugData) {
+			this.debugData = new Debug();
+		}
+
+		this.debugData.addParam(param);
 	}
 
 	/**
@@ -430,5 +490,34 @@ public final class Mod implements Serializable, Comparable<Mod> {
 	@Override
 	public int compareTo(Mod other) {
 		return (this.name.compareTo(other.name));
+	}
+
+	/**
+	 * 调试数据对象。
+	 * 
+	 * @author Jiangwei Xu
+	 */
+	protected class Debug {
+		protected ArrayList<String> args = null;
+		protected ArrayList<String> params = null;
+
+		protected Debug() {
+		}
+
+		public void addArg(String arg) {
+			if (null == this.args) {
+				this.args = new ArrayList<String>(2);
+			}
+
+			this.args.add(arg);
+		}
+
+		public void addParam(String param) {
+			if (null == this.params) {
+				this.params = new ArrayList<String>(2);
+			}
+
+			this.params.add(param);
+		}
 	}
 }

@@ -1,4 +1,5 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@page import="java.util.*" %>
 <%@page import="yi.core.*" %>
 <%@page import="yi.debugger.*" %>
 <%
@@ -50,23 +51,75 @@ boolean direct = (null != load && (load.equals("1") || load.equals("true")));
         </div>
         <div class="panel-body">
           <div class="row toolbar">
-            <div class="col-md-12">
+            <div class="col-md-9 col-sm-9">
               <form class="form-horizontal" role="form">
                 <div class="form-group">
-                  <label class="col-sm-1 control-label" for="input_args">参数</label>
-                  <div class="col-sm-7">
-                    <input type="text" class="form-control" id="input_args" placeholder="输入模组参数" maxlength="512" />
+                  <label class="col-sm-3 control-label" for="input_args">主函数参数</label>
+                  <div class="col-sm-9">
+                    <div class="input-group">
+                      <input type="text" class="form-control" id="input_args" placeholder="输入主函数参数" maxlength="512" />
+                      <span class="input-group-btn">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+                          <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu pull-right" role="menu">
+                          <li><a id="btn_clear_args" href="javascript:;"><span class="glyphicon glyphicon-remove-circle"></span> 清空</a></li>
+<%
+List<String> presetList = mod.getPresetDebugArgs();
+if (null != presetList) {
+	int index = 0;
+	for (String value : presetList) {
+%>
+                          <li><a id="btn_preset_arg_<%=index%>" href="javascript:;" data-value='<%=value%>'><span class="glyphicon glyphicon-pencil"></span> 预置参数<%=(index+1) %></a></li>
+<%
+		++index;
+	}
+}
+%>
+                        </ul>
+                      </span>
+                    </div>
                   </div>
-                  <div class="col-sm-4">
-                    <button id="btn_run" type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="加载调试"><span class="glyphicon glyphicon-play"></span></button>
-                    <button id="btn_clear" type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="清空参数"><span class="glyphicon glyphicon-trash"></span></button>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-3 control-label" for="input_params">URL参数</label>
+                  <div class="col-sm-9">
+                    <div class="input-group">
+                      <input type="text" class="form-control" id="input_params" placeholder="输入URL参数" maxlength="512" />
+                      <span class="input-group-btn">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+                          <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu pull-right" role="menu">
+                          <li><a id="btn_clear_params" href="javascript:;"><span class="glyphicon glyphicon-remove-circle"></span> 清空</a></li>
+<%
+presetList = mod.getPresetDebugParams();
+if (null != presetList) {
+	int index = 0;
+	for (String value : presetList) {
+%>
+                          <li><a id="btn_preset_param_<%=index%>" href="javascript:;" data-value='<%=value%>'><span class="glyphicon glyphicon-pencil"></span> 预置参数<%=(index+1) %></a></li>
+<%
+		++index;
+	}
+}
+%>
+                        </ul>
+                      </span>
+                    </div>
                   </div>
                 </div>
               </form>
             </div>
+            <div class="col-md-3 col-sm-3 action-group">
+              <button id="btn_run" type="button" class="btn btn-ultrahigh btn-primary" data-toggle="tooltip" data-placement="top" title="加载"><span class="glyphicon glyphicon-play"></span></button>
+              <button id="btn_reset" type="button" class="btn btn-ultrahigh btn-primary" data-toggle="tooltip" data-placement="top" title="重置"><span class="glyphicon glyphicon-refresh"></span></button>
+            </div>
           </div>
           <hr />
-          <div id="mod_container_0" class="mod-container mod"></div>
+          <div id="mod_container_0" class="mod-container mod">
+            <div class="preview text-center"><h3>预览区域</h3></div>
+          </div>
           <hr />
           <div class="debug-info">
             <div class="row">

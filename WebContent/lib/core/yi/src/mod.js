@@ -30,14 +30,15 @@ var ModManager = function() {
 	this.mods = {};
 	// Key：Event name， Value：List
 	this.listeners = new HashMap();
-};
+}
 
 /**
  * 加载 Mod 。 
  * @param container MOD 的容器
  * @param args MOD 参数
+ * @param addition URL 参数
  */
-ModManager.prototype.load = function(container, args) {
+ModManager.prototype.load = function(container, args, addition) {
 	var target = container;
 	if (typeof(target) == 'string') {
 		target = $('#' + container);
@@ -72,6 +73,12 @@ ModManager.prototype.load = function(container, args) {
 			, "_v": data["version"]
 			, "_d": false
 		};
+		if (addition !== undefined && addition != null) {
+			addition["_n"] = params._n;
+			addition["_v"] = params._v;
+			addition["_d"] = params._d;
+			params = addition;
+		}
 		data["params"] = params;
 		// 上下文路径
 		data["contextPath"] = context + data.path;
@@ -122,14 +129,33 @@ ModManager.prototype.deleteRemoteMod = function(name, version, callback, fail) {
 }
 
 /**
+ * 重新部署 Debug 下的 MOD 工程。
+ */
+ModManager.prototype.redeployDebug = function(name, version, callback, fail) {
+	var url = this.context + "modmgm" + "/redeploy_d/" + name + "/" + version;
+	$.post(url, function(data, textStatus, jqXHR) {
+		callback.call(null, data);
+	}, 'json')
+	.fail(function() {
+		console.log('[Yi#Mod] Failed requests "' + url + '"');
+		if (fail !== undefined) {
+			fail.call(null, name, version);
+		}
+	});
+}
+
+/**
  * 调试 MOD 。
  */
-ModManager.prototype.debug = function(containerId, mod) {
+ModManager.prototype.debug = function(containerId, mod, addition) {
 	var _debug = {
 		startTime: new Date()
 	};
 
 	var container = $('#' + containerId);
+	// 清空 HTML 数据
+	container.html('');
+
 	// 上下文
 	mod["context"] = this.context;
 	// URL 参数
@@ -138,6 +164,12 @@ ModManager.prototype.debug = function(containerId, mod) {
 		, "_v": mod["version"]
 		, "_d": true
 	};
+	if (addition !== undefined && addition != null) {
+		addition["_n"] = params._n;
+		addition["_v"] = params._v;
+		addition["_d"] = params._d;
+		params = addition;
+	}
 	mod["params"] = params;
 
 	// 上下文路径
@@ -214,19 +246,30 @@ ModManager.prototype._search = function() {
 		var el = $(this);
 		var auto = el.attr("data-auto");
         if (auto !== undefined && auto == "true") {
+			// 主函数参数
 			var args = el.data('args');
+			// URL 参数
+			var params = el.data('params');
+
 			if (args !== undefined) {
 				try {
 					var obj = eval(args);
 					args = obj;
 				} catch (e) {
-					// Nothing
+					console.log('[Yi#Mod] Parse "data-args" error');
 				}
-				self.load(el, args);
 			}
-			else {
-				self.load(el);
+
+			if (params !== undefined) {
+				try {
+					var obj = eval(params);
+					params = obj;
+				} catch (e) {
+					console.log('[Yi#Mod] Parse "data-params" error');
+				}
 			}
+
+			self.load(el, args, params);
 		}
     });
 }

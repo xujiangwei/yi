@@ -53,6 +53,15 @@ sup {
   min-height: 300px;
 }
 
+.preview {
+  padding-top: 80px;
+  min-height: 300px;
+  width: 100%;
+}
+.preview h3 {
+  padding-top: 20px;
+}
+
 .debug-info {
 }
 
@@ -67,4 +76,13 @@ sup {
   right: auto;
   text-align: center;
   margin: 0px auto;
+}
+
+.action-group {
+  padding-top: 12px;
+}
+.btn-ultrahigh {
+  width: 60px !important;
+  height: 60px !important;
+  font-size: 24px;
 }

@@ -12,12 +12,28 @@
 	yi.ready(function() {
 		window.manager = new Manager();
 
-		// 绑定事件
+		// 详情按钮
+		$('[id^=btn_detail_]').each(function(index, element) {
+            var el = $(this);
+			var name = el.data("name");
+			var version = el.data("version");
+			el.bind("click", function() {
+				var content = $('input[name="'+ name +'"][value="'+ version +'"]');
+				content = content.html();
+				if (content.length > 0) {
+					yi.alert(content);
+				}
+				else {
+					yi.alert('正在后台加载数据请稍候……');
+				}
+			});
+        });
+
+		// 删除按钮
 		$('[id^=btn_delete_]').each(function(index, element) {
 			var el = $(this);
 			var name = el.data("name");
 			var version = el.data("version");
-			var index = parseInt(el.data("index"));
 			el.bind("click", function() {
 				el.button('loading');
 				yi.mod.deleteRemoteMod(name, version

@@ -19,7 +19,7 @@
 		Holder.run();
 
 		// 从容器里取出对象
-		common.use(mod.contextPath + "AndroidCarousel", function(AndroidCarousel) {
+		common.use(mod.contextPath + "android-carousel", function(AndroidCarousel) {
 			var ac = new AndroidCarousel(container.find('.carousel'));
 			ac.resetJellyBean(mod.contextPath);
 		});

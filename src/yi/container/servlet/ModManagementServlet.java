@@ -15,12 +15,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import yi.core.Mod;
 import yi.core.ModManager;
+import yi.debugger.DebuggerDirector;
 
 /**
  * 进行 MOD 管理。
  * 
  * 格式1：modmgm/${action}/${mod_name}/${mod_version}
- * action: delete/remove
+ * action: delete/redeploy_d/redeploy
  * 
  * @author Jiangwei Xu
  */
@@ -51,7 +52,22 @@ public class ModManagementServlet extends AbstractHttpServlet {
 				if (action.equals("delete")) {
 					// 执行删除
 					Mod mod = ModManager.getInstance().deleteMod(modName, version);
-					this.wrapResponseWithOk(response, mod.toJSON());
+					if (null != mod) {
+						this.wrapResponseWithOk(response, mod.toJSON());
+					}
+					else {
+						this.wrapResponse(response, HttpServletResponse.SC_NOT_FOUND);
+					}
+				}
+				else if (action.equals("redeploy_d")) {
+					// Debug 工程重新部署
+					Mod mod = DebuggerDirector.getInstance().redeploy(modName, version);
+					if (null != mod) {
+						this.wrapResponseWithOk(response, mod.toJSON());
+					}
+					else {
+						this.wrapResponse(response, HttpServletResponse.SC_NOT_FOUND);
+					}
 				}
 				else {
 					this.wrapResponse(response, HttpServletResponse.SC_NOT_IMPLEMENTED);

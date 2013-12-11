@@ -177,9 +177,9 @@ public final class ModManager extends AbstractLifeCycle {
 
 					// 移除数据
 					this.removeMod(name, version);
-				}
 
-				return mod;
+					return mod;
+				}
 			}
 
 			return null;

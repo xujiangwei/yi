@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import yi.core.Mod;
 import yi.core.ModReader;
@@ -35,11 +36,14 @@ public final class DebuggerDirector extends AbstractLifeCycle {
 	private String managedDir = "debugger" + File.separator + "modules" + File.separator;
 
 	private Timer timer;
-	private HashMap<String, Mod> mods;
+	private HashMap<String, HashMap<String, Mod>> mods;
+
+	private AtomicBoolean taskRunning;
 
 	private DebuggerDirector() {
 		this.timer = new Timer();
-		this.mods = new HashMap<String, Mod>(8);
+		this.mods = new HashMap<String, HashMap<String, Mod>>(8);
+		this.taskRunning = new AtomicBoolean(false);
 	}
 
 	public static DebuggerDirector getInstance() {
@@ -52,7 +56,11 @@ public final class DebuggerDirector extends AbstractLifeCycle {
 	 */
 	public List<Mod> getModList() {
 		ArrayList<Mod> list = new ArrayList<Mod>(this.mods.size());
-		list.addAll(this.mods.values());
+		synchronized (this.mods) {
+			for (HashMap<String, Mod> map : this.mods.values()) {
+				list.addAll(map.values());
+			}
+		}
 		Collections.sort(list);
 		return list;
 	}
@@ -64,9 +72,11 @@ public final class DebuggerDirector extends AbstractLifeCycle {
 	 * @return
 	 */
 	public Mod getMod(String name, String version) {
-		Mod mod = this.mods.get(name);
-		if (null != mod && mod.getVersion().equals(version)) {
-			return mod;
+		synchronized (this.mods) {
+			HashMap<String, Mod> map = this.mods.get(name);
+			if (null != map) {
+				return map.get(version);
+			}
 		}
 
 		return null;
@@ -93,6 +103,37 @@ public final class DebuggerDirector extends AbstractLifeCycle {
 		return this.rootPath + "debugger" + File.separator;
 	}
 
+	/**
+	 * 重新部署。
+	 * @param name
+	 * @param version
+	 */
+	public Mod redeploy(String name, String version) {
+		Mod mod = null;
+		// 删除数据
+		synchronized (this.mods) {
+			HashMap<String, Mod> map = this.mods.get(name);
+			if (null != map) {
+				mod = map.remove(version);
+				if (map.isEmpty()) {
+					this.mods.remove(name);
+				}
+			}
+		}
+
+		// 启动线程
+		Thread thread = new Thread() {
+			@Override
+			public void run() {
+				DaemonTimerTask task = new DaemonTimerTask();
+				task.run();
+			}
+		};
+		thread.start();
+
+		return mod;
+	}
+
 	@Override
 	protected void doStart() {
 		this.timer.schedule(new DaemonTimerTask(), 2000, 10 * 60 * 1000);
@@ -104,7 +145,17 @@ public final class DebuggerDirector extends AbstractLifeCycle {
 	}
 
 	protected void registerMod(Mod mod) {
-		this.mods.put(mod.getName(), mod);
+		synchronized (this.mods) {
+			HashMap<String, Mod> map = this.mods.get(mod.getName());
+			if (null != map) {
+				map.put(mod.getVersion(), mod);
+			}
+			else {
+				map = new HashMap<String, Mod>(1);
+				map.put(mod.getVersion(), mod);
+				this.mods.put(mod.getName(), map);
+			}
+		}
 	}
 
 	/**
@@ -118,6 +169,13 @@ public final class DebuggerDirector extends AbstractLifeCycle {
 
 		@Override
 		public void run() {
+			if (taskRunning.get()) {
+				return;
+			}
+
+			// 设置任务启动
+			taskRunning.set(true);
+
 			// 变更状态
 			changeState(LifeCycleState.RUNNING);
 
@@ -131,6 +189,9 @@ public final class DebuggerDirector extends AbstractLifeCycle {
 					this.scanAndParse(file);
 				}
 			}
+
+			// 设置任务结束
+			taskRunning.set(false);
 		}
 
 		/**
