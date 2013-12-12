@@ -66,11 +66,11 @@
 		}
 
 		var info = $('#action_info');
-		info.html("3 秒后窗口自动关闭");
+		info.html('3 秒后将自动<a href="javascript:closeSelf();">关闭窗口</a>');
 		var count = 3;
 		var t = setInterval(function() {
 			--count;
-			info.html(count + " 秒后窗口自动关闭");
+			info.html(count + ' 秒后将自动<a href="javascript:closeSelf();">关闭窗口</a>');
 			if (count == 0) {
 				clearInterval(t);
 				handle.close();
@@ -104,5 +104,15 @@
 		setTimeout(function() {
 			bar.parent().removeClass('active');
 		}, 500);
+	}
+
+	// 关闭窗口
+	this.closeSelf = function() {
+		var handle = window.handle;
+		if (handle === undefined) {
+			return;
+		}
+
+		handle.close();
 	}
 })();

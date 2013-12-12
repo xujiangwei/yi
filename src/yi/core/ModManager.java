@@ -163,6 +163,10 @@ public final class ModManager extends AbstractLifeCycle {
 			if (null != map) {
 				Mod mod = map.get(version);
 				if (null != mod) {
+					if (mod.isReadOnly()) {
+						return mod;
+					}
+
 					// 工作路径
 					String path = this.workPath + this.modSubPath;
 					File file = new File(path + File.separator + name + "_" + version + ".mod");

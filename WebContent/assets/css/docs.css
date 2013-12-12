@@ -39,7 +39,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Outline button for use within the docs */
 .btn-outline {
-  color: #563d7c;
+  color: #223b71;
   background-color: #fff;
   border-color: #e5e5e5;
 }
@@ -250,8 +250,8 @@ h1, h2, h3, h4, h5, h6 {
 @media screen and (min-width: 768px) {
   .bs-masthead {
     text-align: left;
-    padding-top:    120px;
-    padding-bottom: 120px;
+    padding-top:    140px;
+    padding-bottom: 140px;
   }
   .bs-masthead h1 {
     font-size: 100px;
@@ -436,9 +436,9 @@ h1, h2, h3, h4, h5, h6 {
 .bs-sidebar .nav > .active:hover > a,
 .bs-sidebar .nav > .active:focus > a {
   font-weight: bold;
-  color: #563d7c;
+  color: #223b71;
   background-color: transparent;
-  border-right: 1px solid #563d7c;
+  border-right: 1px solid #223b71;
 }
 
 /* Nav: second level (shown on .active) */

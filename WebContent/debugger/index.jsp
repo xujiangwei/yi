@@ -10,7 +10,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>调试管理器</title>
 <link href="../lib/core/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-<link href="../lib/core/yi/yi.css" rel="stylesheet" />
+<link href="../lib/core/yi/yi.min.css" rel="stylesheet" />
 <link href="assets/css/index.css" rel="stylesheet" />
 </head>
 
@@ -31,13 +31,45 @@
         <li><a href="../modules/manager.jsp">模组管理器</a></li>
       </ul>
       <ul class="nav navbar-nav nav-pills pull-right">
-        <li><button id="btn_new" class="btn btn-default">新建</button></li>
+        <li><button id="btn_new" class="btn btn-default" data-toggle="modal" data-target="#mod_profile_dialog">新建</button></li>
         <li><button id="btn_import" class="btn btn-default">导入</button></li>
         <li><button id="btn_help" class="btn btn-default">帮助</button></li>
       </ul>
     </div><!--/.nav-collapse -->
   </div>
 </div>
+
+<!-- 模组属性配置对话框 -->
+<div id="mod_profile_dialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mod_profile_dialog_label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="mod_profile_dialog">配置模组</h4>
+      </div>
+      <div class="modal-body">
+        <form id="mod_profile_form" class="form-horizontal" role="form" verifier-validate>
+          <div class="form-group">
+            <label for="input_name" class="col-sm-3 control-label">名称 <sup>*</sup></label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" id="input_name" placeholder="模组名称" verifier-trigger="keyup focusin focusout" verifier-notblank="true" verifier-regexp="^[a-z0-9A-Z_]+$" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="input_version" class="col-sm-3 control-label">版本</label>
+            <div class="col-sm-3"><input type="text" class="form-control" id="input_version_major" placeholder="主版本号" verifier-trigger="keyup focusin focusout" verifier-type="digits" /></div>
+            <div class="col-sm-3"><input type="text" class="form-control" id="input_version_minor" placeholder="副版本号" verifier-trigger="keyup focusin focusout" verifier-type="digits" /></div>
+            <div class="col-sm-3"><input type="text" class="form-control" id="input_version_revision" placeholder="修订号" verifier-trigger="keyup focusin focusout" verifier-type="digits" /></div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary">确定</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 <div class="container">
   <div class="row">
@@ -71,13 +103,12 @@ for (Mod mod : list) {
                   <td>
                     <a id="btn_debug_<%=mod.getName()%>" class="btn btn-sm btn-primary" href="debugger.jsp?name=<%=mod.getName()%>&version=<%=mod.getVersion()%>" target="_blank">调试</a>
                     <button id="btn_build_<%=mod.getName()%>" class="btn btn-sm btn-info" onClick="javascript:window.build('builder.jsp?name=<%=mod.getName()%>&version=<%=mod.getVersion()%>');">构建</button>
-                    <button id="btn_config_<%=mod.getName()%>" class="btn btn-sm btn-default">配置</button>
                     <div class="btn-group">
-                      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">更多 <span class="caret"></span></button>
+                      <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">更多 <span class="caret"></span></button>
                       <ul class="dropdown-menu" role="menu">
-                        <li><a href="#">刷新</a></li>
+                        <li><a id="btn_config_<%=mod.getName()%>" href="#">配置</a></li>
+                        <li><a href="#">重置</a></li>
                         <li><a href="#">导出</a></li>
-                        <li><a href="#">删除</a></li>
                       </ul>
                     </div>
                   </td>

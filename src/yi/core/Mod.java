@@ -24,6 +24,9 @@ public final class Mod implements Serializable, Comparable<Mod> {
 
 	private static final long serialVersionUID = -1259621851477001920L;
 
+	// 是否只读
+	private boolean readOnly;
+
 	// 名称
 	private String name;
 	// 版本号
@@ -59,8 +62,17 @@ public final class Mod implements Serializable, Comparable<Mod> {
 	}
 
 	public Mod(String name, String version) {
+		this.readOnly = false;
 		this.name = name;
 		this.version = version;
+	}
+
+	public boolean isReadOnly() {
+		return this.readOnly;
+	}
+
+	protected void setReadOnly(boolean value) {
+		this.readOnly = value;
 	}
 
 	/**
@@ -347,6 +359,10 @@ public final class Mod implements Serializable, Comparable<Mod> {
 		try {
 			json.put("name", this.name);
 			json.put("version", this.version);
+
+			if (this.readOnly) {
+				json.put("readOnly", this.readOnly);
+			}
 
 			// 上下文路径
 			json.put("path", this.contextPath);

@@ -32,7 +32,12 @@
  */
 
 (function($){
+	
+	/**
+	 * jQuery Fetch
+	 */
 	$.fn.fetch = function(options, payload) {
+		// 默认设置
 		var defaults = {
 			params: null
 			, styles: []
@@ -92,6 +97,7 @@
 				var url = options['html'];
 				if (null != params)
 					url += "?" + params;
+				// jQuery#load
 				self.load(url, function(response, status, xhr) {
 					// 记录 HTML 结束时间
 					if (null != debug) {
@@ -116,21 +122,9 @@
 
 									if (null != main && typeof(main) == 'string') {
 										var f = eval(main);
-										// 这里有一个 BUG：
-										// 在 FF 里连续调用 eval 时，浏览器不能正确返回结果，而返回 undefined
-										if (f !== undefined) {
-											f.call(null, pself, options.args, payload);
-										}
-										else {
-											var timer = setTimeout(function() {
-												clearTimeout(timer);
-												f = eval(main);
-												if (f !== undefined)
-													f.call(null, pself, options.args, payload);
-											}, 20);
-										}
+										f.call(null, pself, options.args, payload);
 									}
-									else {
+									else if (null != main) {
 										main.call(null, pself, options.args, payload);
 									}
 
@@ -143,10 +137,12 @@
 									options.done.call(null, pself, payload);
 								}
 							};
-							// 执行加载
+							// 执行压缩方式加载
+							compressLoad(options.scripts, loadedCallback);
+							/* 以下为非压缩方式
 							for (var i = 0, size = options.scripts.length; i < size; ++i) {
 								loadScript(options.scripts[i], loadedCallback);
-							}
+							}*/
 						}
 						else {
 							// 记录加载结束时间
@@ -170,6 +166,7 @@
 				var url = options['tmpl'];
 				if (null != params)
 					url += "?" + params;
+				// jQuery#ajax
 				$.ajax(url, {
 					async: true
 					, mimeType: 'text/plain; charset=utf-8'
@@ -222,19 +219,9 @@
 
 								if (null != main && typeof(main) == 'string') {
 									var f = eval(main);
-									if (f !== undefined) {
-										f.call(null, pself, options.args, payload);
-									}
-									else {
-										var timer = setTimeout(function() {
-											clearTimeout(timer);
-											f = eval(main);
-											if (f !== undefined)
-												f.call(null, pself, options.args, payload);
-										}, 20);
-									}
+									f.call(null, pself, options.args, payload);
 								}
-								else {
+								else if (null != main) {
 									main.call(null, pself, options.args, payload);
 								}
 
@@ -247,9 +234,12 @@
 								options.done.call(null, pself, payload);
 							}
 						};
+						// 执行压缩方式加载
+						compressLoad(options.scripts, loadedCallback);
+						/* 以下为非压缩方式
 						for (var i = 0, size = options.scripts.length; i < size; ++i) {
 							loadScript(options.scripts[i], loadedCallback);
-						}
+						}*/
 					}
 					else {
 						// 记录加载结束时间
@@ -284,19 +274,9 @@
 
 						if (null != main && typeof(main) == 'string') {
 							var f = eval(main);
-							if (f !== undefined) {
-								f.call(null, pself, options.args, payload);
-							}
-							else {
-								var timer = setTimeout(function() {
-									clearTimeout(timer);
-									f = eval(main);
-									if (f !== undefined)
-										f.call(null, pself, options.args, payload);
-								}, 20);
-							}
+							f.call(null, pself, options.args, payload);
 						}
-						else {
+						else if (null != main) {
 							main.call(null, pself, options.args, payload);
 						}
 
@@ -309,15 +289,103 @@
 						options.done.call(null, pself, payload);
 					}
 				};
+				// 执行压缩方式加载
+				compressLoad(options.scripts, loadedCallback);
+				/* 以下为非压缩方式
 				for (var i = 0, size = options.scripts.length; i < size; ++i) {
 					loadScript(options.scripts[i], loadedCallback);
-				}
+				}*/
 			}
 			else {
 				options.error.call(null, self);
 			}
 		});
-	};
+	}
+
+	// 本地关系集合
+	var scriptRelationSet = {};
+	var callbackSetKey = [];
+	var callbackSet = {};
+	// 本地定时器
+	var localTimer = 0;
+
+	// 压缩加载量关系，解决瞬时相同 URL 脚本被重复加载的问题
+	function compressLoad(list, callback) {
+		for (var i = 0, size = list.length; i < size; ++i) {
+			var url = list[i];
+			var v = scriptRelationSet[url];
+			if (typeof v == 'undefined') {
+				// 没有对应的 URL，直接执行加载
+				loadScript(url, function() {
+					callback.call(null);
+				});
+				// 记录脚本 URL
+				scriptRelationSet[url] = true;
+			}
+			else {
+				// 发现有重复，追加记录
+				if (callbackSetKey.indexOf(url) < 0)
+					callbackSetKey.push(url);
+
+				var array = callbackSet[url];
+				if (typeof array == 'undefined')
+					array = [];
+				array.push(callback);
+				callbackSet[url] = array;
+			}
+		}
+
+		// 启动轮询
+		if (callbackSetKey.length > 0) {
+			if (localTimer > 0)
+				clearTimeout(localTimer);
+			localTimer = setTimeout(polling, 60);
+		}
+	}
+
+	function polling() {
+		clearTimeout(localTimer);
+		localTimer = 0;
+
+		var completedList = [];
+		for (var i = 0; i < callbackSetKey.length; ++i) {
+			var url = callbackSetKey[i];
+			if (cache.checkScriptCached(url)) {
+				// 获取回调函数列表
+				var array = callbackSet[url];
+				for (var n = 0; n < array.length; ++n) {
+					(array[n]).call(null);
+				}
+
+				completedList.push(url);
+			}
+		}
+
+		if (completedList.length > 0) {
+			// 删除已完成加载
+			for (var i = 0; i < completedList.length; ++i) {
+				var url = completedList[i];
+				var index = callbackSetKey.indexOf(url);
+				if (index >= 0) {
+					callbackSetKey.splice(index, 1);
+				}
+			}
+
+			completedList.splice(0, completedList.length);
+		}
+		completedList = null;
+
+		if (callbackSetKey.length > 0) {
+			// 继续轮询
+			localTimer = setTimeout(polling, 60);
+			return;
+		}
+
+		// 执行清理
+		// 重新创建集合
+		scriptRelationSet = {};
+		callbackSet = {};
+	}
 
 	// 加载样式表
 	function loadLink(url) {
@@ -328,17 +396,24 @@
 			link.href  = url;// + "?_=" + (new Date()).getTime();
 			var head = document.getElementsByTagName("head")[0];
 			head.appendChild(link);
+
+			// 缓存样式表记录
+			cache.cacheStyle(url);
 		}
-	};
+	}
 
 	// 加载脚本
 	function loadScript(url, loadedCallback) {
-		if (!cache.checkScriptCached(url)) {
+		var surl = url.toString();
+		if (!cache.checkScriptCached(surl)) {
 			var script = document.createElement("script");
 			script.type = "text/javascript";
-			script.src = url;// + "?_=" + (new Date()).getTime();
+			script.src = surl;// + "?_=" + (new Date()).getTime();
 			if (loadedCallback !== undefined) {
 				script.onload = function() {
+					// 缓存脚本记录
+					cache.cacheScript(surl);
+
 					loadedCallback.call(null);
 				};
 			}
@@ -351,102 +426,45 @@
 
 	// 用于缓存已加载样式表和脚本的缓存
 	var cache = {
-		pageStyle: "jquery.fetch.style"
-		, pageScript: "jquery.fetch.script"
-		, styleMap: null
+		styleMap: null
 		, scriptMap: null
 
 		, init: function() {
-			var page = window.location.href;
-			cache.pageStyle = page + '#css';
-			cache.pageScript = page + '#js';
-			if (window.store !== undefined) {
-				window.store.remove(cache.pageStyle);
-				window.store.remove(cache.pageScript);
-			}
-			else {
-				cache.styleMap = {};
-				cache.scriptMap = {};
-			}
+			cache.styleMap = {};
+			cache.scriptMap = {};
+		}
+
+		, cacheScript: function(url) {
+			cache.scriptMap[url] = true;
+		}
+
+		, cacheStyle: function(url) {
+			cache.styleMap[url] = true;
 		}
 
 		// 如果脚本已经被缓存则返回 true，否则返回 false
 		, checkScriptCached: function(url) {
-			if (null == cache.scriptMap) {
-				var s = window.store.get(cache.pageScript);
-				if (s != null && s !== undefined) {
-					var obj = JSON.parse(s);
-					var list = obj.scripts;
-					if (list.indexOf(url) >= 0) {
-						// 已经缓存
-						return true;
-					}
-					else {
-						// 未缓存
-						list.push(url);
-						var nv = JSON.stringify({"scripts":list});
-						window.store.set(cache.pageScript, nv);
-						return false;
-					}
-				}
-				else {
-					// 未缓存
-					var newValue = JSON.stringify({"scripts":[url]});
-					window.store.set(cache.pageScript, newValue);
-					return false;
-				}
+			var value = cache.scriptMap[url];
+			if (typeof value == 'undefined') {
+				// 未缓存
+				return false;
 			}
 			else {
-				var value = cache.scriptMap[url];
-				if (value != null && value !== undefined) {
-					// 已经缓存
-					return true;
-				}
-				else {
-					// 未缓存
-					cache.scriptMap[url] = true;
-					return false;
-				}
+				// 已缓存
+				return true;
 			}
 		}
 
 		// 如果样式表已经被缓存则返回 true，否则返回 false
 		, checkStyleCached: function(url) {
-			if (null == cache.styleMap) {
-				var s = window.store.get(cache.pageStyle);
-				if (s != null && s !== undefined) {
-					var obj = JSON.parse(s);
-					var list = obj.styles;
-					if (list.indexOf(url) >= 0) {
-						// 已经缓存
-						return true;
-					}
-					else {
-						// 未缓存
-						list.push(url);
-						var nv = JSON.stringify({"styles":list});
-						window.store.set(cache.pageStyle, nv);
-						return false;
-					}
-				}
-				else {
-					// 未缓存
-					var newValue = JSON.stringify({"styles":[url]});
-					window.store.set(cache.pageStyle, newValue);
-					return false;
-				}
+			var value = cache.styleMap[url];
+			if (typeof value == 'undefined') {
+				// 未缓存
+				return false;
 			}
 			else {
-				var value = cache.styleMap[url];
-				if (value != null && value !== undefined) {
-					// 已经缓存
-					return true;
-				}
-				else {
-					// 未缓存
-					cache.styleMap[url] = true;
-					return false;
-				}
+				// 已缓存
+				return true;
 			}
 		}
 	};

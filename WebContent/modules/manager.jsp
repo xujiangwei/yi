@@ -11,7 +11,7 @@ List<Mod> list = ModManager.getInstance().getModList();
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>模组管理器</title>
 <link href="../lib/core/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-<link href="../lib/core/yi/yi.css" rel="stylesheet" />
+<link href="../lib/core/yi/yi.min.css" rel="stylesheet" />
 <link href="../assets/css/app-manager.css" rel="stylesheet" />
 </head>
 

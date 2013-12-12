@@ -91,6 +91,12 @@ public final class ModReader {
 			Document document = builder.parse(file);
 
 			Element root = document.getDocumentElement();
+			// readonly 属性
+			String strReadOnly = root.getAttribute("readonly");
+			boolean readOnly = false;
+			if (null != strReadOnly && strReadOnly.equals("true")) {
+				readOnly = true;
+			}
 			// name 节点
 			NodeList nlName = root.getElementsByTagName("name");
 			// version 节点
@@ -101,6 +107,7 @@ public final class ModReader {
 			// 创建 Mod 实例
 			mod = new Mod(nlName.item(0).getTextContent(), nlVersion.item(0).getTextContent());
 			mod.setDescription(nlDesc.item(0).getTextContent());
+			mod.setReadOnly(readOnly);
 
 			// 获取文件列表
 			Node nodeFiles = root.getElementsByTagName("files").item(0);

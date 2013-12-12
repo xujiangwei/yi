@@ -17,7 +17,7 @@ boolean direct = (null != load && (load.equals("1") || load.equals("true")));
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>调试器 - <%=mod.getName()%> <%=mod.getVersion()%></title>
 <link href="../lib/core/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-<link href="../lib/core/yi/yi.css" rel="stylesheet" />
+<link href="../lib/core/yi/yi.min.css" rel="stylesheet" />
 <link href="assets/css/app-debugger.css" rel="stylesheet" />
 </head>
 

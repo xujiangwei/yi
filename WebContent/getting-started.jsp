@@ -25,21 +25,11 @@
     </div>
     <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
       <ul class="nav navbar-nav">
-        <li class="active">
-          <a href="getting-started.jsp">起步</a>
-        </li>
-        <li>
-          <a href="api.jsp">API</a>
-        </li>
-        <li>
-          <a href="components.jsp">组件</a>
-        </li>
-        <li>
-          <a href="modules.jsp">模组</a>
-        </li>
-        <li>
-          <a href="utility-library.jsp">实用库</a>
-        </li>
+        <li class="active"><a href="getting-started.jsp">起步</a></li>
+        <li><a href="api.jsp">API</a></li>
+        <li><a href="components.jsp">组件</a></li>
+        <li><a href="modules.jsp">模组</a></li>
+        <li><a href="utility-library.jsp">实用库</a></li>
       </ul>
     </nav>
   </div>
@@ -77,12 +67,6 @@
             <a href="#examples">案例</a>
           </li>
           <li>
-            <a href="#intention">目标</a>
-            <ul class="nav">
-              <li><a href="#intention-first-stage">第一阶段目标</a></li>
-            </ul>
-          </li>
-          <li>
             <a href="#browsers">浏览器支持</a>
           </li>
         </ul>
@@ -98,7 +82,7 @@
         <p class="lead">壹框提供了几种可以帮你快速上手的方式，每种方式针对具有不同技能等级的开发者和不同的使用场景。继续阅读下面的内容，看看哪种方式适合你的需求吧。</p>
 
         <h3 id="download-compiled">编译后的文件</h3>
-        <p>获取壹框最快速的方式就是下载经过编译的Jar、CSS、JavaScript文件，另外还包含字体文件。但是不包含文档和源码文件。</p>
+        <p>获取壹框最快速的方式就是下载经过编译的 JAR、CSS、JavaScript 文件，另外还包含字体文件。但是不包含文档和源码文件。</p>
         <p><a class="btn btn-lg btn-primary" href="https://github.com/xujiangwei/yi/archive/master.zip">下载壹框</a></p>
 
         <h3 id="download-sources">源代码文件</h3>
@@ -174,6 +158,23 @@
 │   │   │   │   ├── console.min.css
 │   │   │   │   ├── console.js
 │   │   │   │   └── console.min.js
+│   │   │   ├── html5shiv/
+│   │   │   │   └── html5shiv.js
+│   │   │   ├── jquery/
+│   │   │   │   ├── jquery-1.10.2.js
+│   │   │   │   ├── jquery-1.10.2.min.js
+│   │   │   │   ├── jquery-2.0.3.js
+│   │   │   │   └── jquery-2.0.3.min.js
+│   │   │   ├── respond/
+│   │   │   │   └── respond.min.js
+│   │   │   ├── seajs/
+│   │   │   │   ├── sea-debug.js
+│   │   │   │   └── sea.js
+│   │   │   └── yi/
+│   │   │       ├── yi.css
+│   │   │       ├── yi.js
+│   │   │       ├── yi.min.css
+│   │   │       └── yi.min.js
 │   │   ├── extensions/
 │   │   ├── modules/
 │   │   ├── plugins/

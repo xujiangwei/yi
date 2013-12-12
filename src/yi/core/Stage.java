@@ -42,7 +42,6 @@ public final class Stage extends AbstractLifeCycle {
 		String[] list = new String[] {"core/jquery/jquery-1.10.2.min.js"
 			, "core/bootstrap/js/bootstrap.min.js"
 			, "core/seajs/sea.js"
-			, "utils/store.js"
 			, "utils/json2.js"
 			, "utils/hashmap.js"
 			, "core/yi/yi.min.js"
@@ -70,7 +69,7 @@ public final class Stage extends AbstractLifeCycle {
 			contextPath += "/";
 
 		String[] list = new String[] {"core/bootstrap/css/bootstrap.min.css"
-			, "core/yi/yi.css"
+			, "core/yi/yi.min.css"
 		};
 
 		StringBuilder ret = new StringBuilder();

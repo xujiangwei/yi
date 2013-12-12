@@ -9,15 +9,12 @@
 	yi.config("../");
 
 	yi.ready(function() {
-		$('#btn_new').click(function() {
-			yi.confirm('正在开发……', function(result) {
-				
-			});
-		});
-
 		$('#btn_help').click(function() {
 			yi.alert('正在开发……');
 		});
+
+		// 启动配置模组的表单验证
+		$('#mod_profile_form').verify();
 	});
 
 	this.build = function(url) {

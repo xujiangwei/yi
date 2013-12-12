@@ -22,7 +22,8 @@
  */
 
 global.ModEvent = {
-	LOADED: "loaded"
+	LOADED: "loaded",
+	FAILED: "failed"
 };
 
 var ModManager = function() {
@@ -101,7 +102,8 @@ ModManager.prototype.load = function(container, args, addition) {
 		}
 	}, 'json')
 	.fail(function() {
-		console.log('[Yi#Mod] Failed requests "' + url + '"');
+		console.log('[Yi#Mod#load] Failed requests "' + url + '"');
+		self.notifyEvent(global.ModEvent.FAILED, target, {"name":modName, "version":version});
 	});
 }
 

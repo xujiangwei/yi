@@ -28,26 +28,26 @@ if (null == mod) {
       <span class="form-control-static" style="font-size:16px;">模组信息</span>
     </div>
     <div class="form-group">
-      <label class="col-sm-2 control-label">名称</label>
-      <div class="col-sm-10">
+      <label class="col-sm-3 control-label">名称</label>
+      <div class="col-sm-9">
         <p class="form-control-static"><%=mod.getName() %></p>
       </div>
     </div>
     <div class="form-group">
-      <label class="col-sm-2 control-label">版本号</label>
-      <div class="col-sm-10">
+      <label class="col-sm-3 control-label">版本号</label>
+      <div class="col-sm-9">
         <p class="form-control-static"><%=mod.getVersion() %></p>
       </div>
     </div>
     <div class="form-group">
-      <label class="col-sm-2 control-label">描述</label>
-      <div class="col-sm-10">
+      <label class="col-sm-3 control-label">描述</label>
+      <div class="col-sm-9">
         <p class="form-control-static"><%=mod.getDescription() %></p>
       </div>
     </div>
     <div class="form-group">
-      <label class="col-sm-2 control-label">HTML 文件</label>
-      <div class="col-sm-10">
+      <label class="col-sm-3 control-label">HTML 文件</label>
+      <div class="col-sm-9">
 <%
 String html = mod.getHtmlFilename();
 long size = mod.getHtmlFileSize();
@@ -69,8 +69,8 @@ else {
       </div>
     </div>
     <div class="form-group">
-      <label class="col-sm-2 control-label">样式表文件</label>
-      <div class="col-sm-10">
+      <label class="col-sm-3 control-label">样式表文件</label>
+      <div class="col-sm-9">
 <%
 List<String> list = mod.getStyleFilenameList();
 if (null != list) {
@@ -90,8 +90,8 @@ else {
       </div>
     </div>
     <div class="form-group">
-      <label class="col-sm-2 control-label">脚本文件</label>
-      <div class="col-sm-10">
+      <label class="col-sm-3 control-label">脚本文件</label>
+      <div class="col-sm-9">
 <%
 list = mod.getScriptFilenameList();
 if (null != list) {
@@ -111,8 +111,8 @@ else {
       </div>
     </div>
     <div class="form-group">
-      <label class="col-sm-2 control-label">入口函数</label>
-      <div class="col-sm-10">
+      <label class="col-sm-3 control-label">入口函数</label>
+      <div class="col-sm-9">
 <%
 String main = mod.getMainFunction();
 if (null != main) {
