@@ -5,24 +5,31 @@
 }
 
 .yi-gallery-list-item {
-	cursor: pointer;
-	padding: 10px;
+	
 }
-.yi-gallery-list-item-add{
-	visibility : hidden;
+
+.yi-gallery-list-item-add {
+	visibility: hidden;
 }
+
 .yi-gallery-list-item-inner {
+	cursor: pointer;
 }
-.yi-gallery-list-item-bordered,.yi-gallery-bordered{
+
+.yi-gallery-bordered {
 	border: 1px solid #dddddd;
 }
 
 .yi-gallery-list-item-default {
 	text-align: center;
 }
+
 .yi-gallery-list-item-content {
 	width: 100%;
 	height: 170px;
 	border: 1px solid #dddddd;
 }
 
+.yi-gallery-item-selected {
+	background-color: #DDDDFF !important;
+}

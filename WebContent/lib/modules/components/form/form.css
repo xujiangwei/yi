@@ -1,0 +1,5 @@
+.yi-form-hidden-frame {
+	display: none;
+	opacity: 0;
+	filter: alpha(opacity = 0);
+}

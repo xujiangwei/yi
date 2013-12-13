@@ -1,0 +1,12 @@
+.yi-card-layout {
+	/* overflow: auto; */
+	
+}
+
+.yi-card-layout-card {
+	display: none;
+}
+
+.yi-card-layout-card-active {
+	display: block;
+}

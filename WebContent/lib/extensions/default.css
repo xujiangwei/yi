@@ -6,9 +6,13 @@
 
 /* 2.form */
 .yi-form {
-	border: 1px solid #dddddd;
-	padding: 15px 25px;
-	background-color: white;
+	
+}
+
+.yi-form .yi-form-legend {
+	border-bottom-width: 0;
+	font-size: 15px;
+	font-weight: bold;
 }
 
 .yi-form-label {
@@ -16,6 +20,7 @@
 }
 
 /* X.styels for both statics and components */
+/* X.1 timeline */
 .yi-timeline {
 	position: relative;
 	height: 40px;
@@ -70,4 +75,42 @@
 
 .yi-timeline-readonly>.yi-timeline-point {
 	background-image: url(default/timeline/point_readonly.png)
+}
+
+.yi-graph-radio-group-graph-south {
+	margin-top: 20px;
+}
+
+.yi-graph-radio-group-graph-north {
+}
+
+.yi-graph-radio-group-graph-east {
+	display: inline-block;
+}
+.yi-graph-radio-group-graph-west {
+	display: inline-block;
+    float: left;
+}
+
+.yi-graph-radio-group .radio-inline + .radio-inline, .checkbox-inline + .checkbox-inline{
+    margin-left: 0;
+}
+.yi-graph-radio-group .radio-inline, .yi-graph-radio-group .checkbox-inline {
+    padding: 0;
+}
+.yi-graph-radio-group input[type=radio]{
+    margin-left: 0;
+}
+.yi-tab-layout-content{
+    padding: 16px;
+}
+.yi-tab-layout-title-add-btn{
+    cursor: pointer;
+}
+.yi-tab-layout-header-remove{
+    position: absolute;
+    right: 4px;
+    top: 2px;
+    display:none;
+    cursor: pointer;
 }

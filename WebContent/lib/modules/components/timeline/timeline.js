@@ -10,7 +10,7 @@
  * @method String getValue()
  * @method void setValue(String value)
  * 
- * @description 1.目前只处理到天 2.目前只处理闭区间 updated on 2013-12-06
+ * @description 1.目前只处理到天 2.目前只处理闭区间 updated on 2013-12-10
  * 
  */
 define(function(require, exports, module) {
@@ -67,7 +67,7 @@ define(function(require, exports, module) {
 			/**
 			 * @cfg size String
 			 * 
-			 * 'normal', 'small'
+			 * 'normal', 'small'，默认：'normal'
 			 */
 			size : NORMAL,
 			/**
@@ -83,7 +83,7 @@ define(function(require, exports, module) {
 			/**
 			 * @cfg readonly Boolean
 			 * 
-			 * 只读，目前缺少startDate或endDate时readonly只读为true
+			 * 是否只读，目前缺少startDate或endDate时readonly只读为true
 			 */
 			/**
 			 * @cfg value String
@@ -91,8 +91,7 @@ define(function(require, exports, module) {
 			 * 初始值，逗号分隔的字符串
 			 */
 			baseCls : 'yi-timeline',
-			baseHtml : '<div class="yi-timeline">'
-					+ '<div class="yi-timeline-axis"></div>'
+			baseHtml : '<div>' + '<div class="yi-timeline-axis"></div>'
 					+ '<div class="yi-timeline-start"></div>'
 					+ '<div class="yi-timeline-end"></div>' + '</div>',
 			/*
@@ -102,9 +101,9 @@ define(function(require, exports, module) {
 			initComponent : function() {
 				Timeline.superclass.initComponent.call(this);
 
-				this.updateReadOnly()
+				this.updateReadonly()
 			},
-			updateReadOnly : function() {
+			updateReadonly : function() {
 				// initComponent()时只需执行这部分
 				if (this.startDate) {
 					this.sm = parseToMilliseconds(this.startDate);
@@ -133,9 +132,13 @@ define(function(require, exports, module) {
 			setStartDate : function(startDate) {
 				this.startDate = startDate;
 				if (this.startDateEl) {
-					this.startDateEl.html(startDate);
+					if (this.startDate) {
+						this.startDateEl.html(startDate);
+					} else {
+						this.startDateEl.html('');
+					}
 				}
-				this.updateReadOnly();
+				this.updateReadonly();
 				this.updateValue(true);
 			},
 			/**
@@ -144,9 +147,13 @@ define(function(require, exports, module) {
 			setEndDate : function(endDate) {
 				this.endDate = endDate;
 				if (this.endDateEl) {
-					this.endDateEl.html(endDate);
+					if (this.endDate) {
+						this.endDateEl.html(endDate);
+					} else {
+						this.endDateEl.html('');
+					}
 				}
-				this.updateReadOnly();
+				this.updateReadonly();
 				this.updateValue(true);
 			},
 			afterRender : function(parent) {
@@ -166,12 +173,18 @@ define(function(require, exports, module) {
 				this.startDateEl = this.el.children('.' + this.baseCls
 						+ '-start');
 				if (this.startDate) {
+					// TODO 反向同步startDate
 					this.startDateEl.html(this.startDate);
+				} else {
+					this.startDateEl.html('');
 				}
 
 				this.endDateEl = this.el.children('.' + this.baseCls + '-end');
 				if (this.endDate) {
+					// TODO 反向同步endDate
 					this.endDateEl.html(this.endDate);
+				} else {
+					this.endDateEl.html('');
 				}
 
 				this.initValue();

@@ -5,9 +5,9 @@ define(function(require, exports, module) {
 	'require:nomunge,exports:nomunge,module:nomunge';
 
 	require('./component.css');
-	var utils = require('utils/utils');
-	var extend = require('utils/extend');
-	var Observable = require('utils/observable');
+	var utils = require('utils');
+	var extend = require('extend');
+	var Observable = require('observable');
 
 	// 组件管理
 	var components = new HashMap();

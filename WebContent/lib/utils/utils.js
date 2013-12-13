@@ -37,16 +37,40 @@ define(function(/* require */) {
 	}());
 
 	/*
+	 * 浏览器判断
+	 */
+	(function() {
+		// I think window.ActiveXObject would be in IE for a long time
+		var isIE = window.ActiveXObject !== undefined;
+
+		U.apply(U, {
+			isIE : isIE,
+			// window.XMLHttpRequest IE7+
+			isIE6 : isIE && !!(document.compatMode && !window.XMLHttpRequest),
+			// document.documentMode IE8+
+			isIE7 : isIE && !!(window.XMLHttpRequest && !document.documentMode),
+			// window.performance IE9+
+			isIE8 : isIE && !!(document.documentMode && !window.performance),
+			// window.applicationCache IE10+
+			isIE9 : isIE && !!(window.performance && !window.applicationCache),
+			// window.msCrypto IE11+
+			isIE10 : isIE && !!(window.applicationCache && !window.msCrypto),
+			isIE11 : isIE && !!window.msCrypto,
+			isFirefox : !!(window.sidebar && (window.sidebar.addPanel || window.sidebar.addSearchEngine)),
+			isChrome : !!window.chrome,
+			isSafari : /a/.__proto__ == '//'
+		});
+	}());
+
+	/*
 	 * 属性覆盖
 	 */
 	(function() {
-		var isIE = !!window.ActiveXObject;
-
 		function override(origclass, overrides) {
 			if (overrides) {
 				var p = origclass.prototype;
 				U.apply(p, overrides);
-				if (isIE && overrides.hasOwnProperty('toString')) {
+				if (U.isIE && overrides.hasOwnProperty('toString')) {
 					p.toString = overrides.toString;
 				}
 			}

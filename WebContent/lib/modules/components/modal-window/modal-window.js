@@ -9,27 +9,31 @@
  * @method show: Function()
  * @method hide: Function()
  * 
- * @event modalWindow.hide: Function(Event e, String cmpId)
- * @event modalWindow.hidden: Function(Event e, String cmpId)
- * @event modalWindow.show: Function(Event e, String cmpId)
- * @event modalWindow.shown: Function(Event e, String cmpId)
- * @event modalWindow.load: Function(Event e, String responseText, String
+ * @event hide: Function(modalWindow win ,String cmpId)
+ * @event hidden: Function(modalWindow win ,String cmpId)
+ * @event show: Function(modalWindow win ,String cmpId)
+ * @event shown: Function(modalWindow win ,String cmpId)
+ * @event load: Function(modalWindow win ,String responseText, String
  *        textStatus, XMLHttpRequest xhr)
  * 
- * @description updated on 2013-12-08
+ * @description updated on 2013-12-11
  * 
  */
 define(function(require, exports, module) {
 	'require:nomunge,exports:nomunge,module:nomunge';
 
-	require('./modalWindow.css');
+	require('./modal-window.css');
 	var extend = require('extend');
 	var Base = require('component');
 
 	(function() {
 		var modalWindow = extend(Base, {
-			baseCls : 'yi-modalWindow',
+			baseCls : 'yi-modal-window',
 			zIndex : 1000,
+			// <div class="modal-body" />的左右border、padding之和，单位：px
+			bodyLRFrameWidth : 42,// (1 + 20) * 2
+			// <div class="modal-body" />应由总高度减去的高度，单位：px
+			bodyMinusHeight : 141,// 1 + 49 + 20 * 2 + 60 + 1
 			/**
 			 * @cfg url String 页面的url
 			 */
@@ -58,7 +62,7 @@ define(function(require, exports, module) {
 			 * @cfg minHeight Number 窗口的最小高度
 			 */
 			/**
-			 * @cfg minWidth Number 窗口的最小宽度
+			 * @cfg maxHeight Number 窗口的最大高度
 			 */
 			/**
 			 * @cfg modal Boolean 窗口是否带遮罩，默认带遮罩
@@ -73,27 +77,43 @@ define(function(require, exports, module) {
 				this.init();
 			},
 			init : function() {
-				var $el = $(this.el), baseCls = this.baseCls;
+				var $el = this.el, baseCls = this.baseCls;
 				$el
 						.append('<div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h3>'
 								+ (this.title || '&nbsp;')
 								+ '</h3></div><div class="modal-body"></div><div class="modal-footer"></div></div></div>')
 						.addClass((this.cls ? this.cls + ' ' : '') + baseCls
 								+ ' modal fade');
-				if (this.width && $.isNumber(this.width)) {
-					$el.width(this.width);
+				var cmpId = this.getId();
+				$el.data('cmpId', cmpId);
+				var $body = $('.modal-body', $el);
+				var $dialog = $('.modal-dialog', $el);
+				if (this.width) {
+					$dialog.width(this.width);
+					$body.width(this.width - this.bodyLRFrameWidth);
 				}
-				if (this.height && $.isNumber(this.height)) {
-					$el.height(this.height);
-				}
-				if (this.minWidth && $.isNumber(this.minWidth)) {
-					$el.css({
-								'min-width' : this.minWidth
+				if (this.height) {
+					$body.css({
+								'max-height' : 'none',
+								'height' : this.height - this.bodyMinusHeight
 							});
 				}
-				if (this.minHeight && $.isNumber(this.minHeight)) {
-					$el.css({
+				if (this.maxHeight) {
+					$body.css({
+								'max-height' : this.maxHeight
+										- this.bodyMinusHeight
+							});
+				}
+				if (this.minHeight) {
+					$body.css({
 								'min-height' : this.minHeight
+										- this.bodyMinusHeight
+							});
+				}
+				if (this.scroll || this.height || this.maxHeight) {
+					$body.css({
+								'overflow-x' : 'hidden',
+								'overflow-y' : 'auto'
 							});
 				}
 				if (this.buttons && $.isArray(this.buttons)) {
@@ -103,16 +123,12 @@ define(function(require, exports, module) {
 				$el.modal({
 							backdrop : this.modal === true ? 'static' : 'false'
 						});
-				if (this.scroll) {
-					$el.addClass(baseCls + '-scroll')
-				}
 				if (this.url) {
 					var params = this.params;
 					$('.modal-body', $el).load(this.url, params || null,
 							this.doPageLoad);
 					params = null;
 				}
-				var cmpId = this.getId();
 				$el.on('show.bs.modal', {
 							cmpId : cmpId
 						}, this.onShow).on('hide.bs.modal', {
@@ -122,7 +138,8 @@ define(function(require, exports, module) {
 						}, this.onShown).on('hidden.bs.modal', {
 							cmpId : cmpId
 						}, this.onHidden);
-
+				$dialog = null;
+				$body = null;
 				$el = null;
 			},
 			addButtons : function(buttons) {
@@ -168,28 +185,31 @@ define(function(require, exports, module) {
 				e.data.handler.call(cmp);
 			},
 			doPageLoad : function(responseText, textStatus, xhr) {
-				this.trigger('modalWindow.load',
-						[responseText, textStatus, xhr]);
+				var $el = $(this).parents('.yi-modal-window'), cmp = Base
+						.get($el.data('cmpId'));
+				cmp.trigger('load', cmp, responseText, textStatus, xhr);
+				cmp = null;
+				$el = null;
 			},
 			onShow : function(e) {
 				var cmpId = e.data.cmpId, cmp = Base.get(cmpId);
 				cmp.toFront();
-				cmp.trigger('modalWindow.show', [cmpId]);
+				cmp.trigger('show', cmp, cmpId);
 				cmp = null;
 			},
 			onHide : function(e) {
 				var cmpId = e.data.cmpId, cmp = Base.get(cmpId);
-				cmp.trigger('modalWindow.hide', [cmpId]);
+				cmp.trigger('hide', cmp, cmpId);
 				cmp = null;
 			},
 			onShown : function(e) {
 				var cmpId = e.data.cmpId, cmp = Base.get(cmpId);
-				cmp.trigger('modalWindow.shown', [cmpId]);
+				cmp.trigger('shown', cmp, cmpId);
 				cmp = null;
 			},
 			onHidden : function(e) {
 				var cmpId = e.data.cmpId, cmp = Base.get(cmpId);
-				cmp.trigger('modalWindow.hidden', [cmpId]);
+				cmp.trigger('hidden', cmp, cmpId);
 				cmp = null;
 			},
 			/**
