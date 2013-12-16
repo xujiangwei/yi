@@ -1,5 +1,39 @@
 /**
  * Component Base Class
+ * 
+ * @requires utils, extend, observable
+ * 
+ * @method String getId()
+ * @method void render(Mixed parent[, Mixed position])
+ * @method void hide()
+ * @method void show()
+ * @method void enable()
+ * @method void disable()
+ * @method void focus()
+ * @method void blur()
+ * @method void on(String eventName, Functon listener, Object scope)
+ * @method void off(String eventName[, Functon listener])
+ * @method trigger(String eventName[, args])
+ * @method Object getEl()
+ * @method Object getPosition()
+ * @method Number getWidth()
+ * @method Number getHeight()
+ * @method Object getInitialConfig()
+ * @method void destroy()
+ * 
+ * @event render function(Component c)
+ * @event beforehide function(Component c)
+ * @event hide function(Component c)
+ * @event beforeshow function(Component c)
+ * @event show function(Component c)
+ * @event disable function(Component c)
+ * @event enable function(Component c)
+ * @event focus function(Component c)
+ * @event blur function(Component c)
+ * @event beforedestroy function(Component c)
+ * @event destroy function(Component c)
+ * 
+ * @description updated on 2013-12-16
  */
 define(function(require, exports, module) {
 	'require:nomunge,exports:nomunge,module:nomunge';
