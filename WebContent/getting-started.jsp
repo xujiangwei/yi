@@ -105,7 +105,7 @@
           <h4>Yi 前端库依赖 jQuery、Bootstrap 和 Seajs</h4>
           <p>请注意，使用 <strong>Stage</strong> 的 <code>importScripts()</code> 方法将帮助你自动导入脚本依赖， 就像在<a href="#template">基础模版</a>中所展示的一样。</p>
         </div>
-
+        <p>下载压缩包之后，将其解压至任意目录即可看到以下目录结构：</p>
         <div class="highlight">
 <pre><code class="language-bash">yi/
 ├── src/
@@ -177,15 +177,44 @@
 │   │   │       └── yi.min.js
 │   │   ├── extensions/
 │   │   ├── modules/
+│   │   │   ├── components/
+│   │   │   │   ├── component.css
+│   │   │   │   └── component.js
+│   │   │   └── misc/
+│   │   │      ├── theme-manager.js
+│   │   │      └── theme-manager.min.js
 │   │   ├── plugins/
+│   │   │   ├── fetch/
+│   │   │   │   ├── jquery.fetch.js
+│   │   │   │   └── jquery.fetch.min.js
+│   │   │   ├── bootbox.js
+│   │   │   ├── bootbox.min.js
+│   │   │   └── jquery.menu-aim.js
 │   │   └── utils/
+│   │       ├── class.js
+│   │       ├── delayed-task.js
+│   │       ├── event.js
+│   │       ├── extend.js
+│   │       ├── hashmap.js
+│   │       ├── holder.js
+│   │       ├── json2.js
+│   │       ├── observable.js
+│   │       ├── store.js
+│   │       └── utlis.js
 │   ├── modules/
 │   │   └── manager.jsp
 │   ├── scripts/
+│   │   ├── compiler.console.cmd
+│   │   ├── compiler.theme-manager.cmd
+│   │   └── compiler.yi.cmd
 │   └── tools/
+│       ├── compiler.jar
+│       ├── splicer.jar
+│       └── yuicompressor-2.4.8.jar
 └── versions.txt
 </code></pre>
         </div>
+        <p><code>lib/</code> 目录包含了壹框的全部前端脚本文件和样式表文件。<code>debugger/</code> 目录是模组调试器目录。<code>modules/</code> 目录是存放模组文件的目录。<code>scripts/</code></p>
       </div>
     </div>
   </div>

@@ -12,6 +12,14 @@ td {
   vertical-align: middle !important;
 }
 
+sup {
+  color: #f00;
+}
+
+.control-label {
+  padding-left: 6px;
+}
+
 .nav-pills li {
   padding-top: 8px;
 }
@@ -30,4 +38,9 @@ td {
 }
 .page-wrapper-footer .credit {
   margin: 15px 0;
+}
+
+.btn-fix-form {
+  margin-top: 2px;
+  margin-left: -15px;
 }

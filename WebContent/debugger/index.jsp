@@ -32,15 +32,15 @@
       </ul>
       <ul class="nav navbar-nav nav-pills pull-right">
         <li><button id="btn_new" class="btn btn-default" data-toggle="modal" data-target="#mod_profile_dialog">新建</button></li>
-        <li><button id="btn_import" class="btn btn-default">导入</button></li>
-        <li><button id="btn_help" class="btn btn-default">帮助</button></li>
+        <li><button id="btn_import" class="btn btn-default" disabled="disabled">导入</button></li>
+        <li><button id="btn_help" class="btn btn-default" disabled="disabled">帮助</button></li>
       </ul>
     </div><!--/.nav-collapse -->
   </div>
 </div>
 
-<!-- 模组属性配置对话框 -->
-<div id="mod_profile_dialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mod_profile_dialog_label" aria-hidden="true">
+<!-- 模组属性配置对话框 - 开始 -->
+<div id="mod_profile_dialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mod_profile_dialog_label" aria-hidden="true" data-backdrop="static">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -50,26 +50,73 @@
       <div class="modal-body">
         <form id="mod_profile_form" class="form-horizontal" role="form" verifier-validate>
           <div class="form-group">
-            <label for="input_name" class="col-sm-3 control-label">名称 <sup>*</sup></label>
-            <div class="col-sm-9">
-              <input type="text" class="form-control" id="input_name" placeholder="模组名称" verifier-trigger="keyup focusin focusout" verifier-notblank="true" verifier-regexp="^[a-z0-9A-Z_]+$" required />
+            <label for="input_name" class="col-sm-2 control-label">名称<sup>*</sup></label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="input_name" placeholder="输入模组名称" verifier-trigger="keyup focusin focusout" verifier-notblank="true" verifier-regexp="^[a-z0-9A-Z_]+$" required />
             </div>
           </div>
           <div class="form-group">
-            <label for="input_version" class="col-sm-3 control-label">版本</label>
-            <div class="col-sm-3"><input type="text" class="form-control" id="input_version_major" placeholder="主版本号" verifier-trigger="keyup focusin focusout" verifier-type="digits" /></div>
-            <div class="col-sm-3"><input type="text" class="form-control" id="input_version_minor" placeholder="副版本号" verifier-trigger="keyup focusin focusout" verifier-type="digits" /></div>
-            <div class="col-sm-3"><input type="text" class="form-control" id="input_version_revision" placeholder="修订号" verifier-trigger="keyup focusin focusout" verifier-type="digits" /></div>
+            <label for="input_version" class="col-sm-2 control-label">版本<sup>*</sup></label>
+            <div class="col-sm-3"><input type="text" class="form-control" id="input_version_major" placeholder="主版本号" verifier-trigger="keyup focusin focusout" verifier-type="digits" required /></div>
+            <div class="col-sm-3"><input type="text" class="form-control" id="input_version_minor" placeholder="副版本号" verifier-trigger="keyup focusin focusout" verifier-type="digits" required /></div>
+            <div class="col-sm-4"><input type="text" class="form-control" id="input_version_revision" placeholder="修订号" verifier-trigger="keyup focusin focusout" verifier-type="digits" required /></div>
+          </div>
+          <div class="form-group">
+            <label for="input_desc" class="col-sm-2 control-label">描述<sup>*</sup></label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="input_desc" placeholder="输入模组描述信息" maxlength="512" verifier-trigger="keyup focusin focusout" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="input_html_file" class="col-sm-2 control-label">HTML文件</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="input_html_file" placeholder="输入 HTML 文件名" maxlength="512" verifier-trigger="keyup change" verifier-regexp="^[a-z0-9A-Z_\.\-]+$" />
+              <div class="form-inline">
+                <label class="checkbox-inline"><input type="checkbox" id="import_jsp" value="jsp" checked="checked" verifier-group="html_file"> 导入JSP元素</label>
+                <label class="checkbox-inline"><input type="checkbox" id="is_tmpl" value="tmpl" verifier-group="html_file"> 模板文件</label>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="script_files" class="col-sm-2 control-label">脚本文件</label>
+            <div class="col-sm-8">
+              <select id="script_files" multiple class="form-control">
+              </select>
+            </div>
+            <div class="col-sm-2">
+              <button type="button" class="btn btn-sm btn-info" id="btn_add_script"><span class="glyphicon glyphicon-plus"></span> 添加</button>
+              <div style="height:8px;"></div>
+              <button type="button" class="btn btn-sm btn-danger" id="btn_remove_script"><span class="glyphicon glyphicon-remove"></span> 删除</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="style_files" class="col-sm-2 control-label">样式表文件</label>
+            <div class="col-sm-8">
+              <select id="style_files" multiple class="form-control">
+              </select>
+            </div>
+            <div class="col-sm-2">
+              <button type="button" class="btn btn-sm btn-info" id="btn_add_style"><span class="glyphicon glyphicon-plus"></span> 添加</button>
+              <div style="height:8px;"></div>
+              <button type="button" class="btn btn-sm btn-danger" id="btn_remove_style"><span class="glyphicon glyphicon-remove"></span> 删除</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="input_main_function" class="col-sm-2 control-label">主函数</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="input_main_function" placeholder="输入主函数名" verifier-trigger="keyup focusin focusout" verifier-notblank="true" verifier-regexp="^[a-z0-9A-Z_\.]+$" />
+            </div>
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-        <button type="button" class="btn btn-primary">确定</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" id="cancel">取消</button>
+        <button type="button" class="btn btn-primary" id="ok">确定</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+<!-- 模组属性配置对话框 - 结束 -->
 
 <div class="container">
   <div class="row">
@@ -83,7 +130,7 @@
             <table class="table table-striped table-hover table-bordered">
               <thead>
                 <tr>
-                  <th>#</th>
+                  <th><input type="checkbox" class="checkbox" /></th>
                   <th>名称</th>
                   <th>版本</th>
                   <th>上下文路径</th>

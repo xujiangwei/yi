@@ -309,7 +309,7 @@
 	// 本地定时器
 	var localTimer = 0;
 
-	// 压缩加载量关系，解决瞬时相同 URL 脚本被重复加载的问题
+	// 压缩加载，解决瞬时相同 URL 脚本被重复加载的问题
 	function compressLoad(list, callback) {
 		for (var i = 0, size = list.length; i < size; ++i) {
 			var url = list[i];
@@ -382,7 +382,6 @@
 		}
 
 		// 执行清理
-		// 重新创建集合
 		scriptRelationSet = {};
 		callbackSet = {};
 	}

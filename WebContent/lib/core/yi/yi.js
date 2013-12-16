@@ -18,6 +18,8 @@ var Yi = function() {
 
 	this._readyCallbacks = [];
 
+	this._dialogTimer = 0;
+
 	var self = this;
 	var ready = function(event) {
 		// 检查就绪状态
@@ -186,6 +188,44 @@ Yi.prototype.dialog = function(options) {
  */
 Yi.prototype.hideDialog = function() {
 	bootbox.hideAll();
+}
+/**
+ */
+Yi.prototype.pasteDialogTips = function(text, autoTimeout) {
+	var el = $('.bootbox');
+	if (el.length > 0) {
+		if (this._dialogTimer > 0) {
+			clearTimeout(this._dialogTimer);
+			this._dialogTimer = 0;
+		}
+
+		el = el.find('.bootbox-body');
+		if (el.find('#_tip').length > 0) {
+			el.find('#_tip').html('<h6>' + text + '</h6>');
+		}
+		else {
+			el.append('<div id="_tip" class="text-center text-warning"><h6>' + text + '</h6></div>');
+		}
+
+		if (typeof autoTimeout != 'undefined') {
+			var self = this;
+			this._dialogTimer = setTimeout(self.eraseDialogTips, autoTimeout);
+		}
+	}
+}
+/**
+ */
+Yi.prototype.eraseDialogTips = function() {
+	var el = $('.bootbox');
+	if (el.length > 0) {
+		if (this._dialogTimer > 0) {
+			clearTimeout(this._dialogTimer);
+			this._dialogTimer = 0;
+		}
+
+		el = el.find('#_tip');
+		el.remove();
+	}
 }
 /*
  * ModManager
