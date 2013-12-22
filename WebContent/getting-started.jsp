@@ -69,6 +69,9 @@
           <li>
             <a href="#browsers">浏览器支持</a>
           </li>
+          <li>
+            <a href="#aliases">组件别名列表</a>
+          </li>
         </ul>
       </div>
     </div>

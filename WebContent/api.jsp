@@ -48,10 +48,13 @@
       <div class="bs-sidebar hidden-print" role="complementary">
         <ul class="nav bs-sidenav">
           <li>
-            <a href="#item">项目</a>
+            <a href="#component">用户界面组件</a>
             <ul class="nav">
               <li><a href="#sub-item">子项目</a></li>
             </ul>
+          </li>
+          <li>
+            <a href="#open-api">开放接口</a>
           </li>
         </ul>
       </div>
@@ -60,7 +63,17 @@
     <div class="col-md-9" role="main">
       <div class="bs-docs-section">
         <div class="page-header">
-          <h1 id="item">项目</h1>
+          <h1 id="component">用户界面组件</h1>
+        </div>
+        <p class="lead">TODO</p>
+
+        <h2 id="sub-item">子项目</h2>
+        <p>TODO</p>
+      </div>
+      
+      <div class="bs-docs-section">
+        <div class="page-header">
+          <h1 id="open-api">开放接口</h1>
         </div>
         <p class="lead">TODO</p>
 

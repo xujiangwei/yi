@@ -58,6 +58,7 @@ Yi.prototype.config = function(relativePath, addition, excluded) {
 	alias["menu-aim"] = "plugins/jquery.menu-aim.js";		// 改进的浮动菜单
 	alias["rating"] = "plugins/raty/jquery.raty.min.js";	// 评分插件
 	alias["verify"] = "plugins/parsley/parsley.min.js";		// 表单验证插件
+	alias["switch"] = "plugins/bootstrap-switch/switch.js";	// Switch 按钮
 	alias["fetch"] = "plugins/fetch/jquery.fetch.js";		// 片段截取
 	alias["theme-manager"] = "modules/misc/theme-manager.min.js";	// 主题管理器
 	alias["component"] = "modules/components/component.js";	// 组件基类

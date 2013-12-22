@@ -57,14 +57,14 @@ public final class Mod implements Serializable, Comparable<Mod> {
 	private Debug debugData;
 
 	public Mod() {
-		this("Unknown", "Unknown version");
-		this.description = "Unknown mod";
+		this("Unknown", "Unknown version", "Unknown module");
 	}
 
-	public Mod(String name, String version) {
+	public Mod(String name, String version, String description) {
 		this.readOnly = false;
 		this.name = name;
 		this.version = version;
+		this.description = description;
 	}
 
 	public boolean isReadOnly() {
@@ -100,14 +100,6 @@ public final class Mod implements Serializable, Comparable<Mod> {
 		if (!this.contextPath.endsWith("/")) {
 			this.contextPath += "/";
 		}
-	}
-
-	/**
-	 * 设置描述信息。
-	 * @param description
-	 */
-	protected void setDescription(String description) {
-		this.description = description;
 	}
 
 	/**
@@ -359,6 +351,7 @@ public final class Mod implements Serializable, Comparable<Mod> {
 		try {
 			json.put("name", this.name);
 			json.put("version", this.version);
+			json.put("description", this.description);
 
 			if (this.readOnly) {
 				json.put("readOnly", this.readOnly);

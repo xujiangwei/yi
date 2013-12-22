@@ -27,7 +27,7 @@ public final class PageUtils {
 	 * @param request
 	 * @return
 	 */
-	public static String root(HttpServletRequest request) {
+	public static String rootPath(HttpServletRequest request) {
 		if (null == PROJECT_CONTEXT_PATH)
 			PROJECT_CONTEXT_PATH = request.getContextPath();
 		return PROJECT_CONTEXT_PATH;
@@ -39,7 +39,7 @@ public final class PageUtils {
 	 * @return
 	 */
 	public static String modPath(HttpServletRequest request) {
-		String cp = PageUtils.root(request);
+		String cp = PageUtils.rootPath(request);
 		String name = request.getParameter("_n");
 		String version = request.getParameter("_v");
 		boolean debug = Boolean.parseBoolean(request.getParameter("_d"));
@@ -108,7 +108,7 @@ public final class PageUtils {
 	 * @return
 	 */
 	public static String sharedImageFileContextPath(HttpServletRequest request) {
-		String cp = PageUtils.root(request);
+		String cp = PageUtils.rootPath(request);
 		return cp;
 	}
 }

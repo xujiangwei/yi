@@ -103,7 +103,7 @@ public final class Builder extends AbstractLifeCycle {
 			base = base.substring(index + 1);
 		}
 
-		ModWriter.write(this.mod, this.projectPath + this.subDir, base, destFile);
+		ModWriter.write(destFile, this.projectPath + this.subDir, base);
 		return destFile;
 	}
 
@@ -116,33 +116,45 @@ public final class Builder extends AbstractLifeCycle {
 			dest.delete();
 
 		int length = 2097152;
-		FileInputStream in = new FileInputStream(src);
-		FileOutputStream out = new FileOutputStream(dest);
-		FileChannel inC = in.getChannel();
-		FileChannel outC = out.getChannel();
-		ByteBuffer b = null;
-		while (true) {
-			if (inC.position() == inC.size()) {
-				break;
+		FileInputStream fis = null;
+		FileOutputStream fos = null;
+		FileChannel fic = null;
+		FileChannel foc = null;
+		try {
+			fis = new FileInputStream(src);
+			fos = new FileOutputStream(dest);
+			fic = fis.getChannel();
+			foc = fos.getChannel();
+			ByteBuffer b = null;
+			while (true) {
+				if (fic.position() == fic.size()) {
+					break;
+				}
+	
+				if ((fic.size() - fic.position()) < length) {
+					length = (int)(fic.size() - fic.position());
+				}
+				else {
+	                length = 2097152;
+				}
+				b = ByteBuffer.allocateDirect(length);
+				fic.read(b);
+				b.flip();
+				foc.write(b);
+				foc.force(false);
 			}
-
-			if ((inC.size() - inC.position()) < length) {
-				length = (int)(inC.size() - inC.position());
+		} catch (IOException e) {
+			throw e;
+		} finally {
+			try {
+				fic.close();
+				foc.close();
+				fis.close();
+				fos.close();
+			} catch (Exception e) {
+				// Nothing
 			}
-			else {
-                length = 2097152;
-			}
-			b = ByteBuffer.allocateDirect(length);
-			inC.read(b);
-			b.flip();
-			outC.write(b);
-			outC.force(false);
 		}
-
-		inC.close();
-		outC.close();
-		in.close();
-		out.close();
 
 		// 删除源文件
 		src.delete();

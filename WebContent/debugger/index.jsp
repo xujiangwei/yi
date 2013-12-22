@@ -2,6 +2,9 @@
 <%@page import="java.util.List" %>
 <%@page import="yi.core.*" %>
 <%@page import="yi.debugger.*" %>
+<%
+Setting setting = DebuggerDirector.getInstance().getSetting();
+%>
 <!doctype html>
 <html lang="zh-CN">
 <head>
@@ -33,6 +36,7 @@
       <ul class="nav navbar-nav nav-pills pull-right">
         <li><button id="btn_new" class="btn btn-default" data-toggle="modal" data-target="#mod_profile_dialog">新建</button></li>
         <li><button id="btn_import" class="btn btn-default" disabled="disabled">导入</button></li>
+        <li><button id="btn_sync" class="btn btn-default" data-toggle="modal" data-target="#setting_dialog">设置</button></li>
         <li><button id="btn_help" class="btn btn-default" disabled="disabled">帮助</button></li>
       </ul>
     </div><!--/.nav-collapse -->
@@ -41,7 +45,7 @@
 
 <!-- 模组属性配置对话框 - 开始 -->
 <div id="mod_profile_dialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mod_profile_dialog_label" aria-hidden="true" data-backdrop="static">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -68,11 +72,16 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="input_html_file" class="col-sm-2 control-label">HTML文件</label>
+            <label for="input_html_file" class="col-sm-2 control-label">界面文件</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="input_html_file" placeholder="输入 HTML 文件名" maxlength="512" verifier-trigger="keyup change" verifier-regexp="^[a-z0-9A-Z_\.\-]+$" />
+              <div class="input-group">
+                <input type="text" class="form-control" id="input_html_file" placeholder="输入文件名" maxlength="512" verifier-trigger="keyup change" verifier-regexp="^[a-z0-9A-Z_\.\-]+$" />
+                <span class="input-group-btn">
+                  <button id="btn_remove_html" type="button" class="btn btn-default" tabindex="-1"><span class="glyphicon glyphicon-remove"></span></button>
+                </span>
+              </div>
               <div class="form-inline">
-                <label class="checkbox-inline"><input type="checkbox" id="import_jsp" value="jsp" checked="checked" verifier-group="html_file"> 导入JSP元素</label>
+                <label class="checkbox-inline"><input type="checkbox" id="import_tag" value="jsp" checked="checked" verifier-group="html_file"> 导入JSP元素</label>
                 <label class="checkbox-inline"><input type="checkbox" id="is_tmpl" value="tmpl" verifier-group="html_file"> 模板文件</label>
               </div>
             </div>
@@ -118,6 +127,65 @@
 </div><!-- /.modal -->
 <!-- 模组属性配置对话框 - 结束 -->
 
+<!-- 设置对话框 - 开始 -->
+<div id="setting_dialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="setting_dialog_label" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="setting_dialog">设置</h4>
+      </div>
+      <div class="modal-body">
+        <form id="setting_form" class="form-horizontal" role="form" verifier-validate>
+          <fieldset>
+            <legend><h4>逆向同步</h4></legend>
+            <div class="form-group">
+              <label for="setting_reverse_sync_enabled" class="col-sm-2 control-label">启用</label>
+              <div class="col-sm-10">
+                <div class="make-switch switch-small">
+                  <input id="setting_reverse_sync_enabled" type="checkbox" verifier-group="setting_reverse_sync" <%=(setting.enabledReverseSync() ? "checked" : "") %> />
+                </div>
+              </div>
+            </div>
+            <div class="form-group" style="margin-bottom:0px;">
+              <label for="setting_reverse_sync_path" class="col-sm-2 control-label">同步路径</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control input-sm" id="setting_reverse_sync_path" placeholder="输入本地工程绝对路径" verifier-trigger="keyup focusin focusout" verifier-regexp="^[a-z0-9A-Z_\.\:\\\/]+$" value="<%=setting.getReverseSyncPath()%>" />
+                <span class="help-block">需要同步的本地工程绝对路径。</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="setting_reverse_sync_list" class="col-sm-2 control-label">同步项目</label>
+              <div class="col-sm-10">
+<%
+List<Mod> modList = DebuggerDirector.getInstance().getModList();
+for (Mod mod : modList) {
+%>
+                <div class="row sync-list-row">
+                  <div class="col-sm-9"><p class="form-control-static"><span class="text-info"><%=mod.getName() %></span> - <em><%=mod.getVersion() %></em></p></div>
+                  <div class="col-sm-3">
+                    <div class="make-switch switch-small">
+                      <input id="setting_reverse_sync_<%=mod.getName() %>_<%=mod.getVersion() %>" type="checkbox" verifier-group="setting_reverse_sync_list" <%=(setting.isReverseSync(mod.getName(), mod.getVersion())) ? "checked" : "" %> />
+                    </div>
+                  </div>
+                </div>
+<%
+}
+%>
+              </div>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" id="cancel">取消</button>
+        <button type="button" class="btn btn-primary" id="ok">确定</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- 设置对话框 - 结束 -->
+
 <div class="container">
   <div class="row">
     <div class="col-md-12">
@@ -130,7 +198,7 @@
             <table class="table table-striped table-hover table-bordered">
               <thead>
                 <tr>
-                  <th><input type="checkbox" class="checkbox" /></th>
+                  <th><input id="select_all" type="checkbox" class="checkbox" /></th>
                   <th>名称</th>
                   <th>版本</th>
                   <th>上下文路径</th>
@@ -141,21 +209,26 @@
 <%
 List<Mod> list = DebuggerDirector.getInstance().getModList();
 for (Mod mod : list) {
+	String name = mod.getName();
+	String version = mod.getVersion();
 %>
                 <tr>
                   <td><input type="checkbox" class="checkbox" /></td>
-                  <td><%=mod.getName() %></td>
-                  <td><%=mod.getVersion() %></td>
+                  <td><%=name %></td>
+                  <td><%=version %></td>
                   <td><%=mod.getContextPath() %></td>
                   <td>
-                    <a id="btn_debug_<%=mod.getName()%>" class="btn btn-sm btn-primary" href="debugger.jsp?name=<%=mod.getName()%>&version=<%=mod.getVersion()%>" target="_blank">调试</a>
-                    <button id="btn_build_<%=mod.getName()%>" class="btn btn-sm btn-info" onClick="javascript:window.build('builder.jsp?name=<%=mod.getName()%>&version=<%=mod.getVersion()%>');">构建</button>
+                    <a id="btn_debug_<%=name%>" class="btn btn-sm btn-primary" href="debugger.jsp?name=<%=name%>&version=<%=version%>" target="_blank">调试</a>
+                    <button id="btn_build_<%=name%>" class="btn btn-sm btn-info" onclick="javascript:window.build('<%=name%>', '<%=version%>');">构建</button>
                     <div class="btn-group">
                       <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">更多 <span class="caret"></span></button>
                       <ul class="dropdown-menu" role="menu">
-                        <li><a id="btn_config_<%=mod.getName()%>" href="#">配置</a></li>
-                        <li><a href="#">重置</a></li>
-                        <li><a href="#">导出</a></li>
+                        <li><a href="javascript:window.profileMod('<%=name%>', '<%=version%>');"><span class="glyphicon glyphicon-cog"></span> 配置</a></li>
+                        <li><a href="javascript:window.redeployMod('<%=name%>', '<%=version%>');"><span class="glyphicon glyphicon-refresh"></span> 重置</a></li>
+                        <li><a href="javascript:window.exportMod('<%=name%>', '<%=version%>');"><span class="glyphicon glyphicon-export"></span> 导出</a></li>
+                        <li class="divider"></li>
+                        <li><a href="editor.jsp?name=<%=name%>&version=<%=version%>" target="_blank"><span class="glyphicon glyphicon-edit"></span> 创作</a></li>
+                        <li><a href="javascript:window.deleteMod('<%=name%>', '<%=version%>');"><span class="glyphicon glyphicon-floppy-remove"></span> 删除</a></li>
                       </ul>
                     </div>
                   </td>

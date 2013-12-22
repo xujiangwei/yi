@@ -40,6 +40,10 @@ sup {
   margin: 15px 0;
 }
 
+.sync-list-row {
+  margin-bottom: 4px;
+}
+
 .btn-fix-form {
   margin-top: 2px;
   margin-left: -15px;

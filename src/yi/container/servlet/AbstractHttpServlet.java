@@ -6,6 +6,7 @@
 
 package yi.container.servlet;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -94,6 +95,35 @@ public abstract class AbstractHttpServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	/**
+	 * 从请求 Body 里读取 JSON 字符串。
+	 * @param request
+	 * @return
+	 */
+	protected String readJSONStringFromRequestBody(HttpServletRequest request) {
+		StringBuilder json = null;
+		BufferedReader reader = null;
+		try {
+			reader = request.getReader();
+			json = new StringBuilder();
+			String line = null;
+			while((line = reader.readLine()) != null) {
+				json.append(line);
+			}
+		} catch (Exception e) {
+			System.out.println("Error reading JSON string: " + e.toString());
+		} finally {
+			if (null != reader) {
+				try {
+					reader.close();
+				} catch (IOException ex) {
+					ex.printStackTrace();
+				}
+			}
+		}
+		return json.toString();
 	}
 
 	/**

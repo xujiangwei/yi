@@ -267,7 +267,7 @@ public final class ModManager extends AbstractLifeCycle {
 			if (!dir.exists())
 				dir.mkdirs();
 
-			Mod mod = ModReader.read(modFile, path);
+			Mod mod = ModReader.read(path, modFile);
 			if (null != mod) {
 				// 设置上下文
 				mod.setContextPath(this.deploySubPath + "/" + mod.getName() + "/" + mod.getVersion());

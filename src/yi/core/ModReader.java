@@ -38,12 +38,14 @@ public final class ModReader {
 	private final static DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
 
 	/**
-	 * 解包指定的 MOD 到指定目录下
+	 * 解包指定的 MOD 到指定目录下。
+	 * @param outputDirectory
 	 * @param file
+	 * @return
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	public static Mod read(File file, String outputDirectory) throws FileNotFoundException, IOException {
+	public static Mod read(String outputDirectory, File file) throws FileNotFoundException, IOException {
 		// 将所有文件解压到发布路径下
 
 		ZipInputStream zis = new ZipInputStream(new FileInputStream(file));
@@ -76,7 +78,7 @@ public final class ModReader {
 	}
 
 	/**
-	 * 分析 MOD 配置文件。
+	 * 读取 MOD 配置文件。
 	 * @param file
 	 * @return
 	 */
@@ -105,31 +107,32 @@ public final class ModReader {
 			NodeList nlDesc = root.getElementsByTagName("description");
 
 			// 创建 Mod 实例
-			mod = new Mod(nlName.item(0).getTextContent(), nlVersion.item(0).getTextContent());
-			mod.setDescription(nlDesc.item(0).getTextContent());
+			mod = new Mod(nlName.item(0).getTextContent(), nlVersion.item(0).getTextContent(), nlDesc.item(0).getTextContent());
 			mod.setReadOnly(readOnly);
 
 			// 获取文件列表
 			Node nodeFiles = root.getElementsByTagName("files").item(0);
-			NodeList list = nodeFiles.getChildNodes();
-			for (int i = 0, size = list.getLength(); i < size; ++i) {
-				Node n = list.item(i);
-				String name = n.getNodeName();
-				if (name.equals("html")) {
-					File f = new File(path + n.getTextContent());
-					mod.registerHtmlFile(n.getTextContent(), f.length());
-				}
-				else if (name.equals("tmpl")) {
-					File f = new File(path + n.getTextContent());
-					mod.registerTmplFile(n.getTextContent(), f.length());
-				}
-				else if (name.equals("script")) {
-					File f = new File(path + n.getTextContent());
-					mod.addScriptFile(n.getTextContent(), f.length());
-				}
-				else if (name.equals("style")) {
-					File f = new File(path + n.getTextContent());
-					mod.addStyleFile(n.getTextContent(), f.length());
+			if (null != nodeFiles) {
+				NodeList list = nodeFiles.getChildNodes();
+				for (int i = 0, size = list.getLength(); i < size; ++i) {
+					Node n = list.item(i);
+					String name = n.getNodeName();
+					if (name.equals("html")) {
+						File f = new File(path + n.getTextContent());
+						mod.registerHtmlFile(n.getTextContent(), f.length());
+					}
+					else if (name.equals("tmpl")) {
+						File f = new File(path + n.getTextContent());
+						mod.registerTmplFile(n.getTextContent(), f.length());
+					}
+					else if (name.equals("script")) {
+						File f = new File(path + n.getTextContent());
+						mod.addScriptFile(n.getTextContent(), f.length());
+					}
+					else if (name.equals("style")) {
+						File f = new File(path + n.getTextContent());
+						mod.addStyleFile(n.getTextContent(), f.length());
+					}
 				}
 			}
 

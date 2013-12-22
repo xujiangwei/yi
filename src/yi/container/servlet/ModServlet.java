@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import yi.core.Mod;
 import yi.core.ModManager;
+import yi.debugger.DebuggerDirector;
 
 /**
  * 查询 MOD 信息。
@@ -42,9 +43,20 @@ public class ModServlet extends AbstractHttpServlet {
 		String pathInfo = request.getPathInfo();
 		String[] info = pathInfo.split("/");
 		if (info.length >= 3) {
-			String modName = info[1];
+			String name = info[1];
 			String version = info[2];
-			Mod mod = ModManager.getInstance().getMod(modName, version);
+
+			// debug
+			boolean debug = false;
+			String strDebug = request.getParameter("_d");
+			if (null != strDebug && strDebug.equals("true"))
+				debug = true;
+
+			Mod mod = null;
+			if (debug)
+				mod = DebuggerDirector.getInstance().getMod(name, version);
+			else
+				mod = ModManager.getInstance().getMod(name, version);
 			if (null != mod) {
 				this.wrapResponseWithOk(response, mod.toJSON());
 			}

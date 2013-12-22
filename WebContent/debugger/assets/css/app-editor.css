@@ -1,0 +1,90 @@
+/*
+ * Yi Framework
+ * 
+ * Copyright (c) 2013,2014 DHC Software Research Department
+ */
+
+html, body {
+  height: 100%;
+  min-height: 100%;
+  font-family: "微软雅黑", "宋体", Verdana, Geneva, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "微软雅黑", "宋体", Verdana, Geneva, sans-serif;
+}
+
+/* 页脚 */
+.page-wrapper-footer {
+  height: 50px;
+  max-width: 100% !important;
+  margin-top: 20px;
+  background-color: #f5f5f5;
+  border: #ddd thin solid;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  margin-bottom: 20px;
+}
+.page-wrapper-footer .credit {
+  margin: 15px 0;
+}
+
+.icon-preview {
+  display: inline-block;
+  background-image: url(../img/preview.png);
+  background-repeat: no-repeat;
+  background-position: 0 4px;
+  width: 16px;
+  height: 20px;
+  margin-bottom: -3px;
+}
+.icon-page {
+  display: inline-block;
+  background-image: url(../img/code.png);
+  background-repeat: no-repeat;
+  background-position: 0 4px;
+  width: 16px;
+  height: 20px;
+  margin-bottom: -3px;
+}
+.icon-script {
+  display: inline-block;
+  background-image: url(../img/script.png);
+  background-repeat: no-repeat;
+  background-position: 0 4px;
+  width: 16px;
+  height: 20px;
+  margin-bottom: -3px;
+}
+.icon-css {
+  display: inline-block;
+  background-image: url(../img/css.png);
+  background-repeat: no-repeat;
+  background-position: 0 4px;
+  width: 16px;
+  height: 20px;
+  margin-bottom: -3px;
+}
+
+.main-toolbar {
+  margin-bottom: 12px;
+}
+
+.editor {
+  width: 100%;
+  min-height: 480px;
+  margin-top: 8px;
+}
+
+#preview {
+  text-align: center;
+  height: 480px;
+  width: 100%;
+  margin-top: 8px;
+  background-color: #efefef;
+}
+#preview .no-preview {
+  margin-top: 0px;
+  padding-top: 210px;
+}

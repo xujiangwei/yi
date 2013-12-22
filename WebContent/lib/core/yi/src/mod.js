@@ -33,6 +33,21 @@ var ModManager = function() {
 	this.listeners = new HashMap();
 }
 
+ModManager.prototype.getMod = function(name, version, success, fail, debug) {
+	var url = this.context + "mod/" + name + "/" + version;
+	if (debug !== undefined && debug)
+		url += "?_d=true";
+
+	$.get(url, function(data, textStatus, jqXHR) {
+		success.call(null, data);
+	}, 'json')
+	.fail(function(e) {
+		console.log('[Yi.Mod#getMod] Failed requests "' + url + '"');
+		if (fail !== undefined)
+			fail.call(null, name, version);
+	});
+}
+
 /**
  * 加载 Mod 。 
  * @param container MOD 的容器
@@ -48,19 +63,19 @@ ModManager.prototype.load = function(container, args, addition) {
 	// 获取 MOD 名
 	var modName = target.data('mod');
 	if (modName === undefined) {
-		console.log('[Yi#Mod] Can not find "data-mod" attribute value.');
+		console.log('[Yi.Mod#load] Can not find "data-mod" attribute value.');
 		return;
 	}
 	var version = target.data('ver');
 	if (version === undefined) {
-		console.log('[Yi#Mod] Can not find "data-ver" attribute value.');
+		console.log('[Yi.Mod#load] Can not find "data-ver" attribute value.');
 		return;
 	}
 
 	var context = this.context;
 	var self = this;
 	// 获取 MOD 加载数据
-	var url = context + "modloader" + "/" + modName + "/" + version;
+	var url = context + "modloader/" + modName + "/" + version;
 	$.post(url, function(data, textStatus, jqXHR) {
 		// 处理返回数据
 		if (args !== undefined) {
@@ -102,7 +117,7 @@ ModManager.prototype.load = function(container, args, addition) {
 		}
 	}, 'json')
 	.fail(function() {
-		console.log('[Yi#Mod#load] Failed requests "' + url + '"');
+		console.log('[Yi.Mod#load] Failed requests "' + url + '"');
 		self.notifyEvent(global.ModEvent.FAILED, target, {"name":modName, "version":version});
 	});
 }
@@ -118,12 +133,12 @@ ModManager.prototype.unload = function(container) {
  * 删除服务器上的 MOD 数据。
  */
 ModManager.prototype.deleteRemoteMod = function(name, version, callback, fail) {
-	var url = this.context + "modmgm" + "/delete/" + name + "/" + version;
+	var url = this.context + "modmgm/delete/" + name + "/" + version;
 	$.post(url, function(data, textStatus, jqXHR) {
 		callback.call(null, data);
 	}, 'json')
 	.fail(function() {
-		console.log('[Yi#Mod] Failed requests "' + url + '"');
+		console.log('[Yi.Mod#deleteRemoteMod] Failed requests "' + url + '"');
 		if (fail !== undefined) {
 			fail.call(null, name, version);
 		}
@@ -134,16 +149,48 @@ ModManager.prototype.deleteRemoteMod = function(name, version, callback, fail) {
  * 重新部署 Debug 下的 MOD 工程。
  */
 ModManager.prototype.redeployDebug = function(name, version, callback, fail) {
-	var url = this.context + "modmgm" + "/redeploy_d/" + name + "/" + version;
+	var url = this.context + "modmgm/redeploy_d/" + name + "/" + version;
 	$.post(url, function(data, textStatus, jqXHR) {
 		callback.call(null, data);
 	}, 'json')
 	.fail(function() {
-		console.log('[Yi#Mod] Failed requests "' + url + '"');
+		console.log('[Yi.Mod#redeployDebug] Failed requests "' + url + '"');
 		if (fail !== undefined) {
 			fail.call(null, name, version);
 		}
 	});
+}
+
+/**
+ * 新建 Debug 项目工程。
+ */
+ModManager.prototype.newDebug = function(mod, done, fail) {
+	var url = this.context + "modmgm/new/" + mod.name + "/" + mod.version;
+	$.post(url, JSON.stringify(mod), function(data, textStatus, jqXHR) {
+		done.call(null, data);
+	}, 'json')
+	.fail(function() {
+		console.log('[Yi.Mod#newDebug] Failed requests "' + url + '"');
+		if (fail !== undefined) {
+			fail.call(null, mod);
+		}
+	});
+}
+
+/**
+ * 删除 Debug 项目工程。
+ */
+ModManager.prototype.deleteDebug = function(name, version, done, fail) {
+	var url = this.context + "modmgm/delete_d/" + name + "/" + version;
+	$.post(url, function(data, textStatus, jqXHR) {
+		done.call(null, data);
+	}, 'json')
+	.fail(function() {
+		console.log('[Yi.Mod#deleteDebug] Failed requests "' + url + '"');
+		if (fail !== undefined) {
+			fail.call(null, name, version);
+		}
+	}); 
 }
 
 /**
@@ -258,7 +305,7 @@ ModManager.prototype._search = function() {
 					var obj = eval(args);
 					args = obj;
 				} catch (e) {
-					console.log('[Yi#Mod] Parse "data-args" error');
+					console.log('[Yi.Mod#_search] Parse "data-args" error');
 				}
 			}
 
@@ -267,7 +314,7 @@ ModManager.prototype._search = function() {
 					var obj = eval(params);
 					params = obj;
 				} catch (e) {
-					console.log('[Yi#Mod] Parse "data-params" error');
+					console.log('[Yi.Mod#_search] Parse "data-params" error');
 				}
 			}
 
