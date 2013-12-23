@@ -46,7 +46,7 @@ if (null == mod) {
       </div>
     </div>
     <div class="form-group">
-      <label class="col-sm-3 control-label">HTML 文件</label>
+      <label class="col-sm-3 control-label">界面文件</label>
       <div class="col-sm-9">
 <%
 String html = mod.getHtmlFilename();

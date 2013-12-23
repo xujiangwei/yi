@@ -144,6 +144,25 @@
 						}
 					}
 
+					// 脚本文件列表
+					var files = form.find('#script_files').find('option');
+					if (files.length > 0) {
+						var scripts = new Array();
+						files.each(function(index, element) {
+							scripts.push($(this).val());
+						});
+						mod["scripts"] = scripts;
+					}
+					// 样式文件列表
+					files = form.find('#style_files').find('option');
+					if (files.length > 0) {
+						var styles = new Array();
+						files.each(function(index, element) {
+							styles.push($(this).val());
+						});
+						mod["styles"] = styles;
+					}
+
 					if (profileMode == MODE_NEW) {
 						yi.mod.newDebug(mod, function() {
 							$('#mod_profile_dialog').modal('hide');
@@ -289,7 +308,7 @@
 		form.find('#script_files').html('');
 		form.find('#style_files').html('');
 
-		form.find('#input_main_function').val('');
+		form.find('#input_main_function').val('').removeClass('verifier-success').removeClass('verifier-error');
 
 		form.find('.verifier-error-list').each(function(index, element) {
             $(this).remove();

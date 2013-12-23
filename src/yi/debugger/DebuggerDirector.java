@@ -165,7 +165,7 @@ public final class DebuggerDirector extends AbstractLifeCycle {
 		return mod;
 	}
 
-	private void newHtmlFile(String filename, boolean tag) {
+	protected void newHtmlFile(String filename, boolean tag) {
 		
 	}
 

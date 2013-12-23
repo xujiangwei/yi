@@ -7,6 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>起步 - 壹框</title>
 <%=Stage.importStyles("lib/")%>
+<link href="assets/css/highlight.min.css" rel="stylesheet">
 <link href="assets/css/docs.css" rel="stylesheet">
 </head>
 
@@ -61,7 +62,7 @@
             <a href="#base-setting">基础环境需求</a>
           </li>
           <li>
-            <a href="#template">基本模板</a>
+            <a href="#templates">基本模板</a>
           </li>
           <li>
             <a href="#examples">案例</a>
@@ -94,7 +95,7 @@
             <a href="https://github.com/xujiangwei/yi/archive/master.zip">下载源码</a>
           </h4>
         </div>
-      </div>
+      </div><!-- /.bs-docs-section -->
 
       <!-- 文件结构
       ================================================== -->
@@ -217,8 +218,89 @@
 └── versions.txt
 </code></pre>
         </div>
-        <p><code>lib/</code> 目录包含了壹框的全部前端脚本文件和样式表文件。<code>debugger/</code> 目录是模组调试器目录。<code>modules/</code> 目录是存放模组文件的目录。<code>scripts/</code></p>
-      </div>
+        <p><code>lib/</code> 目录包含了壹框的全部前端脚本文件和样式表文件。<code>debugger/</code> 目录是模组调试器目录。<code>modules/</code> 目录是存放模组原始文件目录。<code>scripts/</code> 目录是工程的维护脚本目录。</p>
+      </div><!-- /.bs-docs-section -->
+
+      <!-- 基础环境说明
+      ================================================== -->
+      <div class="bs-docs-section">
+        <div class="page-header">
+          <h1 id="base-setting">基础环境需求</h1>
+        </div>
+        <p class="lead"></p>
+
+        <p>TODO</p>
+      </div><!-- /.bs-docs-section -->
+
+      <!-- 基本模板
+      ================================================== -->
+      <div class="bs-docs-section">
+        <div class="page-header">
+          <h1 id="templates">基本模板</h1>
+        </div>
+        <p class="lead">使用以下给出的这份超级简单的 JSP 模版，或者修改这些案例。我们强烈建议你对这些案例按照自己的需求进行修改，而不要简单的复制、粘贴。</p>
+
+        <p>拷贝并粘贴下面给出的JSP代码，这就是一个最简单的壹框页面了。</p>
+        <div class="highlight">
+<pre><code class="language-html">&lt;%@page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot; pageEncoding=&quot;UTF-8&quot;%&gt;
+&lt;%@page import=&quot;yi.core.*&quot; %&gt;
+&lt;!doctype html&gt;
+&lt;html lang=&quot;zh-CN&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+&lt;title&gt;壹框模板&lt;/title&gt;
+&lt;!-- 通过 Stage 引入框架样式表 --&gt;
+&lt;%=Stage.importStyles(&quot;lib/&quot;)%&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+  &lt;h1&gt;页面内容&lt;/h1&gt;
+&lt;/body&gt;
+
+&lt;!-- 通过 Stage 引入框架脚本 --&gt;
+&lt;%=Stage.importScripts(&quot;lib/&quot;)%&gt;
+&lt;!-- 引入页面应用的入口脚本 --&gt;
+&lt;script src="assets/app.js" type="text/javascript"&gt;&lt;/script&gt;
+&lt;/html&gt;</code></pre>
+        </div>
+        <p>上面 JSP 模板里引入的 <code>app.js</code> 的代码如下：</p>
+        <div class="highlight">
+<pre><code class="language-javascript">(function() {
+    var yi = window.yi;
+
+    // 配置 CommonJS 基础路径
+    yi.config("./");
+
+    yi.ready(function() {
+        // 框架就绪函数
+        // 从这里开始你自己的页面应用的代码
+    }
+})();
+</code></pre>
+        </div>
+        <p>在 JavaScript 代码里，需要进行基本的框架配置，并且可以注册页面的 ready 函数来加载页面应用的逻辑代码。</p>
+      </div><!-- /.bs-docs-section -->
+      
+      <!-- 案例
+      ================================================== -->
+      <div class="bs-docs-section">
+        <div class="page-header">
+          <h1 id="examples">案例</h1>
+        </div>
+        <p class="lead">下面这些案例都是基于上面给出的基本模版并结合各种组件制作的。</p>
+
+        <div class="row bs-examples">
+          <div class="col-xs-6 col-md-4">
+            <a class="thumbnail" href="examples/templates/starter/">
+              <img src="examples/screenshots/template.jpg" alt="" />
+            </a>
+            <h4>最简页面</h4>
+            <p>只有一些最基本的东西：引入框架CSS和JavaScript文件，并进行壹框基础属性配置，页面只有一个container容器。</p>
+          </div>
+        </div>
+      </div><!-- /.bs-docs-section -->
     </div>
   </div>
 </div>
@@ -246,5 +328,7 @@
 </body>
 
 <%=Stage.importScripts("lib/")%>
-<script src="assets/js/docs.js" type="text/javascript"></script>
+<script type="text/javascript" src="assets/js/highlight.min.js"></script>
+<script type="text/javascript">hljs.initHighlightingOnLoad();</script>
+<script type="text/javascript" src="assets/js/docs.js"></script>
 </html>

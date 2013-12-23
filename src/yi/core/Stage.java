@@ -80,6 +80,11 @@ public final class Stage extends AbstractLifeCycle {
 			ret.append("\" rel=\"stylesheet\" />");
 		}
 
+		ret.append("\n<!--[if lt IE 9]>");
+		ret.append("\n<script src=\"" + contextPath + "core/html5shiv/html5shiv.js\"></script>");
+		ret.append("\n<script src=\"" + contextPath + "core/respond/respond.min.js\"></script>");
+		ret.append("\n<![endif]-->");
+
 		return ret.toString();
 	}
 
