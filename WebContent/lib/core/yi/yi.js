@@ -75,6 +75,20 @@ Yi.prototype.config = function(relativePath, addition, excluded) {
 	alias["theme-manager"] = "modules/misc/theme-manager.min.js";	// 主题管理器
 	alias["component"] = "modules/components/component.js";	// 组件基类
 
+	alias["card-layout"] = "modules/components/card-layout/card-layout.js";	// 卡式布局
+	alias["form"] = "modules/components/form/form.js";						// 表单
+	alias["gallery"] = "modules/components/gallery/gallery.js";				// 大图列表基类
+	alias["graph-radio-group"] = "modules/components/graph-radio-group/graph-radio-group.js"; // 单选按钮组
+	alias["modal"] = "modules/components/modal-window/modal-window.js";		// 模态对话框
+	alias["tab"] = "modules/components/tab/tab.js";							// 单选按钮组
+	alias["timeline"] = "modules/components/timeline/timeline.js";			// 时间线
+	// 待定 alias["roundabout"]="plugins/roundabout";						// 轮播轮盘
+	alias["clickable"] = "modules/components/clickable/clickable.js";		// 点击类
+	alias["button"] = "modules/components/button/button.js";				// 按钮
+	// 待定 alias["page-loader"] = "modules/components/page-loader/page-loader.js";	// 点击类
+	alias["carousel"] = "modules/components/carousel/carousel-roundabout.js";	// 轮播组件
+	alias["date-format"] = "utils/date-format.js";							// 简单日期格式化工具
+
 	common.config({
 		base: relativePath + "lib/",
 		alias: alias

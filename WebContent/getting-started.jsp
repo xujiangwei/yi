@@ -63,6 +63,10 @@
           </li>
           <li>
             <a href="#templates">基本模板</a>
+            <ul class="nav">
+              <li><a href="#template-page">页面模板</a></li>
+              <li><a href="#template-app">应用模板</a></li>
+            </ul>
           </li>
           <li>
             <a href="#examples">案例</a>
@@ -240,7 +244,8 @@
         </div>
         <p class="lead">使用以下给出的这份超级简单的 JSP 模版，或者修改这些案例。我们强烈建议你对这些案例按照自己的需求进行修改，而不要简单的复制、粘贴。</p>
 
-        <p>拷贝并粘贴下面给出的JSP代码，这就是一个最简单的壹框页面了。</p>
+        <h3 id="template-page">页面模板</h3>
+        <p>拷贝并粘贴下面给出的 JSP 代码，这就是一个最简单的壹框页面了。</p>
         <div class="highlight">
 <pre><code class="language-html">&lt;%@page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot; pageEncoding=&quot;UTF-8&quot;%&gt;
 &lt;%@page import=&quot;yi.core.*&quot; %&gt;
@@ -262,12 +267,12 @@
 &lt;!-- 通过 Stage 引入框架脚本 --&gt;
 &lt;%=Stage.importScripts(&quot;lib/&quot;)%&gt;
 &lt;!-- 引入页面应用的入口脚本 --&gt;
-&lt;script src="assets/app.js" type="text/javascript"&gt;&lt;/script&gt;
+&lt;script src="app.js" type="text/javascript"&gt;&lt;/script&gt;
 &lt;/html&gt;</code></pre>
         </div>
         <p>上面 JSP 模板里引入的 <code>app.js</code> 的代码如下：</p>
         <div class="highlight">
-<pre><code class="language-javascript">(function() {
+<pre><code class="language-js">(function() {
     var yi = window.yi;
 
     // 配置 CommonJS 基础路径
@@ -276,13 +281,47 @@
     yi.ready(function() {
         // 框架就绪函数
         // 从这里开始你自己的页面应用的代码
-    }
+    });
 })();
 </code></pre>
         </div>
         <p>在 JavaScript 代码里，需要进行基本的框架配置，并且可以注册页面的 ready 函数来加载页面应用的逻辑代码。</p>
+
+        <h3 id="template-app">应用模板</h3>
+        <p>为每一个页面创建一个符合 CommonJS 规范的调用方式将极大的提高代码复用率并合理的解耦代码结构。拷贝并粘贴下面给出的 JavaScript 代码，这就是一个基础的 CommonJS 模块定义。</p>
+        <div class="highlight">
+<pre><code class="language-js">define(function(require, exports, module) {
+    /* 请求依赖的CommonJS模块，这是一个示例，你可以根据你的需要添加自己的模块依赖项 */
+    require('utils');
+
+    /* 导出 run() 方法 */
+    exports.run = function() {
+        /* 这里是你的页面入口，从这里编写你的页面应用代码 */
+        console.log('这里是程序入口');
+    }
+});
+</code></pre>
+        </div>
+        <p>接着我们需要在 ready 函数里调用我们定义好的应用入口函数 <code>run()</code>，修改页面模板里 <code>app.js</code> 为：</p>
+        <div class="highlight">
+<pre><code class="language-js">(function() {
+    var yi = window.yi;
+
+    // 配置 CommonJS 基础路径
+    yi.config("./");
+
+    yi.ready(function() {
+        // 使用 CommonJS 的模块加载方式加载我们上面的 JavaScript 文件
+        common.use('./main.js', function(module) {
+            module.run();
+        });
+    }
+})();
+</code></pre>
+        </div>
+        <p>应用模板帮助我们规范所有的页面应用代码，这些代码都采用统一的标准进行开发，这样即有利于与划分代码结构，也便于今后的代码升级和维护。遵循统一的编码规范将事半功倍，当然这需要你学习和训练使用这些相关规范的 API 。</p>
       </div><!-- /.bs-docs-section -->
-      
+
       <!-- 案例
       ================================================== -->
       <div class="bs-docs-section">
@@ -293,11 +332,11 @@
 
         <div class="row bs-examples">
           <div class="col-xs-6 col-md-4">
-            <a class="thumbnail" href="examples/templates/starter/">
-              <img src="examples/screenshots/template.jpg" alt="" />
+            <a class="thumbnail" href="examples/templates/starter/" target="_blank">
+              <img src="examples/screenshots/starter.jpg" alt="最简页面" />
             </a>
             <h4>最简页面</h4>
-            <p>只有一些最基本的东西：引入框架CSS和JavaScript文件，并进行壹框基础属性配置，页面只有一个container容器。</p>
+            <p>只有一些最基本的东西：引入框架CSS和JavaScript文件，并进行壹框基础属性配置，载入一个Module。</p>
           </div>
         </div>
       </div><!-- /.bs-docs-section -->
