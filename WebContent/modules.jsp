@@ -86,8 +86,7 @@
   </div>
 </div>
 
-</body>
-
 <%=Stage.importScripts("lib/")%>
 <script src="assets/js/docs.js" type="text/javascript"></script>
+</body>
 </html>

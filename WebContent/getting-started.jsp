@@ -111,7 +111,7 @@
 
         <div class="bs-callout bs-callout-warning" id="jquery-required">
           <h4>Yi 前端库依赖 jQuery、Bootstrap 和 Seajs</h4>
-          <p>请注意，使用 <strong>Stage</strong> 的 <code>importScripts()</code> 方法将帮助你自动导入脚本依赖， 就像在<a href="#template">基础模版</a>中所展示的一样。</p>
+          <p>请注意，使用 <strong>Stage</strong> 的 <code>importScripts()</code> 方法将帮助你自动导入脚本依赖， 就像在<a href="#templates">基础模版</a>中所展示的一样。</p>
         </div>
         <p>下载压缩包之后，将其解压至任意目录即可看到以下目录结构：</p>
         <div class="highlight">
@@ -262,12 +262,12 @@
 
 &lt;body&gt;
   &lt;h1&gt;页面内容&lt;/h1&gt;
-&lt;/body&gt;
 
 &lt;!-- 通过 Stage 引入框架脚本 --&gt;
 &lt;%=Stage.importScripts(&quot;lib/&quot;)%&gt;
 &lt;!-- 引入页面应用的入口脚本 --&gt;
 &lt;script src="app.js" type="text/javascript"&gt;&lt;/script&gt;
+&lt;/body&gt;
 &lt;/html&gt;</code></pre>
         </div>
         <p>上面 JSP 模板里引入的 <code>app.js</code> 的代码如下：</p>
@@ -364,10 +364,10 @@
   </div>
 </footer>
 
-</body>
-
 <%=Stage.importScripts("lib/")%>
 <script type="text/javascript" src="assets/js/highlight.min.js"></script>
 <script type="text/javascript">hljs.initHighlightingOnLoad();</script>
 <script type="text/javascript" src="assets/js/docs.js"></script>
+
+</body>
 </html>

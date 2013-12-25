@@ -1,0 +1,76 @@
+/**
+ * SlickGrid for Bootstrap styles
+ */
+
+.grid {
+  height: auto;
+  width: 100%;
+  position: relative;
+  border-bottom: 1px solid #dddddd;
+}
+
+.grid .grid-canvas .slick-row {
+  border: 0 none;
+  position: absolute;
+  width: 100%;
+}
+
+.grid .slick-header {
+  padding: 0px;
+  margin: 0px;
+}
+
+.grid .slick-header-columns {
+  background: #fff;
+  left: 0px !important;
+  width: 100%;
+  height: 36px !important;
+  padding: 0px 0px 0px 4px;
+  margin: 0px 0px;
+  border: 0;
+  border-bottom: 2px solid #ddd;
+}
+
+.grid .slick-header-column {
+  background: transparent;
+  padding: 0px;
+  margin: 0px;
+  border: 0;
+  height: 36px;
+}
+.grid .slick-header-column:hover {
+  background: transparent;
+}
+
+.grid .slick-header-column .slick-column-name {
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: 9px;
+  display: inline-block;
+}
+
+.grid .slick-resizable-handle {
+  padding: 0px;
+  margin: 0px;
+}
+
+.grid .slick-row {
+  border: 0 none;
+}
+.grid .slick-cell {
+  border-right: none;
+  padding-top: 6px;
+}
+
+.grid .slick-row > .active {
+  border-right: 1px solid #808080;
+}
+
+.grid .even {
+  background-color: #f9f9f9;
+  border: 1px dotted #f9f9f9;
+}
+.grid .odd {
+  background-color: #fff;
+  border: 1px dotted #fff;
+}

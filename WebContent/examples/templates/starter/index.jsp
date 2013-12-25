@@ -40,10 +40,10 @@
     <p class="lead">使用这个文档模板可以快速构建任何新的项目。<br/><span id="desc"></span></p>
   </div>
 </div><!-- /.container -->
-</body>
 
 <!-- 通过 Stage 引入框架脚本 -->
 <%=Stage.importScripts("../../../lib/")%>
 <!-- 引入页面应用的入口脚本 -->
 <script src="app.js" type="text/javascript"></script>
+</body>
 </html>

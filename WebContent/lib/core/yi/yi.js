@@ -62,18 +62,20 @@ Yi.prototype.config = function(relativePath, addition, excluded) {
 	alias["map"] = "utils/hashmap.js";						// 实用 Map 实现
 	alias["extend"] = "utils/extend.js";					// 对象继承实现
 	alias["observable"] = "utils/observable.js";			// 观察者实现
-	alias["delayed-task"] = "utils/delayed-task.js";			// 延迟任务
+	alias["delayed-task"] = "utils/delayed-task.js";		// 延迟任务
 	alias["event"] = "utils/event.js";						// 事件
 	alias["holder"] = "utils/holder.js";					// 图片占位符
 	alias["console"] = "core/console/console.min.js";		// 可视化控制台
-	alias["dialog"] = "plugins/bootbox.min.js";				// 对话框
-	alias["menu-aim"] = "plugins/jquery.menu-aim.js";		// 改进的浮动菜单
+	alias["dialog"] = "plugins/bootbox/bootbox.min.js";		// 对话框
+	alias["menu-aim"] = "plugins/menu/jquery.menu-aim.js";	// 改进的浮动菜单
 	alias["rating"] = "plugins/raty/jquery.raty.min.js";	// 评分插件
 	alias["verify"] = "plugins/parsley/parsley.min.js";		// 表单验证插件
-	alias["switch"] = "plugins/bootstrap-switch/switch.js";	// Switch 按钮
+	alias["switch"] = "plugins/switch/switch.js";			// Switch 按钮
 	alias["fetch"] = "plugins/fetch/jquery.fetch.js";		// 片段截取
 	alias["theme-manager"] = "modules/misc/theme-manager.min.js";	// 主题管理器
 	alias["component"] = "modules/components/component.js";	// 组件基类
+
+	alias["grid"] = "modules/components/grid/grid-boot.js";
 
 	alias["card-layout"] = "modules/components/card-layout/card-layout.js";	// 卡式布局
 	alias["form"] = "modules/components/form/form.js";						// 表单
@@ -90,8 +92,10 @@ Yi.prototype.config = function(relativePath, addition, excluded) {
 	alias["date-format"] = "utils/date-format.js";							// 简单日期格式化工具
 
 	common.config({
+		debug: 2,
 		base: relativePath + "lib/",
-		alias: alias
+		alias: alias,
+		preload: []
 	});
 }
 
