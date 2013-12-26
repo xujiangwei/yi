@@ -1,0 +1,29 @@
+.yi-gallery-item.yi-gallery-image-item {
+	border: 0 none;
+	cursor: default;
+}
+
+.yi-gallery-item-top {
+	margin-bottom: 10px;
+	border: 1px solid #dddddd;
+	cursor: pointer;
+	text-align: center;
+}
+
+.yi-gallery-item-bottom {
+	text-align: center;
+}
+
+.yi-gallery-item.yi-gallery-item-over.yi-gallery-image-item .yi-gallery-item-top
+	{
+	border-color: #428bca;
+}
+
+.yi-gallery-item.yi-gallery-item-selected.yi-gallery-image-item {
+	background-color: transparent;
+}
+
+.yi-gallery-item.yi-gallery-item-selected.yi-gallery-image-item .yi-gallery-item-top
+	{
+	border-color: #428bca;
+}

@@ -9,14 +9,13 @@
  * @method show: Function()
  * @method hide: Function()
  * 
- * @event hide: Function(modalWindow win ,String cmpId)
- * @event hidden: Function(modalWindow win ,String cmpId)
- * @event show: Function(modalWindow win ,String cmpId)
- * @event shown: Function(modalWindow win ,String cmpId)
+ * @event hide: Function(modalWindow win)
+ * @event hidden: Function(modalWindow win)
+ * @event shown: Function(modalWindow win)
  * @event load: Function(modalWindow win ,String responseText, String
  *        textStatus, XMLHttpRequest xhr)
  * 
- * @description updated on 2013-12-11
+ * @description updated on 2013-12-25
  * 
  */
 define(function(require, exports, module) {
@@ -68,18 +67,14 @@ define(function(require, exports, module) {
 			 * @cfg modal Boolean 窗口是否带遮罩，默认带遮罩
 			 */
 			modal : true,
-
-			onRender : function(container, position) {
-				modalWindow.superclass.onRender.call(this, container, position);
-			},
-			afterRender : function() {
-				modalWindow.superclass.afterRender.call(this);
+			afterRender : function(container) {
+				modalWindow.superclass.afterRender.call(this,container);
 				this.init();
 			},
 			init : function() {
 				var $el = this.el, baseCls = this.baseCls;
 				$el
-						.append('<div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h3>'
+						.html('<div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h3>'
 								+ (this.title || '&nbsp;')
 								+ '</h3></div><div class="modal-body"></div><div class="modal-footer"></div></div></div>')
 						.addClass((this.cls ? this.cls + ' ' : '') + baseCls
@@ -116,28 +111,26 @@ define(function(require, exports, module) {
 								'overflow-y' : 'auto'
 							});
 				}
-				if (this.buttons && $.isArray(this.buttons)) {
+				if (this.buttons) {
 					this.addButtons(this.buttons)
 				}
-				// 是否带遮罩
-				$el.modal({
-							backdrop : this.modal === true ? 'static' : 'false'
-						});
-				if (this.url) {
+				if (this.url && '' != this.url) {
 					var params = this.params;
 					$('.modal-body', $el).load(this.url, params || null,
 							this.doPageLoad);
 					params = null;
 				}
-				$el.on('show.bs.modal', {
-							cmpId : cmpId
-						}, this.onShow).on('hide.bs.modal', {
+				$el.on('hide.bs.modal', {
 							cmpId : cmpId
 						}, this.onHide).on('shown.bs.modal', {
 							cmpId : cmpId
 						}, this.onShown).on('hidden.bs.modal', {
 							cmpId : cmpId
 						}, this.onHidden);
+				// 是否带遮罩
+				$el.modal({
+							backdrop : this.modal === true ? 'static' : 'false'
+						});
 				$dialog = null;
 				$body = null;
 				$el = null;
@@ -159,18 +152,18 @@ define(function(require, exports, module) {
 									: '') + '"></a>').html(button.text || '')
 							.appendTo($footer);
 					var handler = button.handler;
-					if (handler && $.isFunction(handler)) {
-						$btn.on('click', {
-									handler : handler,
-									cmpId : this.getId()
-								}, this.onBtnClick);
-					}
+					$btn.on('click', {
+								handler : handler,
+								cmpId : this.getId()
+							}, this.onBtnClick);
 					$btn = null;
 				}
 				$footer = null;
 			},
 			/**
-			 * 手动载入内容
+			 * @description 加载内容
+			 * @param option {} :
+			 *            1)url String:页面地址 2)params {}:额外的参数
 			 */
 			load : function(option) {
 				var option = option || {}, url = option.url || '', params = option.params
@@ -182,7 +175,7 @@ define(function(require, exports, module) {
 			},
 			onBtnClick : function(e) {
 				var cmp = Base.get(e.data.cmpId);
-				e.data.handler.call(cmp);
+				e.data.handler.call(cmp,$(this));
 			},
 			doPageLoad : function(responseText, textStatus, xhr) {
 				var $el = $(this).parents('.yi-modal-window'), cmp = Base
@@ -191,25 +184,20 @@ define(function(require, exports, module) {
 				cmp = null;
 				$el = null;
 			},
-			onShow : function(e) {
-				var cmpId = e.data.cmpId, cmp = Base.get(cmpId);
-				cmp.toFront();
-				cmp.trigger('show', cmp, cmpId);
-				cmp = null;
-			},
 			onHide : function(e) {
 				var cmpId = e.data.cmpId, cmp = Base.get(cmpId);
-				cmp.trigger('hide', cmp, cmpId);
+				cmp.trigger('hide', cmp);
 				cmp = null;
 			},
 			onShown : function(e) {
 				var cmpId = e.data.cmpId, cmp = Base.get(cmpId);
-				cmp.trigger('shown', cmp, cmpId);
+				cmp.toFront();
+				cmp.trigger('shown', cmp);
 				cmp = null;
 			},
 			onHidden : function(e) {
 				var cmpId = e.data.cmpId, cmp = Base.get(cmpId);
-				cmp.trigger('hidden', cmp, cmpId);
+				cmp.trigger('hidden', cmp);
 				cmp = null;
 			},
 			/**
@@ -217,13 +205,13 @@ define(function(require, exports, module) {
 			 */
 			show : function() {
 				this.toFront();
-				$(this.el).modal('show');
+				this.el.modal('show');
 			},
 			/**
 			 * 隐藏窗口
 			 */
 			hide : function() {
-				$(this.el).modal('hide');
+				this.el.modal('hide');
 			},
 			/**
 			 * 置于最前
@@ -232,7 +220,7 @@ define(function(require, exports, module) {
 				$('.modal-backdrop').css({
 							'zIndex' : this.zIndex++
 						});
-				$(this.el).css({
+				this.el.css({
 							'zIndex' : this.zIndex++
 						});
 			},

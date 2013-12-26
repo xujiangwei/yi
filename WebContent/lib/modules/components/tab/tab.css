@@ -1,0 +1,15 @@
+.yi-tab-content {
+	
+}
+
+.yi-tab-title-add-btn {
+	cursor: pointer;
+}
+
+.yi-tab-header-remove {
+	position: absolute;
+	right: 4px;
+	top: 2px;
+	display: none;
+	cursor: pointer;
+}

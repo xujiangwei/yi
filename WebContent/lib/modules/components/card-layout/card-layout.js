@@ -3,6 +3,8 @@
  * 
  * @author wensong, wensong@dhcc.com.cn, 2013-12-09
  * 
+ * @extends component
+ * 
  * @requires utils, extend, component
  * 
  * @method void setActive(Number index)
@@ -10,7 +12,7 @@
  * @event activate function(CardLayout c, Number activeIndex, Number
  *        lastActiveIndex)
  * 
- * @description 还可以补充通过参数加载卡片页面以及手动添加卡片页面 updated on 2013-12-10
+ * @description 还可以补充通过参数加载卡片页面以及手动添加卡片页面 updated on 2013-12-26
  * 
  */
 define(function(require, exports, module) {

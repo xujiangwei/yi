@@ -33,7 +33,7 @@
  * @event beforedestroy function(Component c)
  * @event destroy function(Component c)
  * 
- * @description updated on 2013-12-16
+ * @description updated on 2013-12-26
  */
 define(function(require, exports, module) {
 	'require:nomunge,exports:nomunge,module:nomunge';
@@ -42,9 +42,10 @@ define(function(require, exports, module) {
 	var utils = require('utils');
 	var extend = require('extend');
 	var Observable = require('observable');
+	var Map = require('map');
 
 	// 组件管理
-	var components = new HashMap();
+	var components = new Map();
 
 	// 处理style
 	var cssRe = /([a-z0-9-]+)\s*:\s*([^;\s]+(?:\s*[^;\s]+)*);?/gi;
@@ -150,16 +151,19 @@ define(function(require, exports, module) {
 					 * 
 					 * 不指定则自动赋值
 					 */
+
 					/**
 					 * @cfg applyTo String
 					 * 
 					 * 已有DOM的id，将其应用于组件。该DOM可能是组件的最外层元素或关键元素，视组件情况而定。组件初始化后，该DOM的jQuery对象将成为组件的私有属性el
 					 */
+
 					/**
 					 * @cfg renderTo String
 					 * 
 					 * 只给出一个空白元素，交给组件渲染，renderTo的值就是该空白元素的id
 					 */
+
 					/**
 					 * @cfg baseHtml String
 					 * 
@@ -167,6 +171,7 @@ define(function(require, exports, module) {
 					 * 
 					 * baseHtml由组件的默认配置指定
 					 */
+
 					/**
 					 * @cfg baseCls String
 					 * 
@@ -174,16 +179,19 @@ define(function(require, exports, module) {
 					 * 
 					 * baseCls由组件的默认配置指定
 					 */
+
 					/**
 					 * @cfg cls String
 					 * 
 					 * 每个组件实例可以拥有自定义的样式类，它会被自动添加到组件的el上，方便使用者修改组件实例的样式
 					 */
+
 					/**
 					 * @cfg style Object/String
 					 * 
 					 * 每个组件实例可以拥有自定义的内联样式，它会被自动添加到组件的el上，方便使用者修改组件实例的样式
 					 */
+
 					/**
 					 * @cfg overCls String
 					 * 
@@ -191,11 +199,13 @@ define(function(require, exports, module) {
 					 * 
 					 * overCls由组件的默认配置指定
 					 */
+
 					/**
 					 * @cfg hidden Boolean
 					 * 
 					 * 渲染后是否隐藏
 					 */
+
 					/**
 					 * @cfg hideMode String
 					 * 
@@ -204,22 +214,26 @@ define(function(require, exports, module) {
 					 * ’visibility’，则组件占位隐藏（visibility: hidden）
 					 */
 					hideMode : 'display',
+
 					/**
 					 * @cfg disabled Boolean
 					 * 
 					 * 渲染后是否为不可用状态
 					 */
+
 					/**
 					 * @cfg disabledCls String
 					 * 
 					 * 每个组件实例可以拥有自定义的内联样式，它会被自动添加到组件的el上，方便使用者修改组件实例的样式
 					 */
 					disabledCls : 'disabled',
+
 					/**
 					 * @cfg listeners Object
 					 * 
 					 * 每个组件实例可以拥有自定义的内联样式，它会被自动添加到组件的el上，方便使用者修改组件实例的样式
 					 */
+
 					/**
 					 * @cfg permission Object
 					 * 

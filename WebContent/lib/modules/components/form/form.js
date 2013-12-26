@@ -3,11 +3,13 @@
  * 
  * @author wensong, wensong@dhcc.com.cn, 2013-12-10
  * 
+ * @extends component
+ * 
  * @requires utils, extend, component
  * 
- * @method void submit()
+ * @method void submit(Object option)
  * 
- * @description updated on 2013-12-11
+ * @description updated on 2013-12-26
  * 
  */
 define(function(require, exports, module) {
@@ -17,32 +19,125 @@ define(function(require, exports, module) {
 	var extend = require('extend');
 	var Base = require('component');
 
+	function onUploadFileFrameLoad(e) {
+		var r = {
+			responseText : '',
+			responseXML : null
+		}, doc;
+
+		try {
+			doc = this.contentWindow.document || this.contentDocument
+					|| WINDOW.frames[id].document;
+			if (doc) {
+				if (doc.body) {
+					r.responseText = doc.body.innerHTML;
+				}
+				r.responseXML = doc.XMLDocument || doc;
+			}
+
+			if (e.data.success && utils.isFunction(e.data.success)) {
+				e.data.success.call(e.data.scope || null, r);
+
+				delete e.data.success;
+			}
+		} catch (exception) {
+			if (e.data.failure && utils.isFunction(e.data.failure)) {
+				e.data.failure.call(e.data.scope || null, r);
+
+				delete e.data.failure;
+			}
+		}
+
+		if (e.data.componentId && e.data.fc) {
+			var comp = Base.get(e.data.componentId), fc = e.data.fc, p;
+			for (p in fc) {
+				if (fc.hasOwnProperty(p)) {
+					if (utils.isEmpty(fc[p])) {
+						comp.el.removeAttr(p);
+					} else {
+						comp.el.attr(p, fc[p]);
+					}
+				}
+			}
+		}
+
+		// TODO 关闭进度条
+		// comp.afterAction();
+
+		comp = null;
+		doc = null;
+		r = null;
+
+		$(this).remove();
+	}
+
+	function onSubmitSuccess(data, textStatus, jqXhr) {
+		var comp = Base.get(this.componentId);
+		if (this.successFn && utils.isFunction(this.successFn)) {
+			this.successFn.call(this.scope || null, comp, jqXhr);
+			delete this.successFn;
+		}
+		delete this.failureFn;
+		delete this.scope;
+
+		// comp.afterAction();
+
+		comp = null;
+	}
+
+	function onSubmitError(jqXhr, textStatus, errorThrown) {
+		var comp = Base.get(this.componentId);
+		if (this.failureFn && utils.isFunction(this.failureFn)) {
+			this.failureFn.call(this.scope || null, comp, jqXhr);
+			delete this.failureFn;
+		}
+		delete this.successFn;
+		delete this.failureFn;
+
+		// comp.afterAction();
+
+		comp = null;
+	}
+
 	(function() {
 		var HttpsRe = /^https/i;
 
 		var Form = extend(Base, {
+					baseCls : 'yi-form',
+					baseHtml : '<form></form>',
+
 					/**
 					 * uploadFile Boolean
 					 * 
 					 * 是否要上传文件
 					 */
-					baseCls : 'yi-form',
-					baseHtml : '<form></form>',
+
 					/**
 					 * 提交表单
 					 * 
-					 * @augments {} option {} 1)url String: URL 2)params Object:
-					 *           额外的参数 3)mothod String: 'GET' or 'POST'，默认'GET'
-					 *           4)success Function: function(Form form)
-					 *           5)failure Function: function(Form form)
-					 *           6)timeout Number: 单位：毫秒 7)scope Object:
-					 *           success和failure的作用域
+					 * @augments option {} 1)original Boolean 是否使用原生的表单提交 2)url
+					 *           String: URL 3)params Object: 额外的参数 4)mothod
+					 *           String: 'GET' or 'POST'，默认'GET' 5)success
+					 *           Function: function(Form form) 6)failure
+					 *           Function: function(Form form) 7)timeout Number:
+					 *           单位：毫秒 8)scope Object: success和failure的作用域
 					 */
 					submit : function(option) {
 						option = option || {};// 避免undefined
-						var url = option.url || this.el.attr('action');
+						var action = this.el.attr('action');
+						var url = option.url || action;
 						if (utils.isEmpty(url)) {
 							return;
+						}
+
+						if (option.original) {
+							this.el.attr('action', url);
+
+							if (option.params) {
+								this.createHiddens(option.params);
+							}
+
+							this.el.submit();
 						}
 
 						// TODO 进度条
@@ -83,23 +178,8 @@ define(function(require, exports, module) {
 									.attr('enctype', 'multipart/form-data')
 									.attr('target', id);
 
-							var hiddens = [];
 							if (option.params) {
-								var P = option.params, p;
-								for (p in P) {
-									if (P.hasOwnProperty(p)) {
-										var $h = $('<input type="hidden" name="'
-												+ p
-												+ '" value="'
-												+ P[p]
-												+ '" />').appendTo(this.el);
-										hiddens.push($h);
-
-										$h = null;
-									}
-								}
-
-								P = null;
+								this.createHiddens(option.params);
 							}
 
 							$f.one('load', {
@@ -108,20 +188,12 @@ define(function(require, exports, module) {
 										success : option.success,
 										failure : option.failure,
 										scope : option.scope
-									}, this.onUploadFileFrameLoad);
+									}, onUploadFileFrameLoad);
 
 							this.el.submit();
 
-							if (hiddens.length > 0) {
-								var i, len = hiddens.length;
-								for (i = 0; i < len; i++) {
-									hiddens[i].remove();
+							this.deleteHiddens();
 
-									delete hiddens[i];
-								};
-							}
-
-							hiddens = null
 							$f = null;
 						} else {
 							var o = {
@@ -136,13 +208,13 @@ define(function(require, exports, module) {
 								o.type = option.method;
 							}
 							o.componentId = this.getId();
-							o.success = this.onSubmitSuccess;
+							o.success = onSubmitSuccess;
 							if (option.success
 									&& utils.isFunction(option.success)) {
 								o.successFn = option.success;
 								o.scope = option.scope;
 							}
-							o.error = this.onSubmitError;
+							o.error = onSubmitError;
 							if (option.failure
 									&& utils.isFunction(option.failure)) {
 								o.failureFn = option.failure;
@@ -181,91 +253,34 @@ define(function(require, exports, module) {
 
 							$.ajax(o);
 						}
-
-						// 只允许应用于jQuery对象中第一个元素则应使用return this;
-						return this;
 					},
-					onUploadFileFrameLoad : function(e) {
-						var r = {
-							responseText : '',
-							responseXML : null
-						}, doc;
+					createHiddens : function(params) {
+						this.deleteHiddens()
 
-						try {
-							doc = this.contentWindow.document
-									|| this.contentDocument
-									|| WINDOW.frames[id].document;
-							if (doc) {
-								if (doc.body) {
-									r.responseText = doc.body.innerHTML;
-								}
-								r.responseXML = doc.XMLDocument || doc;
-							}
+						this.hiddens = [];
+						var p;
+						for (p in params) {
+							if (params.hasOwnProperty(p)) {
+								var $h = $('<input type="hidden" name="' + p
+										+ '" value="' + params[p] + '" />')
+										.appendTo(this.el);
+								this.hiddens.push($h);
 
-							if (e.data.success
-									&& utils.isFunction(e.data.success)) {
-								e.data.success.call(e.data.scope || null, r);
-
-								delete e.data.success;
-							}
-						} catch (exception) {
-							if (e.data.failure
-									&& utils.isFunction(e.data.failure)) {
-								e.data.failure.call(e.data.scope || null, r);
-
-								delete e.data.failure;
+								$h = null;
 							}
 						}
-
-						if (e.data.componentId && e.data.fc) {
-							var form = Base.get(e.data.componentId), fc = e.data.fc, p;
-							for (p in fc) {
-								if (fc.hasOwnProperty(p)) {
-									if (utils.isEmpty(fc[p])) {
-										form.el.removeAttr(p);
-									} else {
-										form.el.attr(p, fc[p]);
-									}
-								}
-							}
-						}
-
-						// TODO 关闭进度条
-						// form.afterAction();
-
-						form = null;
-						doc = null;
-						r = null;
-
-						$(this).remove();
 					},
-					onSubmitSuccess : function(data, textStatus, jqXhr) {
-						var comp = Base.get(this.componentId);
-						if (this.successFn && utils.isFunction(this.successFn)) {
-							this.successFn
-									.call(this.scope || null, comp, jqXhr);
-							delete this.successFn;
+					deleteHiddens : function() {
+						if (this.hiddens) {
+							var i, len = hiddens.length;
+							for (i = 0; i < len; i++) {
+								hiddens[i].remove();
+
+								delete hiddens[i];
+							};
 						}
-						delete this.failureFn;
-						delete this.scope;
 
-						// comp.afterAction();
-
-						comp = null;
-					},
-					onSubmitError : function(jqXhr, textStatus, errorThrown) {
-						var comp = Base.get(this.componentId);
-						if (this.failureFn && utils.isFunction(this.failureFn)) {
-							this.failureFn
-									.call(this.scope || null, comp, jqXhr);
-							delete this.failureFn;
-						}
-						delete this.successFn;
-						delete this.failureFn;
-
-						// comp.afterAction();
-
-						comp = null;
+						delete this.hiddens;
 					}
 				});
 
