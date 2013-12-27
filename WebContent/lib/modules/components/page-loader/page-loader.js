@@ -11,7 +11,7 @@
  * 
  * @event load function(PageLoader c)
  * 
- * @description updated on 2013-12-26
+ * @description updated on 2013-12-27
  * 
  */
 define(function(require, exports, module) {
@@ -22,27 +22,21 @@ define(function(require, exports, module) {
 	var Base = require('component');
 
 	function onLoadSuccess(data, textStatus, jqXhr) {
-		// console.info('onLoadSuccess')
-		if (this.componentId) {
-			var comp = Base.get(this.componentId);
+		var comp = Base.get(this.componentId);
+		if (comp) {
 			comp.processSuccess(jqXhr.responseText);
-
-			comp = null;
 		}
 
-		delete this.componentId;
+		comp = null;
 	}
 
 	function onLoadFailure(jqXhr, textStatus, errorThrown) {
-		// console.info('onLoadFailure')
-		if (this.componentId) {
-			var comp = Base.get(this.componentId);
+		var comp = Base.get(this.componentId);
+		if (comp) {
 			comp.processFailure();
-
-			comp = null;
 		}
 
-		delete this.componentId;
+		comp = null;
 	}
 
 	var Event;
@@ -211,7 +205,7 @@ define(function(require, exports, module) {
 				$.ajax({
 							url : url,
 							data : params || null,
-							traditional : false,
+							traditional : true,
 							async : async === true ? true : false,
 							timeout : timeout,
 							// complete : callback,

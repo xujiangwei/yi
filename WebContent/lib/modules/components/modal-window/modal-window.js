@@ -15,7 +15,7 @@
  * @event load: Function(modalWindow win ,String responseText, String
  *        textStatus, XMLHttpRequest xhr)
  * 
- * @description updated on 2013-12-25
+ * @description updated on 2013-12-27
  * 
  */
 define(function(require, exports, module) {
@@ -24,11 +24,11 @@ define(function(require, exports, module) {
 	require('./modal-window.css');
 	var extend = require('extend');
 	var Base = require('component');
+	var jqueryUtils = require('jquery-utils');
 
 	(function() {
 		var modalWindow = extend(Base, {
 			baseCls : 'yi-modal-window',
-			zIndex : 1000,
 			// <div class="modal-body" />的左右border、padding之和，单位：px
 			bodyLRFrameWidth : 42,// (1 + 20) * 2
 			// <div class="modal-body" />应由总高度减去的高度，单位：px
@@ -68,7 +68,7 @@ define(function(require, exports, module) {
 			 */
 			modal : true,
 			afterRender : function(container) {
-				modalWindow.superclass.afterRender.call(this,container);
+				modalWindow.superclass.afterRender.call(this, container);
 				this.init();
 			},
 			init : function() {
@@ -140,9 +140,9 @@ define(function(require, exports, module) {
 						this.el);
 				for (i = 0; i < len; i++) {
 					var button = buttons[i];
-					var $btn = $('<a id='
+					var $btn = $('<a id="'
 							+ (button.id || '')
-							+ ' class="btn btn-default '
+							+ '" class="btn btn-default '
 							+ (button.cls || '')
 							+ ' '
 							+ (button.disabled ? 'disabled' : '')
@@ -175,7 +175,7 @@ define(function(require, exports, module) {
 			},
 			onBtnClick : function(e) {
 				var cmp = Base.get(e.data.cmpId);
-				e.data.handler.call(cmp,$(this));
+				e.data.handler.call(cmp, $(this));
 			},
 			doPageLoad : function(responseText, textStatus, xhr) {
 				var $el = $(this).parents('.yi-modal-window'), cmp = Base
@@ -213,15 +213,12 @@ define(function(require, exports, module) {
 			hide : function() {
 				this.el.modal('hide');
 			},
-			/**
-			 * 置于最前
-			 */
 			toFront : function() {
 				$('.modal-backdrop').css({
-							'zIndex' : this.zIndex++
+							'zIndex' : jqueryUtils.zIndex()
 						});
 				this.el.css({
-							'zIndex' : this.zIndex++
+							'zIndex' : jqueryUtils.zIndex()
 						});
 			},
 			beforeDestroy : function() {

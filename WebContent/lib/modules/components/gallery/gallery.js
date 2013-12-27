@@ -28,7 +28,7 @@
  * @event itemclick: function(Gallery g, Object item, String id, Boolean isAdd,
  *        Event e)
  * 
- * @description updated on 2013-12-26
+ * @description updated on 2013-12-27
  * 
  */
 define(function(require, exports, module) {
@@ -42,22 +42,36 @@ define(function(require, exports, module) {
 
 	var baseCls = 'yi-gallery';
 
-	function onLoadSuccess(data, textStatus, jqXHR) {
-		if (utils.isString(data)) {
-			data = $.parseJSON(data);
-		}
-
+	function onLoadSuccess(data, textStatus, jqXhr) {
+		var d = $.parseJSON(jqXhr.responseText);
 		var comp = Base.get(this.componentId);
 		if (comp) {
-			comp.add(data);
-			comp.trigger('load', comp, data);
+			comp.add(d);
+			comp.trigger('load', comp, d);
 		}
 
 		comp = null;
+		d = null;
 	}
 
-	function onMouseOver(e) {
+	function onClick(e) {
 		var $item = $(e.target).closest('.' + baseCls + '-item');
+		if ($item.size() > 0) {
+			var comp = Base.get(e.data.componentId);
+			if (comp) {
+				var id = $item.parent().data('itemId');
+
+				comp.clickItem(id, e);
+			}
+
+			comp = null;
+		}
+
+		$item = null;
+	}
+
+	function onItemMouseEnter(e) {
+		var $item = $(e.currentTarget);
 		if ($item.size() > 0) {
 			var comp = Base.get(e.data.componentId);
 			if (comp) {
@@ -72,30 +86,14 @@ define(function(require, exports, module) {
 		$item = null;
 	}
 
-	function onMouseOut(e) {
-		var $item = $(e.target).closest('.' + baseCls + '-item');
+	function onItemMouseLeave(e) {
+		var $item = $(e.currentTarget);
 		if ($item.size() > 0) {
 			var comp = Base.get(e.data.componentId);
 			if (comp) {
 				var id = $item.parent().data('itemId');
 
 				comp.outItem(id, e);
-			}
-
-			comp = null;
-		}
-
-		$item = null;
-	}
-
-	function onClick(e) {
-		var $item = $(e.target).closest('.' + baseCls + '-item');
-		if ($item.size() > 0) {
-			var comp = Base.get(e.data.componentId);
-			if (comp) {
-				var id = $item.parent().data('itemId');
-
-				comp.clickItem(id, e);
 			}
 
 			comp = null;
@@ -233,17 +231,12 @@ define(function(require, exports, module) {
 					this.el.addClass(this.baseCls + '-border');
 				}
 
-				this.wrap = $('<div class="' + this.baseCls
-						+ '-wrap row"></div>').appendTo(this.el);
-
-				var componentId = this.getId();
-				this.el.on('mousemove', {
-							componentId : componentId
-						}, onMouseOver).on('mouseout', {
-							componentId : componentId
-						}, onMouseOut).on('click', {
-							componentId : componentId
+				this.el.on('click', {
+							componentId : this.getId()
 						}, onClick);
+
+				this.list = $('<div class="' + this.baseCls
+						+ '-list row"></div>').appendTo(this.el);
 
 				if (this.hasAddItem) {
 					this.addAddItem();
@@ -344,7 +337,7 @@ define(function(require, exports, module) {
 
 				var $col = $('<div class="' + this.baseCls + '-col-add '
 						+ this.colCls + '"></div>').data('itemId', id)
-						.appendTo(this.wrap);
+						.appendTo(this.list);
 
 				this.addItem = {
 					id : id,
@@ -370,6 +363,14 @@ define(function(require, exports, module) {
 				if (this.cols.length == 0 && !this.responsive) {
 					item.el.width(this.itemWidth);
 				}
+
+				var componentId = this.getId();
+				item.el.on('mouseenter', {
+							componentId : componentId
+						}, onItemMouseEnter).on('mouseleave', {
+							componentId : componentId
+						}, onItemMouseLeave);
+
 				this.trigger('itemrender', this, item, id, item.isAdd);
 
 				// afteritemrender?
@@ -409,7 +410,7 @@ define(function(require, exports, module) {
 				$.ajax({
 							url : url,
 							data : params || null,
-							traditional : false,
+							traditional : true,
 							success : onLoadSuccess,
 							componentId : this.getId()
 						})
@@ -453,7 +454,7 @@ define(function(require, exports, module) {
 
 					var position;
 					if (utils.isNumber(index)) {
-						position = this.wrap.children('.' + this.baseCls
+						position = this.list.children('.' + this.baseCls
 								+ '-col').eq(index);
 					} else if (this.addItem) {
 						position = this.addItem.el.parent();
@@ -477,7 +478,7 @@ define(function(require, exports, module) {
 						if (position) {
 							$col.insertBefore(position);
 						} else {
-							$col.appendTo(this.wrap);
+							$col.appendTo(this.list);
 						}
 
 						var item = {
@@ -503,7 +504,7 @@ define(function(require, exports, module) {
 			remove : function(item) {
 				var id, $col, removeItem;
 				if (utils.isNumber(item)) {
-					$col = this.wrap.children('.' + this.baseCls + '-col')
+					$col = this.list.children('.' + this.baseCls + '-col')
 							.eq(item);
 					id = $col.data('itemId');
 					removeItem = this.getItem(id);
@@ -517,12 +518,13 @@ define(function(require, exports, module) {
 					id = item.id;
 				}
 
-				// if (removeItem.isAdd) {
-				// removeItem = null;
-				// $col = null;
-				//
-				// return;
-				// }
+				if (this.multiSelect) {
+					if (this.selectedItems && this.selectedItems[id]) {
+						delete this.selectedItems[id];
+					}
+				} else if (id == this.selectedItems) {
+					delete this.selectedItems;
+				}
 
 				if (removeItem) {
 					this.destroyItem(removeItem, id, removeItem.isAdd);
@@ -539,6 +541,9 @@ define(function(require, exports, module) {
 				if (this.trigger('beforeitemdestroy', this, item, id, isAdd) !== false) {
 					this.beforeItemDestroy(item, id, isAdd)// container?data?
 
+					// for ensuring
+					item.el.off('mouseenter', onItemMouseEnter).off(
+							'mouseleave', onItemMouseLeave);
 					delete item.el;
 
 					this.onItemDestroy(item, id, isAdd);// container?data?
@@ -564,7 +569,7 @@ define(function(require, exports, module) {
 				} else if (utils.isString(item)) {
 					return this.itemMap.get(item);
 				} else if (utils.isNumber(item)) {
-					return this.itemMap.get(this.wrap.children('.'
+					return this.itemMap.get(this.list.children('.'
 							+ this.baseCls + '-col').eq(item).data('itemId'));
 				} else {
 					return null;
@@ -627,10 +632,12 @@ define(function(require, exports, module) {
 					this.itemMap.clear();
 					delete this.itemMap;
 				}
-				if (this.wrap) {
-					this.wrap.remove();
-					delete this.wrap;
+				if (this.list) {
+					this.list.remove();
+					delete this.list;
 				}
+
+				this.el.off('click', onClick);
 
 				Gallery.superclass.beforeDestroy.call(this);
 			}
