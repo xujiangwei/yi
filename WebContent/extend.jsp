@@ -5,7 +5,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>API - 壹框</title>
+<title>扩展 - 壹框</title>
 <%=Stage.importStyles("lib/")%>
 <link href="assets/css/docs.css" rel="stylesheet">
 </head>
@@ -26,10 +26,11 @@
     <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
       <ul class="nav navbar-nav">
         <li><a href="getting-started.jsp">起步</a></li>
-        <li class="active"><a href="api.jsp">API</a></li>
+        <li><a href="css.jsp">层叠样式表</a></li>
         <li><a href="components.jsp">组件</a></li>
         <li><a href="modules.jsp">模组</a></li>
         <li><a href="utility-library.jsp">实用库</a></li>
+        <li class="active"><a href="extend.jsp">扩展</a></li>
       </ul>
     </nav>
   </div>
@@ -37,7 +38,7 @@
 
 <div class="bs-header" id="content">
   <div class="container">
-    <h1>API 文档</h1>
+    <h1>扩展</h1>
     <p>TODO</p>
   </div>
 </div>
@@ -48,13 +49,10 @@
       <div class="bs-sidebar hidden-print" role="complementary">
         <ul class="nav bs-sidenav">
           <li>
-            <a href="#component">用户界面组件</a>
+            <a href="#item">项目</a>
             <ul class="nav">
               <li><a href="#sub-item">子项目</a></li>
             </ul>
-          </li>
-          <li>
-            <a href="#open-api">开放接口</a>
           </li>
         </ul>
       </div>
@@ -63,17 +61,7 @@
     <div class="col-md-9" role="main">
       <div class="bs-docs-section">
         <div class="page-header">
-          <h1 id="component">用户界面组件</h1>
-        </div>
-        <p class="lead">TODO</p>
-
-        <h2 id="sub-item">子项目</h2>
-        <p>TODO</p>
-      </div>
-      
-      <div class="bs-docs-section">
-        <div class="page-header">
-          <h1 id="open-api">开放接口</h1>
+          <h1 id="item">项目</h1>
         </div>
         <p class="lead">TODO</p>
 

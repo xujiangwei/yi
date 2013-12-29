@@ -26,10 +26,11 @@
     <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
       <ul class="nav navbar-nav">
         <li><a href="getting-started.jsp">起步</a></li>
-        <li><a href="api.jsp">API</a></li>
+        <li><a href="css.jsp">层叠样式表</a></li>
         <li class="active"><a href="components.jsp">组件</a></li>
         <li><a href="modules.jsp">模组</a></li>
         <li><a href="utility-library.jsp">实用库</a></li>
+        <li><a href="extend.jsp">扩展</a></li>
       </ul>
     </nav>
   </div>

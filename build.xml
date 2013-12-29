@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<project name="Yi" default="all" basedir=".">
+
+	<property name="project-name" value="yi"/>
+	<property name="version" value="1.0.0"/>
+	<property name="src.dir" value="src"/>
+
+	<!-- doc directory -->
+	<property name="doc.dir" value="doc"/>
+
+	<property name="lib.dir" value="lib"/>
+	<property name="dist.dir" value="dist"/>
+	<property name="build.dir" value="build"/>
+	<property name="build.class.dir" value="${build.dir}/classes"/>  
+	<property name="web.dir" value="WebContent"/>
+	<property name="war.dir" value="war"/>
+
+	<!-- test directory -->
+	<property name="test.src.dir" value="test" />
+	<property name="test.class.dir" value="${build.dir}/test"/>
+	<property name="test.report.dir" value="${build.dir}/report"/>
+	<property name="test.report.html.dir" value="${build.dir}/report/html"/>
+
+	<!-- checkstyle configuration -->
+	<property name="checkstyle.config" value="checkstyle.xml"/>
+	<!-- <taskdef resource="checkstyletask.properties" classpath="${lib.dir}/checkstyle-all-5.5.jar"/> -->
+
+	<!-- make doc -->
+	<property name="javadoc.package" value="yi*"/>
+
+	<!-- classpath -->
+	<path id="main-classpath">
+		<fileset dir="${lib.dir}">
+			<include name="**/*.jar"/>
+		</fileset>
+	</path>
+	<path id="test-classpath" cache="true">
+		<path refid="main-classpath"/>
+		<pathelement location="${build.class.dir}"/>
+	</path>
+
+	<!-- all -->
+	<target name="all" depends="war,pack"/>
+
+	<!-- init target -->
+	<target name="init">
+		<mkdir dir="${build.dir}"/>
+		<mkdir dir="${build.class.dir}"/>
+		<mkdir dir="${dist.dir}"/>
+		<mkdir dir="${war.dir}"/>
+		<tstamp/>
+		<echo message="begin ant task at : ${DSTAMP}${TSTAMP}"></echo>
+	</target>
+
+	<!-- compile -->
+	<target name="compile" depends="init">
+		<mkdir dir="${build.class.dir}"/>
+
+		<javac destdir="${build.class.dir}" includeantruntime="on" deprecation="on">
+			<src path="${src.dir}"/>
+			<classpath refid="main-classpath"/>
+		</javac>
+	</target>
+
+    <!-- jar -->
+	<target name="jar" depends="compile">
+		<jar jarfile="${dist.dir}/${project-name}-${version}-${DSTAMP}${TSTAMP}.jar" basedir="${build.class.dir}">
+			<include name="**/*.class"/>
+		</jar>
+	</target>
+
+	<!-- war -->
+	<target name="war" depends="jar">
+		<!-- copy files -->
+		<copy todir="${war.dir}">
+			<fileset dir="${web.dir}">
+				<include name="**/*.css"/>
+				<include name="**/*.js"/>
+				<include name="**/*.jsp"/>
+				<include name="**/*.png"/>
+				<include name="**/*.jpg"/>
+				<include name="**/*.jpeg"/>
+				<include name="**/*.gif"/>
+				<include name="**/*.eof"/>
+				<include name="**/*.svg"/>
+				<include name="**/*.ttf"/>
+				<include name="**/*.woff"/>
+				<include name="**/*.cmd"/>
+				<include name="**/*.xml"/>
+				<exclude name="copy2github*"/>
+			</fileset>
+		</copy>
+		<!-- copy jar -->
+		<copy todir="${war.dir}/WEB-INF/lib">
+			<fileset dir="${dist.dir}">
+				<include name="*.jar"/>
+			</fileset>
+		</copy>
+		<war destfile="${dist.dir}/yi.war" webxml="${war.dir}/WEB-INF/web.xml">
+			<fileset dir="${war.dir}"/>
+		</war>
+	</target>
+
+	<!-- pack -->
+	<target name="pack">
+		<tstamp/>
+		<zip destfile="${dist.dir}/${project-name}-${version}-${DSTAMP}.zip">
+			<fileset dir="${war.dir}">
+				<include name="assets/**"/>
+				<include name="debugger/**"/>
+				<include name="lib/**"/>
+				<include name="modules/**"/>
+				<include name="WEB-INF/**"/>
+			</fileset>
+			<fileset dir="." includes="readme.txt"/>
+		</zip>
+	</target>
+
+	<!-- javadoc -->
+	<!--
+	<target name="doc" depends="init">
+		<mkdir dir="${doc.dir}"/>
+		<mkdir dir="${doc.api.dir}"/>
+
+		<javadoc packagenames="${javadoc.package}" sourcepath="${src.dir}" private="yes" defaultexcludes="yes" destdir="${doc.api.dir}">
+			<classpath refid="main-classpath"/>
+		</javadoc>
+	</target>
+	-->
+
+	<!-- compile junit test -->
+	<target name="compile-test" depends="compile">
+		<mkdir dir="${test.class.dir}"/>
+
+		<javac destdir="${test.class.dir}" includeantruntime="on" deprecation="on">
+			<src path="${test.src.dir}"/>
+			<classpath refid="test-classpath"/>
+		</javac>
+	</target>
+
+	<!-- checkstyle -->
+	<target name="checkstyle" depends="init">
+		<checkstyle config="${checkstyle.config}">
+			<fileset dir="${src.dir}" includes="**/*.java"/>
+			<formatter type="plain"/>
+			<formatter type="xml" toFile="${dist.dir}/checkstyle_errors.xml"/>
+		</checkstyle>
+	</target>
+
+	<!-- run junit -->
+	<target name="test" depends="compile-test">
+		<mkdir dir="${test.report.dir}"/>
+		<mkdir dir="${test.report.html.dir}"/>
+		<junit printsummary="yes" haltonfailure="yes">
+			<classpath refid="test-classpath"/>
+			<formatter type="plain"/>
+			<!-- test name="com.TestClassTest" haltonfailure="no" outfile="result"/ -->
+			<batchtest todir="${test.report.dir}">
+				<fileset dir="${test.class.dir}" includes="**/Test*.class" />
+			</batchtest>
+		</junit>
+		<junitreport todir="${test.report.dir}">
+			<fileset dir="${test.report.dir}">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report format="frames" todir="${test.report.html.dir}" />
+		</junitreport>
+	</target>  
+
+	<!-- clean -->
+	<target name="clean">
+		<delete dir="${build.dir}"/>
+	</target>  
+
+    <!-- clean dist -->
+	<target name="cleanall" depends="clean">
+		<delete dir="${dist.dir}"/>
+		<delete dir="${war.dir}"/>
+	</target>
+</project>

@@ -56,7 +56,7 @@ Yi.prototype.config = function(relativePath, addition, excluded) {
 	this.relativePath = relativePath;
 	this.mod.context = relativePath;
 
-	var alias = (addition !== undefined) ? addition : {};
+	var alias = (addition !== undefined && null != addition) ? addition : {};
 	alias["class"] = "utils/class.js";						// 辅助构建 JS 对象关系
 	alias["utils"] = "utils/utils.js";						// 实用函数库
 	alias["map"] = "utils/hashmap.js";						// 实用 Map 实现
