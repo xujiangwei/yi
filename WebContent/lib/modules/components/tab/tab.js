@@ -3,303 +3,454 @@
  * 
  * @author dengfenfen, dengfenfen@dhcc.com.cn, 2013-12-11
  * 
- * @requires utils, extend, component
+ * @requires utils, Map, extend, component
  * 
- * @method void setActive(Number index)
- * @method void setTitle(Object option)
- * @method void loadTabContent(Object option)
- * @method void add(Object option)
- * @method void remove(Number index)
- * @method Object getTab(Number index)
+ * @method void add(Object/Array items, Number index)
+ * @method void remove(Object/String/Number item)
+ * @method void setActive(Object/String/Number item)
+ * @method void setTitle(Object/String/Number item, String title)
+ * @method Object getItem(String/Number/Object item)
  * 
- * @event beforetabchange function(Tab t, Number activeIndex)
- * @event tabchange function(Tab t, Number activeIndex, Number lastActiveIndex)
- * @event add function(Tab t, Object item)
- * @event remove function(Tab t, Object item)
+ * @event beforeadd: function(Tab t, Object item)
+ * @event add: function(Tab t, Object item)
+ * @event beforeremove: function(Tab t, Object item)
+ * @event remove: function(Tab t, Object item)
+ * @event beforetabchange: function(Tab t, Object activeTab, Object
+ *        lastActiveTab)
+ * @event tabchange: function(Tab t, Object activeTab, Object lastActiveTab)
+ * @event activate: function(Tab t, Object activeTab)
+ * @event addbuttonclick: function(Tab t, jqObject addButton, Event e)
  * 
- * @description updated on 2013-12-25
+ * @description updated on 2013-12-31
  * 
  */
 define(function(require, exports, module) {
-	'require:nomunge,exports:nomunge,module:nomunge';
+	'require:nomunge,exports:nomunge,moduleactivate:nomunge';
 
+	require('./tab.css');
 	var utils = require('utils');
+	var Map = require('map');
 	var extend = require('extend');
 	var Base = require('component');
+	var PageLoader = require('page-loader');
+
+	var baseCls = 'yi-tab';
+
+	function onClick(e) {
+		var $header = $(e.target).closest('.' + baseCls + '-header');
+		if ($header.size() > 0) {
+			var comp = Base.get(e.data.componentId);
+			if (comp) {
+				if ($header.hasClass(baseCls + '-header-add')) {
+					comp.trigger('addbuttonclick', this, $header, e)
+				} else {
+					comp.clickItem($header, e);
+				}
+			}
+
+			comp = null;
+		}
+
+		$header = null;
+	}
+
+	function onMouseOver(e) {
+		var $header = $(e.target).closest('.' + baseCls + '-header');
+		if ($header.size() > 0 && !$header.hasClass(baseCls + '-header-add')) {
+			var $removeButton = $header.children('.' + baseCls + '-remove-btn');
+			if ($removeButton.size() > 0) {
+				$removeButton.show();
+			}
+
+			$removeButton = null;
+		}
+
+		$header = null;
+	}
+
+	function onMouseOut(e) {
+		var $header = $(e.target).closest('.' + baseCls + '-header');
+		if ($header.size() > 0 && !$header.hasClass(baseCls + '-header-add')) {
+			var $removeButton = $header.children('.' + baseCls + '-remove-btn');
+			if ($removeButton.size() > 0) {
+				$removeButton.hide();
+			}
+
+			$removeButton = null;
+		}
+
+		$header = null;
+	}
 
 	(function() {
 		var Tab = extend(Base, {
-			baseCls : 'yi-tab',
+			baseCls : baseCls,
+
+			// TODO baseHtml
+
 			/**
 			 * @cfg activeIndex Number
 			 * 
 			 * 初始化时激活的标签序号，从0开始计数，默认激活第0项
 			 */
 			activeIndex : 0,
+
+			/**
+			 * @cfg hasAddButton Boolean
+			 * 
+			 * 是否有'添加'按钮
+			 */
+
+			/**
+			 * @cfg defaultTitle String
+			 * 
+			 * item中找不到title属性则使用它作为标题
+			 */
 			defaultTitle : 'new tab',
+
+			initComponent : function() {
+				Tab.superclass.initComponent.call(this);
+
+				this.addEvents('beforetabchange',
+
+						'tabchange',
+
+						'activate',
+
+						'add',
+
+						'remove');
+			},
 			afterRender : function(parent) {
 				Tab.superclass.afterRender.call(this, parent);
+
 				var id = this.getId();
-				this.el.data('cmpId', id);
-				this.headers = this.el.children('.' + this.baseCls + '-nav');
-				this.tabs = this.el.children('.' + this.baseCls + '-content');
-				this.tab = this.tabs.children();
-				this.header = this.headers.children().addClass(this.baseCls
+				this.nav = this.el.children('.' + this.baseCls + '-nav').on(
+						'click', {
+							componentId : id
+						}, onClick).on('mouseover', {
+							componentId : id
+						}, onMouseOver).on('mouseout', {
+							componentId : id
+						}, onMouseOut);
+				this.headers = this.nav.children().addClass(this.baseCls
 						+ '-header');
 
-				this.headers.on('click', {
-							cmpId : id
-						}, this.onTitleClick).on('mouseover', {
-							cmpId : id
-						}, this.showRemoveBtn).on('mouseleave', {
-							cmpId : id
-						}, this.hideDeleteBtn);
+				this.content = this.el
+						.children('.' + this.baseCls + '-content');
+				this.tabs = this.content.children();
 
-				this.items = this.items || [];
-				this.add(this.items, true);
+				if (this.hasAddButton) {
+					this.addAddButton();
+				}
+
+				if (this.items) {
+					this.add(this.items);
+					delete this.items;
+				}
+
 				this.setActive(this.activeIndex);
+			},
+			addAddButton : function() {
+				this.addButton = $('<li class="'
+						+ this.baseCls
+						+ '-header '
+						+ this.baseCls
+						+ '-header-add"><a><span class="glyphicon glyphicon-plus"></span></a></li>')
+						.appendTo(this.nav);
+			},
+			/**
+			 * 添加标签页
+			 * 
+			 * @argument
+			 * 
+			 * 1、items Object/Array 1)title String: 标签页的标题 2)closable Boolean:
+			 * 标签页是否可关闭 3)url String: 标签页会加载页面 4)params Object: 加载页面时的额外参数
+			 * 5)async Boolean: 是否异步加载页面 6)loadScripts Boolean: 是否处理加载页面中的脚步
+			 * 7)html String:标签页中会加入html代码
+			 * 
+			 * 2、index Number: 插入UI中的位置（从0开始）
+			 */
+			add : function(items, index) {
+				if (!this.itemMap) {
+					this.initItems();
+				}
 
-				$a = null;
-			},
-			showRemoveBtn : function(e) {
-				var cmp = Base.get(e.data.cmpId), $target = $(e.target), targetCls = cmp.baseCls
-						+ '-header', $li = $target.parentsUntil('.'
-								+ cmp.baseCls, '.' + targetCls);
-				if ($target.hasClass(targetCls)) {
-					$li = $target;
+				var $prevHeader, $prevTab;
+				if (utils.isNumber(index)) {
+					$prevHeader = this.headers.eq(index);
+					$prevTab = this.tabs.eq(index);
+				} else if (this.addButton) {
+					$prevHeader = this.addButton;
 				}
-				$('.' + cmp.baseCls + '-header-remove', cmp.el).hide();
-				if ($li.data('item') && true === $li.data('item').closable) {
-					$li.children('.' + cmp.baseCls + '-header-remove').show();
-				}
-				$target = null;
-				$li = null;
-				cmp = null;
-			},
-			hideDeleteBtn : function(e) {
-				var cmp = Base.get(e.data.cmpId);
-				$('.' + cmp.baseCls + '-header-remove', cmp.el).hide();
-				cmp = null;
-			},
-			onTitleClick : function(e) {
-				var $target = $(e.target), cmp = Base.get(e.data.cmpId);
-				if ($target.hasClass('yi-tab-nav')) {
-					$target = null;
-					return;
-				}
-				var $li = $target.parentsUntil('.yi-tab-nav', '.yi-tab-header');
-				if ($li.size() == 0) {
-					$li = $target;
-				}
-				var index = $li.index();
-				// 删除标签页
-				if ($target.hasClass(cmp.baseCls + '-header-remove')) {
-					cmp.remove(index);
-				}
-				// 添加标签页
-				else if ($target.parentsUntil('.yi-tab-nav',
-						'.yi-tab-title-add').size() > 0
-						|| $target.hasClass('yi-tab-title-add')) {
-					cmp.onAddTab && cmp.onAddTab.call(cmp)
-				}
-				// 激活标签页
-				else if ((($target
-						.parentsUntil('.yi-tab-nav', '.yi-tab-header').size() > 0 || $target
-						.hasClass(cmp.baseCls + '-header')))
-						&& !$li.hasClass('active')) {
-					cmp.setActive(index);
-				}
-				$li = null;
-				$target = null;
-			},
-			onAddTab : utils.emptyFn,
-			/**
-			 * @description 获取tab对象
-			 * @param index
-			 *            Number : tab的序号
-			 */
-			getTab : function(index) {
-				return this.items[index];
-			},
-			/**
-			 * @description 添加标签页
-			 * @param items
-			 *            [{item},{item},] or {item} item的属性：1)title String:
-			 *            标签页的标题 2)closable Boolean: 标签页是否可关闭,默认不可关闭 3)url
-			 *            String 或者 html String:标签页内容 4)beforeDestory: Function
-			 *            删除标签页前的处理 5)afterDestroy: Function 删除标签页后的处理
-			 *            6)afterLoad Function:标签页内容加载完之后执行的函数 7)isAdd:Boolean:
-			 *            判断是否是‘添加’按钮
-			 */
-			add : function(items, init) {
+
 				// 确保items是个数组
 				items = [].concat(items);
-				if (true !== init) {
-					this.items = this.items.concat(items);
-				}
-				var i, len = items.length, baseCls = this.baseCls, addItem;
+				var i, len = items.length, addedItems = [];
 				for (i = 0; i < len; i++) {
 					var item = items[i];
-					url = item.url || '';
-					item.closable = item.closable === true;
-					var $header = $('<li class="' + baseCls + '-header"><a>'
-							+ (item.title || this.defaultTitle)
-							+ '</a><span class="glyphicon glyphicon-remove '
-							+ baseCls + '-header-remove"></span></li>');
-					var $tab = $('<div tabid="'
-							+ (item[this.identifier] || item.id || '')
-							+ '" class="row yi-tab-item tab-pane fade"></div>');
-					item.el = $tab;
-					var $addHeader = $('.' + baseCls + '-title-add', this.el);
-					var $addTab = this.tab.eq($addHeader.index());
-					// 是否是添加按钮
-					if (true === item.isAdd) {
-						item.closable = false;
-						item.url = '';
-						item.html = '';
-						item.beforeDestory = utils.emptyFn;
-						item.afterDestroy = utils.emptyFn;
-						item.afterLoad = utils.emptyFn;
-						$header = $('<li class="'
-								+ baseCls
-								+ '-header '
-								+ baseCls
-								+ '-title-add"><a><span class="glyphicon glyphicon-plus"></span></a></li>');
-						addItem = this.items.splice(i, 1);
 
+					var id = item.id;
+					if (this.itemMap.containsKey(id)) {
+						continue;
 					}
-					if ($addHeader.size() > 0) {
-						$header.insertBefore($addHeader);
-						$tab.insertBefore($addTab);
-					} else {
-						$header.appendTo(this.headers);
-						$tab.appendTo(this.tabs);
+
+					if (this.trigger('beforeadd', this, item) !== false) {
+						var c = new PageLoader(item);
+						id = c.getId();
+						this.itemMap.put(id, c);
+						addedItems.push(c);
+
+						var $header = $('<li class="'
+								+ this.baseCls
+								+ '-header"><a>'
+								+ (item.title || this.defaultTitle)
+								+ '</a>'
+								+ (item.closable
+										? '<span class="glyphicon glyphicon-remove '
+												+ this.baseCls
+												+ '-remove-btn"></span>'
+										: '') + '</li>').data('itemId', id);
+						if ($prevHeader) {
+							$header.insertBefore($prevHeader);
+						} else {
+							$header.appendTo(this.nav);
+						}
+						c.headerEl = $header;
+
+						var $tab = $('<div class="yi-tab-item tab-pane fade"></div>');
+						if ($prevTab) {
+							$tab.insertBefore($prevTab);
+						} else {
+							$tab.appendTo(this.content);
+						}
+						c.render($tab);
+
+						this.refresh();
+
+						this.trigger('add', this, c);
+
+						$header = null;
+						$tab = null;
 					}
-					$tab.hide();
-					$header.data('item', item);
-					$tab.data('item', item);
-
-					this.refresh();
-
-					var index = $header.index();
-
-					this.loadTabContent({
-								index : index,
-								url : url,
-								html : item.html || ''
-							});
 				}
-				$header = null;
-				$tab = null;
-				$addHeader = null;
-				$addTab = null;
-			},
-			/**
-			 * @description 标签页加载内容 option 1)index Number:标签页的index 2)url
-			 *              String: 请求的地址 或者 4)html String: 标签页的内容 5)params
-			 *              Object: 额外的数据
-			 */
-			loadTabContent : function(option) {
-				var $item = this.tab.eq(option.index);
-				if (option.url && '' != option.url) {
-					$item.load(option.url, option.params, this.doItemLoad);
-				} else {
-					$item.html(option.html);
-					this.afterItemLoad.call(this, $item);
-				}
-				$item = null;
-			},
-			doItemLoad : function(responseText, textStatus, xhr) {
-				var cmp = Base.get($(this).parents('.yi-tab').data('cmpId'));
-				var $item = $(this);
-				var item = $item.data('item');
-				cmp.afterItemLoad.call(cmp, $item, item);
-				$item = null;
-			},
-			afterItemLoad : function($item) {
-				var item = $item.data('item');
-				var afterLoad = item && item.afterLoad;
-				afterLoad && afterLoad.call(item, this);
-				this.trigger('add', this, item);
-			},
 
-			/**
-			 * @description 删除标签页
-			 * @param index
-			 *            Number 标签页的序号
-			 */
-			remove : function(index) {
-				var $item = this.header.eq(index), $tab = this.tab.eq(index), item = $tab
-						.data('item'), afterDestroy = item.afterDestroy, beforeDestroy = item.beforeDestroy;
-				if (false !== (beforeDestroy && beforeDestroy.call(item, this))) {
-					delete item.el;
-					$item.removeData('item');
-					$tab.removeData('item');
-					this.items.splice(index, 1);
-					$item.remove();
-					$tab.remove();
-					this.trigger('remove', this, item);
-					this.refresh();
-					afterDestroy && afterDestroy.call(item, this);
-				}
-				$item = null;
-				$tab = null;
+				$prevTab = null;
+				$prevHeader = null;
+
+				return addedItems;
+			},
+			initItems : function() {
+				this.itemMap = new Map();
 			},
 			refresh : function() {
-				this.tab = this.tabs.children();
-				this.header = this.headers.children();
+				this.headers = this.nav.children().not('.' + this.baseCls
+						+ '-header-add');
+				this.tabs = this.content.children();
+			},
+			/**
+			 * 删除标签页
+			 * 
+			 * @argument item Object/String/Number
+			 *           参数可以是item对象、唯一标识或者UI中的位置（从0开始）
+			 */
+			remove : function(item) {
+				var id, $header, $tab, ri;
+				if (utils.isObject(item)) {
+					ri = item
+					id = item.id;
+					$header = ri.headerEl;
+					$tab = ri.el.parent();
+				} else if (utils.isString(item)) {
+					id = item;
+					ri = this.itemMap.get(item);
+					$header = ri.headerEl;
+					$tab = ri.el.parent();
+				} else if (utils.isNumber(item)) {
+					$header = this.headers.eq(item);
+					id = $header.data('itemId');
+					ri = this.itemMap.get(id);
+					$tab = ri.el.parent();
+				}
+
+				if (ri && this.trigger('beforeremove', this, ri) !== false) {
+					var ai;
+					if (ri == this.activeTab) {
+						ai = $header.prev();
+						if (ai.size() == 0) {
+							ai = $header.next();
+						}
+						if (ai.size() > 0) {
+							ai = ai.data('itemId');
+						}
+						ai = undefined;
+					}
+
+					delete ri.headerEl;
+					ri.destroy();
+
+					if ($tab.size() > 0) {
+						$tab.remove();
+					}
+					if ($header.size() > 0) {
+						$header.remove();
+					}
+
+					this.itemMap.remove(id);
+
+					this.refresh();
+
+					this.trigger('remove', this, ri);
+
+					if (ai) {
+						this.setActive(ai);
+					}
+
+					ai = null;
+				}
+
+				ri = null;
+				$tab = null;
+				$header = null;
 			},
 			/**
 			 * 激活某一标签页
+			 * 
+			 * @argument item Object/String/Number
+			 *           参数可以是item对象、唯一标识或者UI中的位置（从0开始）
 			 */
-			setActive : function(index) {
-				var item = this.items[index], $tab = item.el;
-				if (false !== this.trigger('beforetabchange', this, index)) {
-					var activeCls = 'in active';
-					this.header.removeClass(activeCls);
-					this.tab.removeClass(activeCls).hide();
-					this.header.eq(index).addClass(activeCls);
-					$tab.addClass(activeCls).show();
-					this.lastActiveIndex = this.activeIndex;
-					this.activeIndex = index;
-					this
-							.trigger('tabchange', this, index,
-									this.lastActiveIndex);
+			setActive : function(item) {
+				var id, $header, $tab, ai;
+				if (utils.isObject(item)) {
+					ai = item;
+					id = item.id;
+					$header = ai.headerEl;
+					$tab = ai.el.parent();
+				} else if (utils.isString(item)) {
+					id = item;
+					ai = this.itemMap.get(item);
+					$header = ai.headerEl;
+					$tab = ai.el.parent();
+				} else if (utils.isNumber(item)) {
+					$header = this.headers.eq(item);
+					id = $header.data('itemId');
+					ai = this.itemMap.get(id);
+					$tab = ai.el.parent();
 				}
+
+				if (false !== this.trigger('beforetabchange', this, ai,
+						this.activeTab)) {
+					var activeCls = 'in active';
+					this.headers.removeClass(activeCls);
+					this.tabs.removeClass(activeCls).hide();
+					$header.addClass(activeCls);
+					$tab.addClass(activeCls).show();
+
+					if (this.activeTab != ai) {
+						this.trigger('tabchange', this, ai, this.activeTab);
+					}
+
+					this.trigger('activate', this, ai);
+
+					this.activeTab = ai
+				}
+
+				ai = null;
 				$tab = null;
+				$header = null;
+			},
+			clickItem : function(headerEl, e) {
+				var id = headerEl.data('itemId');
+				// 删除标签页
+				if (headerEl.hasClass(baseCls + '-header-remove')) {
+					this.remove(id);
+				}
+				// 激活标签页
+				else if (!headerEl.hasClass('active')) {
+					this.setActive(id);
+				}
 			},
 			/**
-			 * @description 设置标签的名称
-			 * @param option
-			 *            1) index 标签页的序号 2) title String: 标签页的标题
+			 * 获取tab对象
+			 * 
+			 * @argument item String/Number/Object
+			 *           参数可以是item对象、唯一标识或者UI中的位置（从0开始）
 			 */
-			setTitle : function(option) {
-				this.header.eq(option.index).children('a').html(option.title
-						|| '');
+			getItem : function(item) {
+				if (utils.isString(item)) {
+					return this.itemMap.get(item);
+				} else if (utils.isNumber(item)) {
+					return this.itemMap.get(this.headers.eq(item)
+							.data('itemId'));
+				} else if (utils.isObject(item)) {
+					return item;
+				} else {
+					return null;
+				}
+			},
+			/**
+			 * 设置标签的文字
+			 * 
+			 * @argument
+			 * 
+			 * 1、item Object/String/Number 参数可以是item对象、唯一标识或者UI中的位置（从0开始）
+			 * 
+			 * 2、title String: 新的标题
+			 */
+			setTitle : function(item, title) {
+				var headerEl;
+				if (utils.isObject(item)) {
+					headerEl = item.headerEl;
+				} else if (utils.isString(item)) {
+					headerEl = this.itemMap.get(item).headerEl;
+				} else if (utils.isNumber(item)) {
+					headerEl = this.headers.eq(item);
+				}
+				if (headerEl) {
+					headerEl.children('a').html(title || '');
+				}
 			},
 			beforeDestory : function() {
+				delete this.activeTab;
+
+				if (this.addButton) {
+					this.addButton.remove();
+					delete this.addButton;
+				}
+
+				if (this.itemMap && !this.itemMap.isEmpty()) {
+					var K = this.itemMap.keySet(), i, len = K.length;
+					for (i = 0; i < len; i++) {
+						if (this.itemMap.containsKey(K[i])) {
+							this.remove(K[i]);
+						}
+					}
+				}
+				if (this.itemMap) {
+					this.itemMap.clear();
+					delete this.itemMap;
+				}
+
 				if (this.headers) {
 					this.headers.remove();
 					delete this.headers;
+				}
+				if (this.nav) {
+					// for ensuring
+					this.nav.off('click', onClick)
+							.off('mouseover', onMouseOver).off('mouseout',
+									onMouseOut).remove();
+					delete this.nav;
 				}
 				if (this.tabs) {
 					this.tabs.remove();
 					delete this.tabs;
 				}
-				if (this.header) {
-					this.header.remove();
-					delete this.header;
+				if (this.content) {
+					this.content.remove();
+					delete this.content;
 				}
-				if (this.tab) {
-					this.tab.remove();
-					delete this.tab;
-				}
-				if (this.activeIndex) {
-					delete this.activeIndex;
-				}
-				if (this.items) {
-					delete this.items;
-				}
+
 				Tab.superclass.beforeDestory.call(this);
 			}
 		});

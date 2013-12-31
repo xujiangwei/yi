@@ -183,11 +183,12 @@ define(function(/* require */) {
 		U.each = each;
 	}());
 
+	/*
+	 * id 产生器
+	 */
 	(function() {
 		var AUTO_ID = 0, PREFIX = 'yi';
-		/*
-		 * id 产生器
-		 */
+
 		function id(prefix) {
 			return (prefix || PREFIX) + '_' + (AUTO_ID++);
 		}
@@ -242,8 +243,26 @@ define(function(/* require */) {
 			return undefined;
 		}
 
-		U.getNumberOfPixelString = getNumberOfPixelString;
-		U.parseNumberToPixelString = parseNumberToPixelString;
+		U.apply(U, {
+					getNumberOfPixelString : getNumberOfPixelString,
+					parseNumberToPixelString : parseNumberToPixelString
+				});
+	}());
+
+	/*
+	 * 如果一个字符串的长度小于指定的值,则在字符串的左侧(也就是前面)用指定的字符填充,直到字符串长度达到最小值
+	 */
+	(function() {
+		function leftPad(string, size, character) {
+			var result = String(string);
+			character = character || ' ';
+			while (result.length < size) {
+				result = character + result;
+			}
+			return result;
+		}
+
+		U.leftPad = leftPad;
 	}());
 
 	// 

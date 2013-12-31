@@ -1,15 +1,20 @@
-.yi-tab-content {
-	
+.yi-tab-item {
+	display: none;
 }
 
-.yi-tab-title-add-btn {
+.yi-tab-header {
 	cursor: pointer;
 }
 
-.yi-tab-header-remove {
+.yi-tab-header-add {
+	color: #428bca;
+}
+
+.yi-tab-remove-btn {
+	display: none;
 	position: absolute;
 	right: 4px;
 	top: 2px;
-	display: none;
+	color: #428bca;
 	cursor: pointer;
 }

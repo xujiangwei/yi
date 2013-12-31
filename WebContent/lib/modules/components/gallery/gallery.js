@@ -7,10 +7,11 @@
  * 
  * @requires utils, map, extend, component
  * 
- * @method void load(Object option)
+ * @method void load(Object option, Boolean append)
  * @method void clear()
  * @method void add(Object/Array items)
  * @method void remove(Object/String/Number item)
+ * @method void select(Object/String/Number/Array items, Boolean keep)
  * @method Array getSelectedItems()
  * @method Object getItem(String/Number/Object item)
  * @method Object getItemData(String/Object item)
@@ -18,17 +19,17 @@
  * 
  * @event load: function(Gallery g, Object/Array data)
  * @event itemrender: function(Gallery g, Object item, String id, Boolean isAdd)
- * @event beforeitemdestroy:function(Gallery g, Object item, String id, Boolean
- *        isAdd)
- * @event itemdestroy:function(Gallery g, Object item, String id, Boolean isAdd)
  * @event itemmouseover: function(Gallery g, Object item, String id, Boolean
  *        isAdd, Event e)
  * @event itemmouseout: function(Gallery g, Object item, String id, Boolean
  *        isAdd, Event e)
  * @event itemclick: function(Gallery g, Object item, String id, Boolean isAdd,
  *        Event e)
+ * @event beforeitemdestroy:function(Gallery g, Object item, String id, Boolean
+ *        isAdd)
+ * @event itemdestroy:function(Gallery g, Object item, String id, Boolean isAdd)
  * 
- * @description updated on 2013-12-27
+ * @description updated on 2013-12-31
  * 
  */
 define(function(require, exports, module) {
@@ -148,6 +149,12 @@ define(function(require, exports, module) {
 			 * @cfg hasAddItem Boolean
 			 * 
 			 * 是否包含一个用于创建的item
+			 */
+
+			/**
+			 * @cfg addItemFront Boolean
+			 * 
+			 * 用于创建的item是否总在前面
 			 */
 
 			/**
@@ -286,37 +293,21 @@ define(function(require, exports, module) {
 			clickItem : function(id, e) {
 				var item = this.getItem(id);
 				if (item) {
-					var selected = [], unselected = [];
-
 					if (!item.isAdd) {
 						if (this.multiSelect) {
 							if (!this.selectedItems) {
 								this.selectedItems = {};
 							}
 							if (this.selectedItems[id]) {
-								unselected.push(id);
 								delete this.selectedItems[id];
 							} else {
-								selected.push(id);
 								this.selectedItems[id] = id;
 							}
 						} else {
-							if (this.selectedItems) {
-								unselected.push(this.selectedItems);
-							}
 							this.selectedItems = id;
-							selected.push(id);
 						}
-					}
 
-					var i, j, len = selected.length, ulen = unselected.length;
-					for (j = 0; j < ulen; j++) {
-						this.getItem(unselected[j]).el.removeClass(this.baseCls
-								+ '-item-selected');
-					}
-					for (i = 0; i < len; i++) {
-						this.getItem(selected[i]).el.addClass(this.baseCls
-								+ '-item-selected');
+						this.doSelect();
 					}
 
 					this.trigger('itemclick', this, item, id, item.isAdd, e);
@@ -383,13 +374,17 @@ define(function(require, exports, module) {
 			/**
 			 * (重新)加载数据
 			 * 
-			 * @argument option {} 1)data Array: 静态数据 2)dataUrl String: 数据的Url
-			 *           3) params Object: 额外的参数 4)append Boolean: 是否追加数据
+			 * @argument
+			 * 
+			 * 1、option {} 1)data Array: 静态数据 2)dataUrl String: 数据的Url 3) params
+			 * Object: 额外的参数
+			 * 
+			 * 2、append Boolean: 是否追加数据
 			 */
-			load : function(option) {
+			load : function(option, append) {
 				if (this.rendered) {
 					option = option || {};
-					if (option.append !== true) {
+					if (!append) {
 						this.clear();
 					}
 
@@ -437,63 +432,62 @@ define(function(require, exports, module) {
 			/**
 			 * 渲染列表，默认保留旧数据
 			 * 
-			 * @argument 1)data Array/Object: 待添加的列表数组或对象 2)index Number:
+			 * @argument 1)data Object/Array: 待添加的列表数组或对象 2)index Number:
 			 *           插入UI中的位置（从0开始）
 			 */
 			add : function(data, index) {
-				if (utils.isObject(data)) {
-					data = [data];
+				if (!this.dataMap) {
+					this.initData();
 				}
-				if (utils.isArray(data)) {
-					if (!this.dataMap) {
-						this.initData();
-					}
-					if (!this.itemMap) {
-						this.initItems();
-					}
+				if (!this.itemMap) {
+					this.initItems();
+				}
 
-					var position;
-					if (utils.isNumber(index)) {
-						position = this.list.children('.' + this.baseCls
-								+ '-col').eq(index);
-					} else if (this.addItem) {
+				var position;
+				if (utils.isNumber(index)) {
+					position = this.list.children('.' + this.baseCls + '-col')
+							.eq(index);
+				} else if (this.addItem) {
+					if (!this.addItemFront) {
 						position = this.addItem.el.parent();
 					}
+				}
 
-					var i, len = data.length;
-					for (i = 0; i < len; i++) {
-						var d = data[i];
+				// 确保items是个数组
+				data = [].concat(data);
+				var i, len = data.length;
+				for (i = 0; i < len; i++) {
+					var d = data[i];
 
-						var id = d[this.identifier];
-						if (!id) {
-							id = utils.id();
-						}
-						if (this.dataMap.containsKey(id)) {
-							continue;
-						}
-						this.dataMap.put(id, d);
+					var id = d[this.identifier];
+					if (!id) {
+						id = utils.id();
+					}
+					if (this.dataMap.containsKey(id)) {
+						continue;
+					}
+					this.dataMap.put(id, d);
 
-						var $col = $('<div class="' + this.colCls + '"></div>')
-								.data('itemId', id);
-						if (position) {
-							$col.insertBefore(position);
-						} else {
-							$col.appendTo(this.list);
-						}
-
-						var item = {
-							id : id
-						};
-						this.itemMap.put(id, item);
-
-						this.renderItem(item, $col, id, d);
-
-						item = null;
-						$col = null;
+					var $col = $('<div class="' + this.colCls + '"></div>')
+							.data('itemId', id);
+					if (position) {
+						$col.insertBefore(position);
+					} else {
+						$col.appendTo(this.list);
 					}
 
-					position = null;
+					var item = {
+						id : id
+					};
+					this.itemMap.put(id, item);
+
+					this.renderItem(item, $col, id, d);
+
+					item = null;
+					$col = null;
 				}
+
+				position = null;
 			},
 			/**
 			 * 删除列表项
@@ -502,21 +496,23 @@ define(function(require, exports, module) {
 			 *           参数可以是item对象、唯一标识或者UI中的位置（从0开始）
 			 */
 			remove : function(item) {
-				var id, $col, removeItem;
-				if (utils.isNumber(item)) {
+				var id, $col, ri;
+				if (utils.isObject(item)) {
+					ri = item;
+					id = item.id;
+					$col = ri.el.parent();
+				} else if (utils.isString(item)) {
+					id = item;
+					ri = this.getItem(id);
+					$col = ri.el.parent();
+				} else if (utils.isNumber(item)) {
 					$col = this.list.children('.' + this.baseCls + '-col')
 							.eq(item);
 					id = $col.data('itemId');
-					removeItem = this.getItem(id);
-				} else if (utils.isString(item)) {
-					id = item;
-					removeItem = this.getItem(id);
-					$col = removeItem.el.parent();
-				} else if (utils.isObject(item)) {
-					removeItem = item;
-					$col = removeItem.el.parent();
-					id = item.id;
+					ri = this.getItem(id);
 				}
+
+				// beforeadd?
 
 				if (this.multiSelect) {
 					if (this.selectedItems && this.selectedItems[id]) {
@@ -526,15 +522,17 @@ define(function(require, exports, module) {
 					delete this.selectedItems;
 				}
 
-				if (removeItem) {
-					this.destroyItem(removeItem, id, removeItem.isAdd);
-				}
+				this.destroyItem(ri, id, ri.isAdd);
+
 				if ($col.size() > 0) {
 					$col.remove();
 				}
+
 				this.dataMap.remove(id);
 
-				removeItem = null;
+				// beforeadd?
+
+				ri = null;
 				$col = null;
 			},
 			destroyItem : function(item, id, isAdd) {
@@ -558,39 +556,69 @@ define(function(require, exports, module) {
 			// 扩展点
 			onItemDestroy : utils.emptyFn,
 			/**
-			 * 获取item
+			 * 选中记录
 			 * 
-			 * @argument item String/Number/Object
-			 *           参数可以是item对象、唯一标识或者UI中的位置（从0开始）
+			 * @argument
+			 * 
+			 * 1、items Object/String/Number/Array
+			 * 参数可以是单一的item对象、唯一标识或者UI中的位置（从0开始），也可以是它们的数组
+			 * 
+			 * 2、keep Boolean 是否保持选中先前的选中项，多选中有效
 			 */
-			getItem : function(item) {
-				if (utils.isObject(item)) {
-					return item;
-				} else if (utils.isString(item)) {
-					return this.itemMap.get(item);
-				} else if (utils.isNumber(item)) {
-					return this.itemMap.get(this.list.children('.'
-							+ this.baseCls + '-col').eq(item).data('itemId'));
-				} else {
-					return null;
+			select : function(items, keep) {
+				if (this.multiSelect) {
+					if (!this.selectedItems) {
+						this.selectedItems = {};
+					}
+					if (!keep) {
+						this.selectedItems = {};
+					}
+				}
+
+				// 确保items是个数组
+				items = [].concat(items);
+				var i, len = items.length;
+				for (i = 0; i < len; i++) {
+					var item = items[i], id;
+					if (utils.isObject(item)) {
+						id = item.id;
+					} else if (utils.isString(item)) {
+						id = item;
+					} else if (utils.isNumber(item)) {
+						id = this.list.children('.' + this.baseCls + '-col')
+								.eq(item).data('itemId')
+					}
+
+					if (id) {
+						if (this.multiSelect) {
+							this.selectedItems[id] = id;
+						} else {
+							this.selectedItems = id;
+						}
+					}
+				}
+
+				this.doSelect();
+			},
+			doSelect : function() {
+				this.el.find('.' + this.baseCls + '-item')
+						.removeClass(this.baseCls + '-item-selected');
+
+				if (utils.isObject(this.selectedItems)) {
+					var i;
+					for (i in this.selectedItems) {
+						if (this.selectedItems.hasOwnProperty(i)) {
+							this.getItem(this.selectedItems[i]).el
+									.addClass(this.baseCls + '-item-selected');
+						}
+					}
+				} else if (utils.isString(this.selectedItems)) {
+					this.getItem(this.selectedItems).el.addClass(this.baseCls
+							+ '-item-selected');
 				}
 			},
 			/**
-			 * 获取item数据
-			 * 
-			 * @argument item String/Object 参数可以是item对象或者唯一标识
-			 */
-			getItemData : function(item) {
-				if (utils.isString(item)) {
-					return this.dataMap.get(item);
-				} else if (utils.isObject(item)) {
-					return this.dataMap.get(item.id);
-				} else {
-					return null;
-				}
-			},
-			/**
-			 * 获取选中的列表项，返回列表项数组
+			 * 获取选中的item对象，返回列表项数组
 			 */
 			getSelectedItems : function() {
 				var s = this.selectedItems, D = [];
@@ -610,7 +638,39 @@ define(function(require, exports, module) {
 				return D;
 			},
 			/**
-			 * 获取列表数据
+			 * 获取item对象
+			 * 
+			 * @argument item String/Number/Object
+			 *           参数可以是item对象、唯一标识或者UI中的位置（从0开始）
+			 */
+			getItem : function(item) {
+				if (utils.isString(item)) {
+					return this.itemMap.get(item);
+				} else if (utils.isNumber(item)) {
+					return this.itemMap.get(this.list.children('.'
+							+ this.baseCls + '-col').eq(item).data('itemId'));
+				} else if (utils.isObject(item)) {
+					return item;
+				} else {
+					return null;
+				}
+			},
+			/**
+			 * 获取item数据
+			 * 
+			 * @argument item String/Object 参数可以是item对象或者唯一标识
+			 */
+			getItemData : function(item) {
+				if (utils.isString(item)) {
+					return this.dataMap.get(item);
+				} else if (utils.isObject(item)) {
+					return this.dataMap.get(item.id);
+				} else {
+					return null;
+				}
+			},
+			/**
+			 * 获取所有数据
 			 */
 			getData : function() {
 				return this.dataMap.values();
@@ -624,19 +684,20 @@ define(function(require, exports, module) {
 					this.remove(this.addItem)
 					delete this.addItem;
 				}
-				if (this.dataMap) {
-					this.dataMap.clear();
-					delete this.dataMap;
-				}
 				if (this.itemMap) {
 					this.itemMap.clear();
 					delete this.itemMap;
+				}
+				if (this.dataMap) {
+					this.dataMap.clear();
+					delete this.dataMap;
 				}
 				if (this.list) {
 					this.list.remove();
 					delete this.list;
 				}
 
+				// for ensuring
 				this.el.off('click', onClick);
 
 				Gallery.superclass.beforeDestroy.call(this);

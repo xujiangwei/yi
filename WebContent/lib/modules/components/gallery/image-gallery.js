@@ -7,7 +7,9 @@
  * 
  * @requires utils, extend, gallery
  * 
- * @description updated on 2013-12-26
+ * @method void setTitle(Object/String/Number item, String title)
+ * 
+ * @description updated on 2013-12-31
  * 
  */
 define(function(require, exports, module) {
@@ -73,13 +75,14 @@ define(function(require, exports, module) {
 								var tp = this.reader
 										&& this.reader.titleProperty;
 								if (utils.isFunction(sp)) {
-									src = sp.call(this, item, id, data, isAdd);
+									src = sp.call(null, this, item, id, data,
+											isAdd);
 								} else if (sp) {
 									src = data ? data[sp] : this.defaultSrc;
 								}
 								if (utils.isFunction(tp)) {
-									title = tp
-											.call(this, item, id, data, isAdd);
+									title = tp.call(null, this, item, id, data,
+											isAdd);
 								} else if (tp) {
 									title = data ? data[tp] : this.defaultTitle;
 								}
@@ -101,6 +104,28 @@ define(function(require, exports, module) {
 												+ '-item-bottom>'
 												+ (title || this.defaultTitle)
 												+ '</div>');
+							},
+							/**
+							 * 修改标题
+							 * 
+							 * @argument
+							 * 
+							 * 1、item String/Number/Object
+							 * 参数可以是item对象、唯一标识或者UI中的位置（从0开始）
+							 * 
+							 * 2、title String: 新的标题
+							 */
+							setTitle : function(item, title) {
+								var item = this.getItem(item);
+								if (item) {
+									title = title || '';
+
+									var data = this.getItemData(item);
+									data.title = title;
+
+									item.el.children('.' + this.baseCls
+											+ '-item-bottom').html(title);
+								}
 							}
 						});
 
