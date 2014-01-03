@@ -5,7 +5,7 @@
  */
 
 (function() {
-	// Config yi
+	// config yi
 	yi.config("./");
 })();
 

@@ -1083,7 +1083,7 @@ h1[id] {
   margin-bottom: 5px;
 }
 
-/* FIXME */
+/* FIXME - Author: Xu Jiangwei */
 
 pre code { background: transparent; }
 
@@ -1115,4 +1115,35 @@ pre code { background: transparent; }
 
 .bs-function hr {
   border-color: #d0e3f0;
+}
+
+.bs-screenshot {
+  position: relative;
+  padding: 45px 15px 15px;
+  margin: 0 -15px 30px;
+  background-color: #fafafa;
+  border-color: #e5e5e5 #eee #eee;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  text-align: center;
+}
+.bs-screenshot img {
+  left: auto;
+  right: auto;
+  padding: auto;
+  margin: auto;
+}
+.bs-screenshot:after {
+  content: "示例截图";
+  position: absolute;
+  top:  15px;
+  left: 15px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #bbb;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }

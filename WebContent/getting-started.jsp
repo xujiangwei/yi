@@ -77,10 +77,18 @@
             <ul class="nav">
               <li><a href="#template-page">页面模板</a></li>
               <li><a href="#template-app">应用模板</a></li>
-            </ul>
+              <li><a href="#template-examples">案例</a></li></ul>
           </li>
           <li>
-            <a href="#examples">案例</a>
+            <a href="#project-mod">工程模组</a>
+            <ul class="nav">
+              <li><a href="#project-mod-new">创建模组</a></li>
+              <li><a href="#project-mod-coding">编写模组</a></li>
+              <li><a href="#project-mod-test">测试模组</a></li>
+              <li><a href="#project-mod-release">发布模组</a></li>
+              <li><a href="#project-mod-load">使用模组</a></li>
+              <li><a href="#project-mod-rule">“三优三不”原则</a></li>
+            </ul>
           </li>
           <li>
             <a href="#browsers">浏览器支持</a>
@@ -715,16 +723,9 @@ common.use(['./a', './b'], function(a, b) {
 </code></pre>
         </div>
         <p>应用模板帮助我们规范所有的页面应用代码，这些代码都采用统一的标准进行开发，这样即有利于与划分代码结构，也便于今后的代码升级和维护。遵循统一的编码规范将事半功倍，当然这需要你学习和训练使用这些相关规范的 API 。</p>
-      </div><!-- /.bs-docs-section -->
 
-      <!-- 案例
-      ================================================== -->
-      <div class="bs-docs-section">
-        <div class="page-header">
-          <h1 id="examples">案例</h1>
-        </div>
-        <p class="lead">下面这些案例都是基于上面给出的基本模版并结合各种组件制作的。</p>
-
+        <h3 id="template-examples">案例</h3>
+        <p>下面这些案例都是基于上面给出的基本模版并结合各种组件制作的。</p>
         <div class="row bs-examples">
           <div class="col-xs-6 col-md-4">
             <a class="thumbnail" href="examples/templates/starter/" target="_blank">
@@ -733,6 +734,128 @@ common.use(['./a', './b'], function(a, b) {
             <h4>最简页面</h4>
             <p>只有一些最基本的东西：引入框架CSS和JavaScript文件，并进行壹框基础属性配置，载入一个Module。</p>
           </div>
+        </div>
+      </div><!-- /.bs-docs-section -->
+
+      <!-- 工程模组
+      ================================================== -->
+      <div class="bs-docs-section">
+        <div class="page-header">
+          <h1 id="project-mod">工程模组</h1>
+        </div>
+        <p class="lead">工程模组化是一种模块化的界面组织方式，合理、充分地解耦界面设计与开发，可被单元测试，复用且独立按需发布的模组功能。</p>
+        <p>壹框提供的模组化能力涵盖了模组开发的全周期，包括<strong>工程创建、编码、调试、测试、发布等</strong>过程。在使用模组前，一些必要的预备知识的学习将更好地帮助你理解和运用模组：</p>
+        <ul>
+          <li><a href="https://developer.mozilla.org/en-US/docs/AJAX/Getting_Started" target="_blank">AJAX</a></li>
+          <li><a href="http://en.wikipedia.org/wiki/Representational_state_transfer" target="_blank">RESTful</a></li>
+          <li><a href="http://engineering.linkedin.com/frontend/leaving-jsps-dust-moving-linkedin-dustjs-client-side-templates" target="_blank">JavaScript templating</a></li>
+        </ul>
+        <p>如果你已经掌握了这些知识那么很容易理解模组的技术原理。</p>
+        <p>壹框模组通过 AJAX 按需获取界面单元，并自动管理依赖关系（JavaScript 文件和 CSS 样式表文件），提供模组工作的上下文环境。每个界面模组可独立使用 JSP 技术或者前端 JavaScript 模板技术，由开发者自由控制服务器负载部署。</p>
+        <p>每一个模组最终被打包为一个 <code>.mod</code> 文件，通过<strong>模组管理器</strong>管理和控制，支持版本控制和热部署。</p>
+
+        <p>下面将简述模组的一般开发方式，让你对模组的开发有一个初步的了解。详细的模组介绍你可以查看<a href="modules.jsp">模组</a>章节。</p>
+
+        <!-- 创建模组 -->
+        <h3 id="project-mod-new">创建模组</h3>
+        <p>模组的创建可以在模组<strong>调试管理器</strong>里进行，打开<a href="debugger/" target="_blank">调试管理器</a>，点击“新建”按钮，在模态框里完成模组信息的录入，如下图所示：</p>
+        <div class="bs-screenshot">
+          <img src="assets/img/screenshots/new_mod.png" class="img-responsive img-rounded"/>
+        </div>
+        <div class="bs-callout bs-callout-warning">
+          <h4>模组定义文件</h4>
+          <p>每一个模组都用一个名为 <code>mod.xml</code> 的文件来对模组信息进行描述。这个文件包含了模组的名称、版本号、描述、文件列表、调试信息等数据，是模组的核心文件。</p>
+        </div>
+        <p>创建好模组后，你可以在<strong>调试管理器</strong>的表格里看到该模组的信息，其中<strong>名称</strong>和<strong>版本</strong>是模组系统管理模组的唯一查询条件，是标识模组唯一性的唯一依据。调试管理器模组列表：</p>
+        <div class="bs-screenshot">
+          <img src="assets/img/screenshots/debugger_manager.png" class="img-responsive img-rounded"/>
+        </div>
+
+        <!-- 编写模组 -->
+        <h3 id="project-mod-coding">编写模组</h3>
+        <p>创建好模组后，你就可以开始编写模组代码了。选择你熟悉的任何编辑器或 IDE 工具进行编码工作，如下图所示，使用了 Eclipse 对界面 JSP 文件进行编码。</p>
+        <div class="bs-screenshot">
+          <img src="assets/img/screenshots/coding_in_eclipse.png" class="img-responsive img-rounded"/>
+        </div>
+        <p>如果你希望进行在线编辑，可以选择表格“操作”列里的“更多”-&gt;“创作”，启动在线编辑器进行编辑。如下图所示，使用在线编辑器开发界面 JSP 文件。</p>
+        <div class="bs-screenshot">
+          <img src="assets/img/screenshots/coding_online.png" class="img-responsive img-rounded"/>
+        </div>
+        <p><strong>根据你项目的需要，你可能还需要编写模组相关的 JavaScript 代码和 CSS 代码。</strong></p>
+        <p>编辑完代码并保存，完成模组的编码工作。如果你使用的 IDE 工具支持对容器即时发布，那么你需要将编写好的代码发布到容器里；如果你使用的是在线编辑器，只需要保存你的修改即可。</p>
+
+        <!-- 测试模组 -->
+        <h3 id="project-mod-test">测试模组</h3>
+        <p>完成代码编写后，就可以开始对模组进行测试。在<a href="debugger/" target="_blank">调试管理器</a>里，点击待测试项目的“调试”按钮，进入调试器。在调试器内，点击“加载”按钮（按钮图标为 <span class="glyphicon glyphicon-play"></span> 的按钮），调试器加载模组数据、加载模组脚本和样式表，开发者在预览区即可看到模组界面。如下图所示：</p>
+        <div class="bs-screenshot">
+          <img src="assets/img/screenshots/debugger.png" class="img-responsive img-rounded"/>
+        </div>
+        <p>调试时，你依然可以使用你熟悉任何一种调试 Web 应用的工具和软件，比如 Firefox 的开发者工具栏、 Chrome 的开发者工具或者 IE 的开发人员工具等。</p>
+
+        <!-- 发布模组 -->
+        <h3 id="project-mod-release">发布模组</h3>
+        <p>测试工作完成，模组符合开发预期需求后，我们就可以发布我们的模组了。如前所述，壹框模组会将相关的文件打包为一个 <code>.mod</code> 文件，只需在 <code>modules</code> 路径下部署此 <code>.mod</code> 文件，系统将自动识别并发布文件内容，让各个页面可复用此模组。</p>
+        <p>点击<a href="debugger/" target="_blank">调试管理器</a>里的“构建”按钮进行模组构建和打包。构建器运行时的界面如下图所示：</p>
+        <div class="bs-screenshot">
+          <img src="assets/img/screenshots/builder.png" class="img-responsive img-rounded"/>
+        </div>
+        <p>构建器构建完成后会提示完成情况，并自动关闭构建窗口。点击<strong>调试管理器</strong>的<strong>“模组管理器”</strong>链接，可打开模组管理器：</p>
+        <div class="bs-screenshot">
+          <img src="assets/img/screenshots/mod_manager.png" class="img-responsive img-rounded"/>
+        </div>
+        <p>发布正确的模组都由模组管理器进行管理，因此在这里列表里你能看到已经被正确发布的模组。</p>
+
+        <!-- 使用模组 -->
+        <h3 id="project-mod-load">使用模组</h3>
+        <p>壹框提供了 DOM 节点定义方式、 JSP 标签库方式、JavaScript 动态加载方式等多种加载模组的方式。以最常用的 DOM 节点定义方式为例，首先在需要显示模组的 DOM 节点的 class 属性里加入 <code>mod</code> class，然后插入 <code>data-mod</code>、<code>data-ver</code> 和 <code>data-auto</code> 等属性，分别赋值为<strong>模组名称</strong>、<strong>模组版本号</strong>和<strong>是否自动载入</strong>。</p>
+        <div class="highlight">
+<pre><code class="language-html">&lt;div id=&quot;my_mod&quot; class=&quot;mod&quot; data-mod=&quot;AndroidCarousel&quot; data-ver=&quot;1.0.0&quot; data-auto=&quot;true&quot;&gt;&lt;/div&gt;
+</code></pre>
+        </div>
+        <p>壹框在完成客户端初始化后，自动搜索所有包含 <code>.mod</code> class 的节点，并尝试加载 <code>data-auto</code> 属性为 <code>true</code> 的模组。如下图所示，一个自动加载的模组：</p>
+        <div class="bs-screenshot">
+          <img src="assets/img/screenshots/load_example.png" class="img-responsive img-rounded"/>
+        </div>
+        <p>如果你的模组主函数需要输入参数，可以插入 <code>data-args</code> 属性，设置一个 JSON 格式的输入参数，壹框会自动将参数传给主函数。</p>
+        <div class="highlight">
+<pre><code class="language-html">&lt;div id=&quot;my_mod&quot; class=&quot;mod&quot; data-mod=&quot;AndroidCarousel&quot; data-ver=&quot;1.0.0&quot; data-auto=&quot;true&quot; data-args='{&quot;first&quot;:&quot;Android 2.3&quot;}'&gt;&lt;/div&gt;
+</code></pre>
+        </div>
+        <p>至此，一个简单的创建、编写、测试、发布、使用模组的流程就结束了，更多关于模组的详细信息、相关的 API 和高级应用方式可以查看<a href="modules.jsp">模组</a>章节。</p>
+
+        <!-- 原则 -->
+        <h3 id="project-mod-rule">“三优三不”原则</h3>
+        <p>在很多情况下你都可以使用模组，合理地应用模组能力将帮助你的项目达到事半功倍的效果，所以你需要规划好你的模组。</p>
+        <div class="bs-callout bs-callout-warning" id="jquery-required">
+          <h4>你需要规划好你的模组</h4>
+          <p>壹框模组相比直接在页面里预置界面标签和采用 JavaScript 动态修改 DOM 树实现动态界面方式而言，在开发效率上并没有较大的改进。模组考虑的是<strong>缓存</strong>、<strong>性能</strong>、<strong>浓缩</strong>、<strong>解耦</strong>、<strong>渐进渲染</strong>和<strong>持续演进</strong>。</p>
+          <ul>
+            <li>抑制重复加载 JavaScript 和 CSS 文件以及重复出现的 HTML 片段。</li>
+            <li>惰性延迟、压缩模板等技术让开发者对性能完全可控。</li>
+            <li>界面可以分解为片段，模板可以分解为小片段，HTML标记和渲染逻辑可重用。</li>
+            <li>鼓励表现层和应用层、业务逻辑分离，提供 URL 参数、Function JSON 参数多种手段进行层次控制。</li>
+            <li>支持同步或异步渲染，后端服务既可以参与渲染也可以只提供数据，可以将部分内容优先渲染，这样用户能很快看到一些数据。</li>
+            <li>严格的版本约定和单文件批包方式保证模组能被持续演进。</li>
+          </ul>
+          <p>因此，当你希望得到这些特性支持时便可以选择使用模组来进行你的应用开发，合理地设计和规划你应用中的模块，将其模组化将是你开发模组的第一步！</p>
+        </div>
+
+        <p>为了帮助开发者快速筛选模组应用的场景和需求，我们总结了一个“三优三不”原则，“三优”即3种可优先使用模组的场景，“三不”即3类不合适使用模组的情况。</p>
+        <div class="bs-callout bs-callout-info">
+          <h4>“三优”原则</h4>
+          <ul>
+            <li>独立功能组件可优先应用模组技术，无论该组件工作在数据层还是业务层。</li>
+            <li>需求需要快速迭代的可解耦功能可优先应用模组技术。</li>
+            <li>需要前后端同时分担界面负载时可优先使用模组技术。</li>
+          </ul>
+        </div>
+        <div class="bs-callout bs-callout-danger">
+          <h4>“三不”原则</h4>
+          <ul>
+            <li>驱动全局或者外部组件布局时，不应当使用模组技术去实现布局控制。</li>
+            <li>串联数据层和逻辑层功能的管理器，不应当使用模组技术实现。</li>
+            <li>产品级或大系统级的补丁，不应当使用模组技术实现。</li>
+          </ul>
         </div>
       </div><!-- /.bs-docs-section -->
 
