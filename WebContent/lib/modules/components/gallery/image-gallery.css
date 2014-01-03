@@ -11,7 +11,10 @@
 }
 
 .yi-gallery-item-bottom {
+	overflow: hidden;
 	text-align: center;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .yi-gallery-item.yi-gallery-item-over.yi-gallery-image-item .yi-gallery-item-top

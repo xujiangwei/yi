@@ -9,7 +9,7 @@
  * 
  * @method void submit(Object option)
  * 
- * @description updated on 2013-12-26
+ * @description updated on 2014-01-03
  * 
  */
 define(function(require, exports, module) {
@@ -18,6 +18,12 @@ define(function(require, exports, module) {
 	var utils = require('utils');
 	var extend = require('extend');
 	var Base = require('component');
+
+	function proventSubmit(e) {
+		if (e.keyCode == 13) {
+			e.preventDefault();
+		}
+	}
 
 	function onUploadFileFrameLoad(e) {
 		var r = {
@@ -112,6 +118,11 @@ define(function(require, exports, module) {
 					 * 是否要上传文件
 					 */
 
+					afterRender : function(container) {
+						Form.superclass.afterRender.call(this, container);
+
+						this.el.on('keydown', proventSubmit);
+					},
 					/**
 					 * 提交表单
 					 * 
