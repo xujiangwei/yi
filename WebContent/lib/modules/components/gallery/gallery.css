@@ -20,14 +20,15 @@
 }
 
 .yi-gallery-item {
+	margin-bottom: 10px;
 	border: 1px solid #cccccc;
 	cursor: pointer;
 }
 
-.yi-gallery-item.yi-gallery-item-over {
+.yi-gallery-item-over {
 	border-color: #428bca;
 }
 
-.yi-gallery-item.yi-gallery-item-selected {
+.yi-gallery-item-selected {
 	background-color: #eeeeee;
 }

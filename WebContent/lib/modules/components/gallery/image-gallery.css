@@ -4,8 +4,9 @@
 }
 
 .yi-gallery-item-top {
-	margin-bottom: 10px;
+	margin-bottom: 5px;
 	border: 1px solid #dddddd;
+	background-color: white;
 	cursor: pointer;
 	text-align: center;
 }
@@ -17,16 +18,14 @@
 	white-space: nowrap;
 }
 
-.yi-gallery-item.yi-gallery-item-over.yi-gallery-image-item .yi-gallery-item-top
-	{
+.yi-gallery-image-item.yi-gallery-item-over .yi-gallery-item-top {
 	border-color: #428bca;
 }
 
-.yi-gallery-item.yi-gallery-item-selected.yi-gallery-image-item {
+.yi-gallery-image-item.yi-gallery-item-selected {
 	background-color: transparent;
 }
 
-.yi-gallery-item.yi-gallery-item-selected.yi-gallery-image-item .yi-gallery-item-top
-	{
+.yi-gallery-image-item.yi-gallery-item-selected .yi-gallery-item-top {
 	border-color: #428bca;
 }

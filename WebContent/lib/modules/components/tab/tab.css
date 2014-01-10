@@ -10,11 +10,13 @@
 	color: #428bca;
 }
 
-.yi-tab-remove-btn {
+.yi-tab-header .close {
 	display: none;
 	position: absolute;
-	right: 4px;
-	top: 2px;
-	color: #428bca;
-	cursor: pointer;
+	top: 0;
+	right: 5px;
+}
+
+.yi-tab-header:hover .close {
+	display: block;
 }

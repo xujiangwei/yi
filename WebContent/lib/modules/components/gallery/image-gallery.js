@@ -9,7 +9,7 @@
  * 
  * @method void setTitle(Object/String/Number item, String title)
  * 
- * @description updated on 2014-01-03
+ * @description updated on 2014-01-08
  * 
  */
 define(function(require, exports, module) {
@@ -25,9 +25,9 @@ define(function(require, exports, module) {
 					baseCls : 'yi-gallery',
 
 					/**
-					 * @cfg reader Object 1)identifier String: item的id对应数据那个属性
-					 *      2)srcProperty String/Function: 图片的src对应数据那个属性
-					 *      3)titleProperty String/Function : 图片的标题对应数据那个属性
+					 * @cfg reader Object 1)identifier String: item的id对应数据哪个属性
+					 *      2)srcProperty String/Function: 图片的src对应数据哪个属性
+					 *      3)titleProperty String/Function : 图片的标题对应数据哪个属性
 					 */
 					reader : {},
 

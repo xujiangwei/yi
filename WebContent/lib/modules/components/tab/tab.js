@@ -21,7 +21,7 @@
  * @event activate: function(Tab t, Object activeTab)
  * @event addbuttonclick: function(Tab t, jqObject addButton, Event e)
  * 
- * @description updated on 2013-12-31
+ * @description updated on 2013-01-06
  * 
  */
 define(function(require, exports, module) {
@@ -37,56 +37,34 @@ define(function(require, exports, module) {
 	var baseCls = 'yi-tab';
 
 	function onClick(e) {
-		var $header = $(e.target).closest('.' + baseCls + '-header');
-		if ($header.size() > 0) {
-			var comp = Base.get(e.data.componentId);
-			if (comp) {
+		var comp = Base.get(e.data.componentId);
+		if (comp) {
+			var $target = $(e.target), $header = $target.closest('.' + baseCls
+					+ '-header');
+
+			if ($target.hasClass('close')) {
+				if ($header.size() > 0) {
+					comp.remove($header.data('itemId'));
+				}
+			} else if ($header.size() > 0) {
 				if ($header.hasClass(baseCls + '-header-add')) {
 					comp.trigger('addbuttonclick', this, $header, e)
-				} else {
-					comp.clickItem($header, e);
+				} else if (!$header.hasClass('active')) {
+					comp.setActive($header.data('itemId'));
 				}
 			}
 
-			comp = null;
+			$header = null;
+			$target = null;
 		}
 
-		$header = null;
-	}
-
-	function onMouseOver(e) {
-		var $header = $(e.target).closest('.' + baseCls + '-header');
-		if ($header.size() > 0 && !$header.hasClass(baseCls + '-header-add')) {
-			var $removeButton = $header.children('.' + baseCls + '-remove-btn');
-			if ($removeButton.size() > 0) {
-				$removeButton.show();
-			}
-
-			$removeButton = null;
-		}
-
-		$header = null;
-	}
-
-	function onMouseOut(e) {
-		var $header = $(e.target).closest('.' + baseCls + '-header');
-		if ($header.size() > 0 && !$header.hasClass(baseCls + '-header-add')) {
-			var $removeButton = $header.children('.' + baseCls + '-remove-btn');
-			if ($removeButton.size() > 0) {
-				$removeButton.hide();
-			}
-
-			$removeButton = null;
-		}
-
-		$header = null;
+		comp = null;
 	}
 
 	(function() {
 		var Tab = extend(Base, {
 			baseCls : baseCls,
-
-			// TODO baseHtml
+			baseHtml : '<div><ul class="nav nav-tabs"></ul><div class="tab-content"></div></div>',
 
 			/**
 			 * @cfg activeIndex Number
@@ -125,19 +103,15 @@ define(function(require, exports, module) {
 				Tab.superclass.afterRender.call(this, parent);
 
 				var id = this.getId();
-				this.nav = this.el.children('.' + this.baseCls + '-nav').on(
-						'click', {
+				this.nav = this.el.children('.nav-tabs').addClass(this.baseCls
+						+ '-nav').on('click', {
 							componentId : id
-						}, onClick).on('mouseover', {
-							componentId : id
-						}, onMouseOver).on('mouseout', {
-							componentId : id
-						}, onMouseOut);
+						}, onClick);
 				this.headers = this.nav.children().addClass(this.baseCls
 						+ '-header');
 
-				this.content = this.el
-						.children('.' + this.baseCls + '-content');
+				this.content = this.el.children('.tab-content')
+						.addClass(this.baseCls + '-content');
 				this.tabs = this.content.children();
 
 				if (this.hasAddButton) {
@@ -207,9 +181,7 @@ define(function(require, exports, module) {
 								+ (item.title || this.defaultTitle)
 								+ '</a>'
 								+ (item.closable
-										? '<span class="glyphicon glyphicon-remove '
-												+ this.baseCls
-												+ '-remove-btn"></span>'
+										? '<button type="button" class="close" aria-hidden="true">&times;</button>'
 										: '') + '</li>').data('itemId', id);
 						if ($prevHeader) {
 							$header.insertBefore($prevHeader);
@@ -218,7 +190,8 @@ define(function(require, exports, module) {
 						}
 						c.headerEl = $header;
 
-						var $tab = $('<div class="yi-tab-item tab-pane fade"></div>');
+						var $tab = $('<div class="' + this.baseCls
+								+ '-item tab-pane"></div>');
 						if ($prevTab) {
 							$tab.insertBefore($prevTab);
 						} else {
@@ -282,8 +255,9 @@ define(function(require, exports, module) {
 						}
 						if (ai.size() > 0) {
 							ai = ai.data('itemId');
+						} else {
+							ai = undefined;
 						}
-						ai = undefined;
 					}
 
 					delete ri.headerEl;
@@ -340,7 +314,7 @@ define(function(require, exports, module) {
 
 				if (false !== this.trigger('beforetabchange', this, ai,
 						this.activeTab)) {
-					var activeCls = 'in active';
+					var activeCls = 'active';
 					this.headers.removeClass(activeCls);
 					this.tabs.removeClass(activeCls).hide();
 					$header.addClass(activeCls);
@@ -358,17 +332,6 @@ define(function(require, exports, module) {
 				ai = null;
 				$tab = null;
 				$header = null;
-			},
-			clickItem : function(headerEl, e) {
-				var id = headerEl.data('itemId');
-				// 删除标签页
-				if (headerEl.hasClass(baseCls + '-header-remove')) {
-					this.remove(id);
-				}
-				// 激活标签页
-				else if (!headerEl.hasClass('active')) {
-					this.setActive(id);
-				}
 			},
 			/**
 			 * 获取tab对象
@@ -437,9 +400,7 @@ define(function(require, exports, module) {
 				}
 				if (this.nav) {
 					// for ensuring
-					this.nav.off('click', onClick)
-							.off('mouseover', onMouseOver).off('mouseout',
-									onMouseOut).remove();
+					this.nav.off('click', onClick);
 					delete this.nav;
 				}
 				if (this.tabs) {

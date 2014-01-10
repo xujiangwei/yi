@@ -33,7 +33,7 @@
  * @event beforedestroy function(Component c)
  * @event destroy function(Component c)
  * 
- * @description updated on 2013-12-26
+ * @description updated on 2014-01-08
  */
 define(function(require, exports, module) {
 	'require:nomunge,exports:nomunge,module:nomunge';
@@ -46,6 +46,19 @@ define(function(require, exports, module) {
 
 	// 组件管理
 	var components = new Map();
+
+	function get(id) {
+		var el;
+		if (utils.isString(id)) {
+			el = $(id);// selector
+			if (el.size() == 0) {
+				el = $('#' + id);// id
+			}
+		} else {
+			el = $(id);// jqObject or DOM
+		}
+		return el;
+	}
 
 	// 处理style
 	var cssRe = /([a-z0-9-]+)\s*:\s*([^;\s]+(?:\s*[^;\s]+)*);?/gi;
@@ -149,25 +162,25 @@ define(function(require, exports, module) {
 					/**
 					 * @cfg id String
 					 * 
-					 * 不指定则自动赋值
+					 * 为组件实例指定一个唯一标识，不指定则自动赋值
 					 */
 
 					/**
 					 * @cfg applyTo String
 					 * 
-					 * 已有DOM的id，将其应用于组件。该DOM可能是组件的最外层元素或关键元素，视组件情况而定。组件初始化后，该DOM的jQuery对象将成为组件的私有属性el
+					 * 指定一个节点，将其应用于组件实例。该节点将成为组件的最外层元素或关键元素，applyTo的值就是该节点的id。组件渲染（render()）后，该节点的jQuery对象将成为组件的私有属性el
 					 */
 
 					/**
 					 * @cfg renderTo String
 					 * 
-					 * 只给出一个空白元素，交给组件渲染，renderTo的值就是该空白元素的id
+					 * 指定一个节点，在其内部按组件的baseHtml构建新的子节点作为组件的el，renderTo的值就是父节点的id
 					 */
 
 					/**
 					 * @cfg baseHtml String
 					 * 
-					 * 如果不是应用于已有的DOM，则按baseHtml动态构建，并且baseHtml的最外层元素的jQuery对象将成为组件的私有属性el
+					 * 如果不是应用于已有的节点，则按baseHtml动态构建，并且baseHtml的最外层元素的jQuery对象将成为组件的私有属性el
 					 * 
 					 * baseHtml由组件的默认配置指定
 					 */
@@ -175,7 +188,7 @@ define(function(require, exports, module) {
 					/**
 					 * @cfg baseCls String
 					 * 
-					 * 每种组件都可以定义一个样式类，它会被自动添加到组件的el上，方便组件创建自己的样式表。
+					 * 每种组件都可以定义一个样式类，它会被自动添加到组件的el上，方便组件创建自己的样式表
 					 * 
 					 * baseCls由组件的默认配置指定
 					 */
@@ -209,9 +222,9 @@ define(function(require, exports, module) {
 					/**
 					 * @cfg hideMode String
 					 * 
-					 * 隐藏组件的方式，hidden: true时，如果hideMode :
-					 * ’display’，则组件隐藏且不占位（display: none）。如果hideMode :
-					 * ’visibility’，则组件占位隐藏（visibility: hidden）
+					 * 隐藏组件的方式，hidden : true时，如果hideMode :
+					 * 'display'，则组件隐藏且不占位（display: none）。如果hideMode :
+					 * 'visibility'，则组件占位隐藏（visibility: hidden）
 					 */
 					hideMode : 'display',
 
@@ -224,20 +237,25 @@ define(function(require, exports, module) {
 					/**
 					 * @cfg disabledCls String
 					 * 
-					 * 每个组件实例可以拥有自定义的内联样式，它会被自动添加到组件的el上，方便使用者修改组件实例的样式
+					 * 每种组件都可以定义一个不可用时的样式类，当组件不可用时，它会被自动添加到组件的el上，方便组件设置自己的不可用样式表
 					 */
 					disabledCls : 'disabled',
 
 					/**
 					 * @cfg listeners Object
 					 * 
-					 * 每个组件实例可以拥有自定义的内联样式，它会被自动添加到组件的el上，方便使用者修改组件实例的样式
+					 * {'eventName1': {fn: function(args){},scope: {}}[,
+					 * event2...]}
+					 * 
+					 * 创建组件时就监听事件
 					 */
 
 					/**
 					 * @cfg permission Object
 					 * 
-					 * 每个组件实例可以拥有自定义的内联样式，它会被自动添加到组件的el上，方便使用者修改组件实例的样式
+					 * {name: 'cigrid', method: 'hide'}
+					 * 
+					 * 组件权限控制，如果当前用户没有name属性的权限，则按照method属性的方法进行处理。method：'hide'，'disable'和'space'
 					 */
 
 					/**
@@ -265,10 +283,7 @@ define(function(require, exports, module) {
 								container = this.el[0].parentNode;
 								this.allowDomMove = false;
 							}
-							if (utils.isString(container)) {
-								container = '#' + container;
-							}
-							this.container = $(container);
+							this.container = get(container);
 							// if (this.ctCls) {
 							// this.container.addClass(this.ctCls);
 							// }
@@ -277,7 +292,7 @@ define(function(require, exports, module) {
 								if (utils.isNumber(position)) {
 									position = this.container[0].childNodes[position];
 								} else {
-									position = $(position)[0];
+									position = get(position)[0];
 								}
 							}
 							this.onRender(this.container, position || null);

@@ -9,9 +9,9 @@
  * 
  * @method void load(Object option)
  * 
- * @event load function(PageLoader c)
+ * @event load function(PageLoader p)
  * 
- * @description updated on 2013-12-27
+ * @description updated on 2014-01-10
  * 
  */
 define(function(require, exports, module) {
@@ -151,7 +151,6 @@ define(function(require, exports, module) {
 			 * 
 			 * 是否加载页面中的脚本
 			 */
-			loadScripts : true,
 
 			/**
 			 * @cfg html String
@@ -167,7 +166,7 @@ define(function(require, exports, module) {
 			afterRender : function(container) {
 				PageLoader.superclass.afterRender.call(this, container);
 
-				if (this.autoLoad) {
+				if (this.autoLoad && this.url) {
 					this.load({
 								url : this.url,
 								params : this.params
@@ -235,10 +234,10 @@ define(function(require, exports, module) {
 					this.trigger('load', this);
 				}
 			},
-			doLoadScripts : function() {
+			doLoadScripts : function(scope) {
 				var hd = document.getElementsByTagName('head')[0], match, attrs, srcMatch, typeMatch, el, s;
 
-				while ((match = scriptRe2.exec(this.html))) {
+				while (match = scriptRe2.exec(scope.html)) {
 					attrs = match[1];
 					srcMatch = attrs ? attrs.match(srcRe) : false;
 					if (srcMatch && srcMatch[2]) {
@@ -258,7 +257,7 @@ define(function(require, exports, module) {
 					}
 				}
 
-				var el = $('#' + this.hookId);
+				var el = $('#' + scope.hookId);
 				if (el.size() > 0) {
 					el.remove();
 				}
@@ -266,7 +265,7 @@ define(function(require, exports, module) {
 				el = null;
 				hd = null;
 
-				delete this.hookId;
+				delete scope.hookId;
 			},
 			processFailure : function() {
 

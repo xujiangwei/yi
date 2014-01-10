@@ -1,5 +1,5 @@
 /**
- * Gallery 大图列表
+ * Gallery
  * 
  * @author dengfenfen, dengfenfen@dhcc.com.cn, 2013-12-04
  * 
@@ -7,15 +7,15 @@
  * 
  * @requires utils, map, extend, component
  * 
- * @method void load(Object option, Boolean append)
+ * @method void load(Object option[, Boolean append])
  * @method void clear()
- * @method void add(Object/Array items)
+ * @method void add(Object/Array items[, Number index])
  * @method void remove(Object/String/Number item)
- * @method void select(Object/String/Number/Array items, Boolean keep)
+ * @method void select(Object/String/Number/Array items[, Boolean keep])
  * @method Array getSelectedItems()
  * @method Object getItem(String/Number/Object item)
  * @method Object getItemData(String/Object item)
- * @method Object getData()
+ * @method Array getData()
  * 
  * @event load: function(Gallery g, Object/Array data)
  * @event itemrender: function(Gallery g, Object item, String id, Boolean isAdd)
@@ -25,11 +25,12 @@
  *        isAdd, Event e)
  * @event itemclick: function(Gallery g, Object item, String id, Boolean isAdd,
  *        Event e)
- * @event beforeitemdestroy:function(Gallery g, Object item, String id, Boolean
+ * @event beforeitemdestroy: function(Gallery g, Object item, String id, Boolean
  *        isAdd)
- * @event itemdestroy:function(Gallery g, Object item, String id, Boolean isAdd)
+ * @event itemdestroy: function(Gallery g, Object item, String id, Boolean
+ *        isAdd)
  * 
- * @description updated on 2013-12-31
+ * @description updated on 2013-01-09
  * 
  */
 define(function(require, exports, module) {
@@ -110,40 +111,39 @@ define(function(require, exports, module) {
 			/**
 			 * @cfg border Boolean
 			 * 
-			 * 列表容器是否显示边框
+			 * 画廊是否显示边框
 			 */
 
 			/**
 			 * @cfg cols Array
 			 * 
-			 * cols[0],cols[1],cols[2],cols[3]分别表示在不同屏幕分辨率下最多占多少列
-			 */
-
-			/**
-			 * @cfg responsive Boolean
-			 * 
-			 * item是否自适应宽高
+			 * 画廊的排列是遵从Bootstrap的栅格系统，cols数组中的4个元素依次表示在Extra
+			 * small、Small、Medium和Large四种屏幕尺寸下，一行显示多少个item
 			 */
 
 			/**
 			 * @cfg itemWidth Number
 			 * 
-			 * item的宽
+			 * item的宽。没有设置cols时，还会根据item宽度自动计算cols
 			 */
-			itemWidth : 300,
+
+			/**
+			 * @cfg itemHeight Number
+			 * 
+			 * item的高
+			 */
 
 			/**
 			 * @cfg itemCls String
 			 * 
-			 * item的样式
+			 * item的自定义样式类，它会被自动添加到item的el上，方便使用者定制item的样式
 			 */
 
 			/**
 			 * @cfg itemOverCls String
 			 * 
-			 * 鼠标悬停时item的样式
+			 * 鼠标悬停时item的自定义样式类，它会被自动添加到item的el上或移除，方便使用者定制鼠标悬停时item的样式
 			 */
-			itemOverCls : 'yi-gallery-item-over',
 
 			/**
 			 * @cfg hasAddItem Boolean
@@ -158,36 +158,35 @@ define(function(require, exports, module) {
 			 */
 
 			/**
-			 * @cfg reader Object 1)identifier String: item的id对应数据那个属性
-			 * 
-			 * 例：reader:{identifier: id}
-			 */
-			reader : {},
-
-			/**
 			 * @cfg data Array
 			 * 
 			 * 初始化时的静态数据
 			 */
 
 			/**
-			 * @cfg autoLoad Boolean
-			 * 
-			 * 初始化后是否自动加载远程数据
-			 */
-			autoLoad : true,
-
-			/**
 			 * @cfg dataUrl String
 			 * 
-			 * 初始化时远程数据的URL
+			 * 远程数据的URL。dataUrl会被作为属性存储于实例中，还可以通过load()传入或覆盖
 			 */
 
 			/**
 			 * @cfg params Object
 			 * 
-			 * 初始化时请求远程数据的额外参数
+			 * 请求远程数据的额外参数。params会被作为属性存储于实例中，还可以通过load()传入或覆盖
 			 */
+
+			/**
+			 * @cfg autoLoad Boolean
+			 * 
+			 * 初始化后是否自动加载远程数据。与data参数互斥，data参数优先
+			 */
+
+			/**
+			 * @cfg reader Object 1)identifier String: item的id对应数据那个属性，默认'id'
+			 * 
+			 * 例：reader:{identifier: 'id'}
+			 */
+			reader : {},
 
 			/**
 			 * @cfg multiSelect Boolean
@@ -265,7 +264,10 @@ define(function(require, exports, module) {
 			overItem : function(id, e) {
 				var item = this.getItem(id);
 				if (item) {
-					item.el.addClass(this.itemOverCls);
+					item.el.addClass(this.baseCls + '-item-over');
+					if (this.itemOverCls) {
+						item.el.addClass(this.itemOverCls);
+					}
 					this.onItemOver(item, id, this.getItemData(id));
 
 					this
@@ -280,7 +282,10 @@ define(function(require, exports, module) {
 			outItem : function(id, e) {
 				var item = this.getItem(id);
 				if (item) {
-					item.el.removeClass(this.itemOverCls);
+					item.el.removeClass(this.baseCls + '-item-over');
+					if (this.itemOverCls) {
+						item.el.removeClass(this.itemOverCls);
+					}
 					this.onItemOut(item, id, this.getItemData(id));
 
 					this.trigger('itemmouseout', this, item, id, item.isAdd, e);
@@ -351,8 +356,11 @@ define(function(require, exports, module) {
 				if (this.itemCls) {
 					item.el.addClass(this.itemCls);
 				}
-				if (this.cols.length == 0 && !this.responsive) {
+				if (this.itemWidth) {
 					item.el.width(this.itemWidth);
+				}
+				if (this.itemHeight) {
+					item.el.height(this.itemHeight);
 				}
 
 				var componentId = this.getId();
@@ -623,12 +631,12 @@ define(function(require, exports, module) {
 			getSelectedItems : function() {
 				var s = this.selectedItems, D = [];
 				if (utils.isString(s)) {
-					D.push(this.dataMap.get(s));
+					D.push(this.itemMap.get(s));
 				} else if (utils.isObject(s)) {
 					var id;
 					for (id in s) {
 						if (s.hasOwnProperty(id)) {
-							D.push(this.dataMap.get(s[id]));
+							D.push(this.itemMap.get(s[id]));
 						}
 					}
 				}
