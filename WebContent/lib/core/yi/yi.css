@@ -37,3 +37,8 @@ ul.verifier-error-list li {
   line-height: 12px;
 }
 /**** 表单验证组件适配用的样式 -- 结束 ****/
+
+/* 栅格 */
+.grid {
+  min-height: 600px;
+}

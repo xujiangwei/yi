@@ -39,7 +39,7 @@
 <div class="bs-header" id="content">
   <div class="container">
     <h1>组件</h1>
-    <p>TODO</p>
+    <p>无数可复用的组件，包括动态栅格，下拉菜单，树型菜单，导航，警告框，弹出框等更多功能。</p>
   </div>
 </div>
 
@@ -49,9 +49,9 @@
       <div class="bs-sidebar hidden-print" role="complementary">
         <ul class="nav bs-sidenav">
           <li>
-            <a href="#item">项目</a>
+            <a href="#grid">栅格</a>
             <ul class="nav">
-              <li><a href="#sub-item">子项目</a></li>
+              <li><a href="#grid-example">案例</a></li>
             </ul>
           </li>
         </ul>
@@ -60,16 +60,36 @@
     <div class="col-md-9" role="main">
       <div class="bs-docs-section">
         <div class="page-header">
-          <h1 id="item">项目</h1>
+          <h1 id="grid">栅格</h1>
         </div>
         <p class="lead">TODO</p>
 
-        <h2 id="sub-item">子项目</h2>
+        <h2 id="grid-example">案例</h2>
         <p>TODO</p>
       </div>
     </div>
   </div>
 </div>
+
+<!-- 页脚
+================================================== -->
+<footer class="bs-footer" role="contentinfo">
+  <div class="container">
+    <p>Copyright &copy; 2013,2014 DHC Software Research Department.</p>
+    <p>Code licensed under <a href="http://www.gnu.org/licenses/gpl.html" target="_blank">GPL License Version 3</a>, documentation under <a href="http://creativecommons.org/licenses/by/3.0/" target="_blank">CC BY 3.0</a>.</p>
+    <ul class="footer-links">
+      <li>当前版本： v<%=Stage.getVersion()%></li>
+      <li class="muted">&middot;</li>
+      <li><a href="http://www.java.com/" target="_blank">Java</a></li>
+      <li class="muted">&middot;</li>
+      <li><a href="http://jquery.com" target="_blank">jQuery</a></li>
+      <li class="muted">&middot;</li>
+      <li><a href="http://getbootstrap.com" target="_blank">Bootstrap</a></li>
+      <li class="muted">&middot;</li>
+      <li><a href="https://github.com/xujiangwei/yi/issues" target="_blank">Issues</a></li>
+    </ul>
+  </div>
+</footer>
 
 <%=Stage.importScripts("lib/")%>
 <script src="assets/js/docs.js" type="text/javascript"></script>

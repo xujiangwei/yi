@@ -9,17 +9,20 @@ define(function(require, exports, module) {
 	var Grid = require('./grid.js');
 
 	// 引导程序
-	var boot =  {
-		_callback: null,
-
-		_ready: function() {
-			this._callback.call(null, Grid);
-		},
-
-		main: function(callback) {
-			this._callback = callback;
-		},
-	};
+	var _callbacks = [];
+	var GridBoot = function() {
+	}
+	GridBoot.prototype._ready = function() {
+		for (var i = 0; i < _callbacks.length; ++i) {
+			var fn = _callbacks[i];
+			fn.call(null, Grid);
+		}
+	}
+	GridBoot.prototype.boot = function(callback) {
+		_callbacks.push(callback);
+	}
+	// 实例化
+	var gridboot = new GridBoot();
 
 	// 加载 CSS
 	require.async('../../../plugins/slickgrid/slick.grid.css', function() {
@@ -34,11 +37,11 @@ define(function(require, exports, module) {
 	require.async('../../../plugins/slickgrid/jquery.event.drag-2.2.js', function() {
 		require.async('../../../plugins/slickgrid/slick.core.js', function() {
 			require.async('../../../plugins/slickgrid/slick.grid.js', function() {
-				boot._ready();
+				gridboot._ready();
 			});
 		});
 	});
 
 	// 导出模块
-	module.exports = boot;
+	module.exports = gridboot.boot;
 });
