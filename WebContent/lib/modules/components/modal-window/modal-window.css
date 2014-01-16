@@ -1,11 +1,11 @@
-.yi-modalWindow {
+.yi-modal-window {
 	
 }
 
-.yi-modalWindow-scroll {
+.yi-modal-window-scroll {
 	overflow: auto;
 }
 
-.yi-modalWindow-button-hide {
+.yi-modal-window-button-hide {
 	display: none;
 }

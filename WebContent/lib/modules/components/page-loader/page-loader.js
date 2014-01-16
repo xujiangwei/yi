@@ -11,7 +11,7 @@
  * 
  * @event load function(PageLoader p)
  * 
- * @description updated on 2014-01-10
+ * @description updated on 2014-01-16
  * 
  */
 define(function(require, exports, module) {
@@ -117,45 +117,47 @@ define(function(require, exports, module) {
 			baseCls : 'yi-page-loader',
 
 			/**
-			 * @cfg autoLoad Boolean 是否自动加载
+			 * @cfg autoLoad Boolean
+			 * 
+			 * 初始化后是否自动加载页面
 			 */
 			autoLoad : true,
 
 			/**
 			 * @cfg url String
 			 * 
-			 * 组件中加载的页面URL
+			 * 加载页面的URL，url会被作为属性存储于实例中，还可以通过load()传入或覆盖
 			 */
 
 			/**
 			 * @cfg params Object
 			 * 
-			 * 请求页面时的额外参数
+			 * 请求页面时的额外参数，params会被作为属性存储于实例中，还可以通过load()传入或覆盖
 			 */
 
 			/**
 			 * @cfg async Boolean
 			 * 
-			 * 是否异步加载
+			 * 是否异步加载，async会被作为属性存储于实例中，还可以通过load()传入或覆盖
 			 */
 
 			/**
 			 * @cfg timeout Number
 			 * 
-			 * 超时
+			 * 超时设置，单位：毫秒，timeout会被作为属性存储于实例中，还可以通过load()传入或覆盖
 			 */
 			timeout : 60000,
 
 			/**
-			 * @cfg loadScripts
+			 * @cfg loadScripts Boolean
 			 * 
-			 * 是否加载页面中的脚本
+			 * 是否加载页面中的脚本，loadScripts会被作为属性存储于实例中，还可以通过load()传入或覆盖
 			 */
 
 			/**
 			 * @cfg html String
 			 * 
-			 * 组件中放入的Html片段
+			 * 初始化时将html字符串作为组件的内容
 			 */
 
 			initComponent : function() {
@@ -178,7 +180,8 @@ define(function(require, exports, module) {
 			},
 			/**
 			 * @augments option {} 1)url String: URL 2)params Object: 额外的参数
-			 *           3)async Boolean: 是否异步加载 4)timeout Number: 超时
+			 *           3)async Boolean: 是否异步加载 4)timeout Number: 超时设置，单位：毫秒
+			 *           5)loadScripts Boolean: 是否加载页面中的脚本
 			 */
 			load : function(option) {
 				if (this.rendered) {
@@ -191,6 +194,9 @@ define(function(require, exports, module) {
 					this.timeout = option.timeout !== undefined
 							? option.timeout
 							: this.timeout;
+					this.loadScripts = option.loadScripts !== undefined
+							? option.loadScripts
+							: this.loadScripts;
 
 					if (this.url) {
 						this.doLoad(this.url, this.params, this.async,

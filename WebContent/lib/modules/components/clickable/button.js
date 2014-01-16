@@ -7,7 +7,7 @@
  * 
  * @requires extend, clickable
  * 
- * @description updated on 2013-12-20
+ * @description updated on 2014-01-14
  * 
  */
 define(function(require, exports, module) {
@@ -20,39 +20,48 @@ define(function(require, exports, module) {
 				var Button = extend(Clickable, {
 							baseCls : 'yi-button',
 							baseHtml : '<button class="btn"></button>',
+
 							/**
 							 * @cfg disabled Boolean
 							 * 
-							 * 是否禁用
+							 * 是否不可用
 							 */
+
 							/**
 							 * @cfg type String
 							 * 
 							 * 'button'、'submit'和'reset'，默认'button'
 							 */
+
 							/**
 							 * @cfg name String
 							 * 
 							 * name属性
 							 */
+
 							/**
 							 * @cfg value String
 							 * 
 							 * value属性
 							 */
+
 							/**
 							 * @cfg iconCls String
 							 * 
-							 * 图标class
+							 * 按钮图标的class
 							 */
+
 							/**
 							 * @cfg text String
 							 * 
-							 * 文字
+							 * 按钮文字
 							 */
+
 							afterRender : function(container) {
 								Button.superclass.afterRender.call(this,
 										container);
+
+								this.el.addClass('btn');
 
 								if (this.disabled) {
 									this.el.prop('disabled', true);
@@ -83,8 +92,10 @@ define(function(require, exports, module) {
 									this.value = this.el.val();
 								}
 
-								if (this.text) {
+								if (this.text !== undefined) {
 									this.el.text(this.text);
+								} else {
+									this.text = this.el.text();
 								}
 
 								if (!this.el.hasClass('btn-primary')
@@ -94,7 +105,7 @@ define(function(require, exports, module) {
 										&& !this.el.hasClass('btn-danger')
 										&& !this.el.hasClass('btn-link')
 										&& !this.el.hasClass('btn-default')) {
-									this.el.addClass('btn-default')
+									this.el.addClass('btn-default');
 								}
 
 								if (this.iconCls) {
@@ -120,6 +131,8 @@ define(function(require, exports, module) {
 									this.el.prepend('<span class="' + iconCls
 											+ '"></span>&nbsp;');
 								}
+
+								$icon = null;
 							}
 						});
 				module.exports = Button;

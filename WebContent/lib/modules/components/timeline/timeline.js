@@ -12,7 +12,7 @@
  * @method String getValue()
  * @method void setValue(String value)
  * 
- * @description 1.目前只处理到天 2.目前只处理闭区间 updated on 2013-12-26
+ * @description 1.目前只处理到天 2.目前只处理闭区间 updated on 2014-01-16
  * 
  */
 define(function(require, exports, module) {
@@ -161,7 +161,7 @@ define(function(require, exports, module) {
 			/**
 			 * @cfg size String
 			 * 
-			 * 'normal', 'small'，默认：'normal'
+			 * 'normal' or 'small'，默认：'normal'
 			 */
 
 			/**
@@ -186,7 +186,7 @@ define(function(require, exports, module) {
 			/**
 			 * @cfg readonly Boolean
 			 * 
-			 * 是否只读，目前缺少startDate或endDate时readonly只读为true
+			 * 是否只读。缺少startDate或endDate时也会强制为只读状态
 			 */
 
 			/**
@@ -332,7 +332,7 @@ define(function(require, exports, module) {
 				var d = left + this.halfPointWidth;
 				var vm = Math.floor(d * this.dm / w) + this.sm;
 				var date = new Date(vm);
-				return this.dateFormat.format(date);
+				return this.formatter.format(date);
 			},
 			addDelegateEvents : function() {
 				$('body').on('mousemove', {
@@ -365,7 +365,7 @@ define(function(require, exports, module) {
 							+ '<li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)">删除</a></li>'
 							+ '</ul>').on('click', {
 								componentId : this.getId()
-							}, onDeleteMenuClick);
+							}, onDeleteMenuClick).appendTo($('body'));
 				}
 				// 从一个deleteTarget到另一个deleteTarget，先清除之前的body事件
 				this.removeDelegateDeleteEvent();
@@ -383,12 +383,12 @@ define(function(require, exports, module) {
 				this.points = this.el.children('.' + this.baseCls + '-point');
 			},
 			addDelegateDeleteEvent : function() {
-				$('body').append(this.deleteMenu).on('click', {
+				$('body').on('click', {
 							componentId : this.getId()
-						}, this.hideDeleteMenu);
+						}, hideDeleteMenu);
 			},
 			removeDelegateDeleteEvent : function() {
-				$('body').off('click', this.hideDeleteMenu);
+				$('body').off('click', hideDeleteMenu);
 			},
 			initValue : function() {
 				if (this.value !== undefined) {

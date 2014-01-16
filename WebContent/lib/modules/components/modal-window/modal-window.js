@@ -3,7 +3,7 @@
  * 
  * @author dengfenfen, dengfenfen@dhcc.com.cn, 2013-12-05
  * 
- * @requires extend, component
+ * @requires extend, component, utils, jquery-utils
  * 
  * @method load: Function(Object option)
  * @method show: Function()
@@ -15,7 +15,7 @@
  * @event load: Function(modalWindow win ,String responseText, String
  *        textStatus, XMLHttpRequest xhr)
  * 
- * @description updated on 2013-12-27
+ * @description updated on 2014-01-12
  * 
  */
 define(function(require, exports, module) {
@@ -25,6 +25,7 @@ define(function(require, exports, module) {
 	var extend = require('extend');
 	var Base = require('component');
 	var jqueryUtils = require('jquery-utils');
+	var utils = require('utils');
 
 	(function() {
 		var modalWindow = extend(Base, {
@@ -152,10 +153,12 @@ define(function(require, exports, module) {
 									: '') + '"></a>').html(button.text || '')
 							.appendTo($footer);
 					var handler = button.handler;
-					$btn.on('click', {
+					if(handler && utils.isFunction(handler)){
+					    $btn.on('click', {
 								handler : handler,
 								cmpId : this.getId()
 							}, this.onBtnClick);
+					}
 					$btn = null;
 				}
 				$footer = null;

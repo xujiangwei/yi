@@ -18,6 +18,10 @@
  * @method Array getData()
  * 
  * @event load: function(Gallery g, Object/Array data)
+ * @event beforeadd: function(Gallery g, Object data, String id, Boolean isAdd)
+ * @event add: function(Tab t, Object item, String id, Boolean isAdd)
+ * @event beforeremove: function(Tab t, Object item, String id, Boolean isAdd)
+ * @event remove: function(Tab t, Object item, String id, Boolean isAdd)
  * @event itemrender: function(Gallery g, Object item, String id, Boolean isAdd)
  * @event itemmouseover: function(Gallery g, Object item, String id, Boolean
  *        isAdd, Event e)
@@ -30,7 +34,7 @@
  * @event itemdestroy: function(Gallery g, Object item, String id, Boolean
  *        isAdd)
  * 
- * @description updated on 2013-01-09
+ * @description updated on 2013-01-16
  * 
  */
 define(function(require, exports, module) {
@@ -199,17 +203,25 @@ define(function(require, exports, module) {
 
 				this.addEvents('load',
 
+						'beforeadd',
+
+						'add',
+
+						'beforeremove',
+
+						'remove',
+
 						'itemrender',
-
-						'beforeitemdestroy',
-
-						'itemdestroy',
 
 						'itemmouseover',
 
 						'itemmouseout',
 
-						'itemclick');
+						'itemclick',
+
+						'beforeitemdestroy',
+
+						'itemdestroy');
 
 				this.identifier = (this.reader && this.reader.identifier)
 						|| 'id';
@@ -331,19 +343,23 @@ define(function(require, exports, module) {
 				var id = this.getId() + '_add';
 				// this.itemMap.put(id, {}); // 单独销毁，不记录就不会被clear()删除
 
-				var $col = $('<div class="' + this.baseCls + '-col-add '
-						+ this.colCls + '"></div>').data('itemId', id)
-						.appendTo(this.list);
+				if (this.trigger('beforeadd', this, null, id, true) !== false) {
+					var $col = $('<div class="' + this.baseCls + '-col-add '
+							+ this.colCls + '"></div>').data('itemId', id)
+							.appendTo(this.list);
 
-				this.addItem = {
-					id : id,
-					isAdd : true
-				};
-				this.itemMap.put(id, this.addItem);
+					this.addItem = {
+						id : id,
+						isAdd : true
+					};
+					this.itemMap.put(id, this.addItem);
 
-				this.renderItem(this.addItem, $col, id, null);
+					this.renderItem(this.addItem, $col, id, null);
 
-				$col = null;
+					this.trigger('add', this, this.addItem, id, true);
+
+					$col = null;
+				}
 			},
 			initData : function() {
 				this.dataMap = new Map();
@@ -468,31 +484,37 @@ define(function(require, exports, module) {
 					var d = data[i];
 
 					var id = d[this.identifier];
-					if (!id) {
-						id = utils.id();
-					}
 					if (this.dataMap.containsKey(id)) {
 						continue;
 					}
-					this.dataMap.put(id, d);
 
-					var $col = $('<div class="' + this.colCls + '"></div>')
-							.data('itemId', id);
-					if (position) {
-						$col.insertBefore(position);
-					} else {
-						$col.appendTo(this.list);
+					if (!id) {
+						id = utils.id();
 					}
 
-					var item = {
-						id : id
-					};
-					this.itemMap.put(id, item);
+					if (this.trigger('beforeadd', this, d, id, false) !== false) {
+						this.dataMap.put(id, d);
 
-					this.renderItem(item, $col, id, d);
+						var $col = $('<div class="' + this.colCls + '"></div>')
+								.data('itemId', id);
+						if (position) {
+							$col.insertBefore(position);
+						} else {
+							$col.appendTo(this.list);
+						}
 
-					item = null;
-					$col = null;
+						var item = {
+							id : id
+						};
+						this.itemMap.put(id, item);
+
+						this.renderItem(item, $col, id, d);
+
+						this.trigger('add', this, item, id, false);
+
+						item = null;
+						$col = null;
+					}
 				}
 
 				position = null;
@@ -520,25 +542,26 @@ define(function(require, exports, module) {
 					ri = this.getItem(id);
 				}
 
-				// beforeadd?
-
-				if (this.multiSelect) {
-					if (this.selectedItems && this.selectedItems[id]) {
-						delete this.selectedItems[id];
+				if (ri
+						&& this.trigger('beforeremove', this, ri, id, ri.isAdd) !== false) {
+					if (this.multiSelect) {
+						if (this.selectedItems && this.selectedItems[id]) {
+							delete this.selectedItems[id];
+						}
+					} else if (id == this.selectedItems) {
+						delete this.selectedItems;
 					}
-				} else if (id == this.selectedItems) {
-					delete this.selectedItems;
+
+					this.destroyItem(ri, id, ri.isAdd);
+
+					if ($col.size() > 0) {
+						$col.remove();
+					}
+
+					this.dataMap.remove(id);
+
+					this.trigger('remove', this, ri, id, ri.isAdd);
 				}
-
-				this.destroyItem(ri, id, ri.isAdd);
-
-				if ($col.size() > 0) {
-					$col.remove();
-				}
-
-				this.dataMap.remove(id);
-
-				// beforeadd?
 
 				ri = null;
 				$col = null;

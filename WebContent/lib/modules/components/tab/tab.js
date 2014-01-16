@@ -21,7 +21,7 @@
  * @event activate: function(Tab t, Object activeTab)
  * @event addbuttonclick: function(Tab t, jqObject addButton, Event e)
  * 
- * @description updated on 2013-01-06
+ * @description updated on 2013-01-16
  * 
  */
 define(function(require, exports, module) {
@@ -69,7 +69,7 @@ define(function(require, exports, module) {
 			/**
 			 * @cfg activeIndex Number
 			 * 
-			 * 初始化时激活的标签序号，从0开始计数，默认激活第0项
+			 * 初始化时激活的标签序号（从0开始）
 			 */
 			activeIndex : 0,
 
@@ -82,22 +82,28 @@ define(function(require, exports, module) {
 			/**
 			 * @cfg defaultTitle String
 			 * 
-			 * item中找不到title属性则使用它作为标题
+			 * item中没有title属性则使用它作为标题
 			 */
 			defaultTitle : 'new tab',
 
 			initComponent : function() {
 				Tab.superclass.initComponent.call(this);
 
-				this.addEvents('beforetabchange',
+				this.addEvents('beforeadd',
+
+						'add',
+
+						'beforeremove',
+
+						'remove',
+
+						'beforetabchange',
 
 						'tabchange',
 
 						'activate',
 
-						'add',
-
-						'remove');
+						'addbuttonclick');
 			},
 			afterRender : function(parent) {
 				Tab.superclass.afterRender.call(this, parent);
@@ -160,7 +166,7 @@ define(function(require, exports, module) {
 
 				// 确保items是个数组
 				items = [].concat(items);
-				var i, len = items.length, addedItems = [];
+				var i, len = items.length, ais = [];
 				for (i = 0; i < len; i++) {
 					var item = items[i];
 
@@ -173,7 +179,7 @@ define(function(require, exports, module) {
 						var c = new PageLoader(item);
 						id = c.getId();
 						this.itemMap.put(id, c);
-						addedItems.push(c);
+						ais.push(c);
 
 						var $header = $('<li class="'
 								+ this.baseCls
@@ -211,7 +217,7 @@ define(function(require, exports, module) {
 				$prevTab = null;
 				$prevHeader = null;
 
-				return addedItems;
+				return ais;
 			},
 			initItems : function() {
 				this.itemMap = new Map();

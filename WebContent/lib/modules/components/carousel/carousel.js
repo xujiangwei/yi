@@ -9,20 +9,21 @@
  * 
  * @method void load(Object option)
  * @method void clear()
- * @method void add(Object/Array items)
  * @method Object getItem(String/Number/Object item)
  * @method Object getItemData(String/Object item)
+ * @method Object getFocusItem()
  * @method void prev(Object item)
  * @method void next(Object item)
- * @method void play(Number index)
+ * @method void play(String/Number/Object item)
  * 
+ * @event load: function(Carousel c, Object/Array data)
  * @event play: function(Carousel c, Object item)
  * @event switch: function(Carousel c, Object lastActiveItem, Object
  *        activeItem,)
  * @event stop: function(Carousel c, Object item)
  * @event itemrender: function(Carousel c, Object item, String id)
  * 
- * @description updated on 2014-01-09
+ * @description updated on 2014-01-15
  * 
  */
 define(function(require, exports, module) {
@@ -39,8 +40,8 @@ define(function(require, exports, module) {
 		var comp = Base.get(this.componentId);
 		if (comp) {
 			comp.add(d);
+			comp.trigger('load', comp, d);
 		}
-
 		comp = null;
 		d = null;
 	}
@@ -54,7 +55,7 @@ define(function(require, exports, module) {
 	}
 	function onChangeClcik(e) {
 		var comp = Base.get(e.data.compId), $target = $(e.target)
-				.closest('.carousel-control');
+				.closest('.yi-carousel-control');
 		if ($target.size() > 0) {
 			if ($target.closest('.' + comp.baseCls + '-left').size() > 0) {
 				comp.clickPrev(e);
@@ -102,7 +103,16 @@ define(function(require, exports, module) {
 			 * 
 			 * 轮播数据
 			 */
-			data : [],
+			/**
+			 * @cfg dataUrl String
+			 * 
+			 * 轮播数据url
+			 */
+			/**
+			 * @cfg params Object
+			 * 
+			 * 额外的参数
+			 */
 			/**
 			 * @cfg autoPlay Boolean
 			 * 
@@ -115,23 +125,32 @@ define(function(require, exports, module) {
 			 */
 			interval : 4000,
 			/**
-			 * @cfg indicators Boolean
+			 * @cfg hasIndicators Boolean
 			 * 
 			 * 是否有圆球形的滑块
 			 */
-
+			/**
+			 * @cfg startWidth Number
+			 * 
+			 * 轮播项的起始宽度
+			 */
+			/**
+			 * @cfg startHeight Number
+			 * 
+			 * 轮播项的起始高度
+			 */
 			/**
 			 * @cfg thumbnail Boolean
 			 * 
 			 * 当前的轮播项的两侧是否还显示别的项
 			 */
 			// 缩放因子
-			factor : 0.75,
+			factor : 0.85,
 			// 规定只显示5张
 			number : 5,
 			activeIndex : 0,
 			activeModal : 0,
-			maxZindex : 1030,
+			maxZindex : 1000,
 			maxOpacity : 1,
 			maxFontSize : 14,
 			initComponent : function() {
@@ -145,13 +164,20 @@ define(function(require, exports, module) {
 				this.itemCls = this.baseCls + '-item';
 				this.focusItemCls = this.baseCls + '-item-focus';
 
-				if (this.thumbnail) {
-					var count = this.data.length, frontCount = 0;
-					if (count > 0) {
-						frontCount = 1;
-					}
-					this.frontCount = frontCount;
-				}
+				this.startLeft = ((this.width - this.startWidth) / 2)
+						.toFixed(0)
+						+ 'px';
+				this.startTop = ((this.height - this.startHeight) / 2)
+						.toFixed(0)
+						+ 'px';
+				this.frontWidth = this.startWidth * this.factor;
+				this.frontHeight = this.startHeight * this.factor;
+				this.sLeft = parseFloat(this.startLeft) - this.frontWidth / 2
+						+ 'px';
+				this.sRLeft = parseFloat(this.startLeft) + this.startWidth
+						- this.startWidth * this.factor / 2 + 'px';
+				this.sTop = ((this.height - this.frontHeight) / 2).toFixed(0)
+						+ 'px';
 			},
 			afterRender : function(container) {
 				Carousel.superclass.afterRender.call(this, container);
@@ -160,15 +186,29 @@ define(function(require, exports, module) {
 						.addClass(this.baseCls);
 				this.itemContainer = $("<div class=" + this.baseCls
 						+ "-item-container></div>").appendTo(this.el);
+				this.itemModal = $("<div class=" + this.baseCls
+						+ "-item-modal-container>").appendTo(this.el).on(
+						'click', {
+							compId : this.getId()
+						}, onItemClick);
+				this.indicatorsCt = $("<ol class='" + this.baseCls
+						+ "-indicators'></ol>").appendTo(this.el).on('click', {
+							compId : this.getId()
+						}, onIndicatorClick).css({
+							'z-index' : this.maxZindex
+						});
+				if (!this.hasIndicators) {
+					this.indicatorsCt.hide();
+				}
 
-				this.addIndicators();
-				this.addModal();
 				this.addControl();
+				this.addModal();
+
 				if (utils.isArray(this.data)) {
 					var data = this.data;
 					delete this.data;
 					this.add(data);
-				} else if (this.autoLoad) {
+				} else {
 					this.load({
 								dataUrl : this.dataUrl,
 								params : this.params
@@ -176,49 +216,40 @@ define(function(require, exports, module) {
 				}
 			},
 			addIndicators : function() {
-				var i, len = this.data.length, indicators = "<ol class='"
-						+ this.baseCls + "-indicators'>";
-				for (i = 0; i < len; i++) {
-					indicators += "<li class='" + this.baseCls + "-indicator'>";
-				}
-				indicators += "</ol>";
-				this.indicatorsCt = $(indicators).css({
-							'z-index' : this.maxZindex
-						}).appendTo(this.el);
-				this.indicatorsCt.find('.' + this.baseCls + '-indicator').on(
-						'click', {
-							compId : this.getId()
-						}, onIndicatorClick);
-				if (!this.indicators) {
-					this.indicatorsCt.hide();
+				var i, len = this.dataMap.values().length, indicators = "";
+				this.indicatorsCt.empty()
+				if (len > 0) {
+					for (i = 0; i < len; i++) {
+						indicators += "<li class='" + this.baseCls
+								+ "-indicator'>";
+					}
+					this.indicatorsCt.append(indicators);
 				}
 				indicators = null;
 			},
 			addControl : function() {
-				if (this.data.length > 1) {
-					$('<a class="yi-carousel-left left carousel-control">'
-							+ '<span class="glyphicon glyphicon-chevron-left">'
-							+ '</span></a>'
-							+ '<a class="yi-carousel-right right carousel-control">'
-							+ '<span class="glyphicon glyphicon-chevron-right">'
-							+ '</span></a>').appendTo(this.el).css({
-								'z-index' : this.maxZindex
-							}).on('click', {
-								compId : this.getId()
-							}, onChangeClcik);
-				}
+				this.control = $('<a class="yi-carousel-left yi-carousel-control">'
+						+ '<span class="glyphicon glyphicon-chevron-left">'
+						+ '</span></a>'
+						+ '<a class="yi-carousel-right yi-carousel-control">'
+						+ '<span class="glyphicon glyphicon-chevron-right">'
+						+ '</span></a>').appendTo(this.el).css({
+							'z-index' : this.maxZindex
+						}).on('click', {
+							compId : this.getId()
+						}, onChangeClcik);
+				var top = (this.height - this.control.height()) / 2 + 'px';
+				this.control.css({
+							'top' : top
+						});
 			},
 			addModal : function() {
-				var i, len = this.number, itemModal = '<div class='
-						+ this.baseCls + '-item-modal-container>';
+				var i, len = this.number, itemModal = '';
 				for (i = 0; i < len; i++) {
 					itemModal += '<div class=' + this.baseCls
 							+ '-item-modal></div>'
 				}
-				itemModal += '</div>';
-				this.itemModal = $(itemModal).appendTo(this.el).on('click', {
-							compId : this.getId()
-						}, onItemClick);
+				this.itemModal.append(itemModal);
 				this.modals = this.itemModal.children();
 				itemModal = null;
 			},
@@ -291,13 +322,15 @@ define(function(require, exports, module) {
 				$nextModal = null;
 			},
 			clickItem : function(e) {
-				if (e.clientX > this.itemContainer.children()
-						.eq(this.activeIndex).offset().left) {
-					$('.' + this.baseCls + '-right', this.el).triggerHandler(
-							'click', [this.getId()]);
-				} else {
-					$('.' + this.baseCls + '-left', this.el).triggerHandler(
-							'click', [this.getId()]);
+				if (this.control.css('display') !== 'none') {
+					if (e.clientX > this.itemContainer.children()
+							.eq(this.activeIndex).offset().left) {
+						$('.' + this.baseCls + '-right', this.el)
+								.triggerHandler('click', [this.getId()]);
+					} else {
+						$('.' + this.baseCls + '-left', this.el)
+								.triggerHandler('click', [this.getId()]);
+					}
 				}
 			},
 			clickIndicator : function(order) {
@@ -336,16 +369,18 @@ define(function(require, exports, module) {
 					this.toggleIndicator($current, $next, isLeft);
 				}
 
+				if (isLeft) {
+					this.prev(this.getItem($next.data('itemId')));
+				} else {
+					this.next(this.getItem($next.data('itemId')));
+				}
+
 				$next = null
 				$current = null;
 				$currentModal = null;
 				$nextModal = null;
 				$prevModal = null;
 				$item = null;
-
-				if (this.autoPlay) {
-					this.carouselInterval();
-				}
 			},
 			toggleIndicator : function($current, $next, isLeft) {
 				var isLeft = (isLeft !== undefined)
@@ -359,20 +394,24 @@ define(function(require, exports, module) {
 								'left' : this.width
 							}, this.interval / 3, 'swing');
 					$next.animate({
-								'left' : this.centerLeft
+								'left' : 0
 							}, this.interval / 3, 'swing');
 				} else {
 					$next.css({
 								'left' : this.width
 							});
 					$next.animate({
-								'left' : this.centerLeft
+								'left' : 0
 							}, this.interval / 3, 'swing');
 					$current.animate({
 								'left' : -(this.width)
 							}, this.interval / 3, 'swing');
 				}
-				this.trigger('play', this.getItem($next.data('itemId')));
+				if (this.autoPlay) {
+					this.carouselInterval();
+				}
+
+				this.trigger('play', this, this.getItem($next.data('itemId')));
 				this.trigger('switch', this, this.getItem($current
 								.data('itemId')), this.getItem($next
 								.data('itemId')));
@@ -394,24 +433,18 @@ define(function(require, exports, module) {
 					this.stop();
 				}
 
-				if (this.thumbnail) {
-					function thumbnailInterval() {
-						$('.' + baseCls + '-right', Base.get(compId).el)
-								.triggerHandler('click', [compId]);
+				function thumbnailInterval() {
+					var comp = Base.get(compId);
+					if (comp.control.css('display') !== 'none') {
+						$('.' + baseCls + '-right', comp.el).triggerHandler(
+								'click', [compId]);
 					}
-					this.intervalId = setInterval(thumbnailInterval,
-							this.interval);
-				} else {
-					function interval() {
-						Base.get(compId).indicatorsCt.children()
-								.eq(activeIndex).triggerHandler('click',
-										[compId]);
-					}
-					this.intervalId = setInterval(interval, this.interval);
+					comp = null;
 				}
+				this.intervalId = setInterval(thumbnailInterval, this.interval);
 			},
 			/**
-			 * 
+			 * 获取当前播放的项
 			 */
 			getFocusItem : function() {
 				return this.getItem(this.activeIndex);
@@ -430,7 +463,7 @@ define(function(require, exports, module) {
 				for (i = 0; i < len; i++) {
 					var d = data[i];
 
-					var id = d[this.identifier];
+					var id = d.id;
 					if (!id) {
 						id = utils.id();
 					}
@@ -449,13 +482,27 @@ define(function(require, exports, module) {
 					item = null;
 				}
 
+				this.addIndicators();
+				if (data.length == 0) {
+					this.itemModal.hide();
+				} else {
+					this.itemModal.show();
+				}
+				if (data.length <= 1) {
+					this.control.hide();
+				} else {
+					this.control.show();
+				}
+
 				if (this.thumbnail) {
 					this.updateThumbnailItemPosition(false);
 				} else {
 					this.updateItemPosition();
 				}
-				this.indicatorsCt.children().eq(this.activeIndex)
-						.addClass('active');
+				if (data.length > 0) {
+					this.indicatorsCt.children().eq(this.activeIndex)
+							.addClass('active');
+				}
 			},
 			initData : function() {
 				this.dataMap = new Map();
@@ -475,8 +522,6 @@ define(function(require, exports, module) {
 							componentId : componentId
 						}, onItemMouseLeave);
 				this.trigger('itemrender', this, item, id);
-				this.startWidth = item.el.width();
-				this.startHeight = item.el.height();
 			},
 			// 扩展点
 			onItemRender : function(item, container, id, data) {
@@ -484,22 +529,18 @@ define(function(require, exports, module) {
 						'itemId', id).appendTo(this.itemContainer);
 			},
 			updateItemPosition : function() {
-				var $items = this.itemContainer.children('.'
-						+ this.itemCls), i, size = $items.size();
-				var top = ((this.height - this.startHeight) / 2).toFixed(0)
-						+ 'px';
-				this.centerLeft = ((this.width - this.startWidth) / 2)
-						.toFixed(0);
-				for (i = 0; i < size; i++) {
-					$items.eq(i).css({
-								'left' : (i * this.width + this.centerLeft)
-										+ 'px',
-								'top' : top
-							});
-				}
-				$items = null;
-				if (this.autoPlay) {
-					this.carouselInterval();
+				var $items = this.itemContainer.children('.' + this.itemCls), i, size = $items
+						.size();
+				if (size > 0) {
+					for (i = 0; i < size; i++) {
+						$items.eq(i).css({
+									'left' : (i * this.width) + 'px'
+								}).width(this.width).height(this.height);
+					}
+					$items = null;
+					if (this.autoPlay) {
+						this.carouselInterval();
+					}
 				}
 			},
 			// 修改轮播项的位置
@@ -507,163 +548,159 @@ define(function(require, exports, module) {
 				var $items = this.itemContainer.children('.' + this.itemCls)
 						.removeClass(this.focusItemCls).animate({
 									'opacity' : 0
-								}, 0, 'swing'), frontCount = this.frontCount, $frontItem, startLeft, startTop;
-				var me = this;
-				if (frontCount) {
+								}, 0, 'swing').css({
+									"z-index" : this.maxZindex - 2
+								}), $frontItem, startLeft = this.startLeft, startTop = this.startTop, size = this.dataMap
+						.values().length;
+				if (size > 0) {
 					$frontItem = $items.eq(this.activeIndex)
 							.addClass(this.focusItemCls);
-					startLeft = ((this.width - this.startWidth) / 2).toFixed(0)
-							+ 'px';
-					startTop = ((this.height - this.startHeight) / 2)
-							.toFixed(0)
-							+ 'px';
-				}
-				var $lastActiveItem = $items.eq(this.lastActiveIndex);
-				// 放灰色的图片
-				var m = this.activeModal, j, count = this.number / 2 + m, y = 0;
-				this.modals.removeClass(this.baseCls + '-item-modal-focus')
-						.animate({
+
+					var $lastActiveItem = $items.eq(this.lastActiveIndex);
+					// 放灰色的图片
+					var m = this.activeModal, j, count = this.number / 2 + m, y = 0;
+					this.modals.removeClass(this.baseCls + '-item-modal-focus')
+							.animate({
+										'opacity' : 0.6
+									}, 0, 'swing');
+
+					// 当前的灰色图片
+					var $lastModal = this.modals.eq(this.lastActiveModal);
+					var $frontModal = this.modals.eq(m);
+
+					if (prev) {
+						// 向左
+						$frontItem.css({
+									'top' : this.sTop,
+									'left' : this.sLeft,
+									'width' : this.frontWidth,
+									'height' : this.frontHeight,
+									'z-index' : this.maxZindex - 1
+								});
+					} else {
+						// 向右
+						$frontItem.css({
+									'top' : this.sTop,
+									'left' : this.sRLeft,
+									'width' : this.frontWidth,
+									'height' : this.frontHeight,
+									'z-index' : this.maxZindex - 1
+								});
+					}
+					if (prev) {
+						$lastActiveItem.animate({
 									'opacity' : 1
-								}, 0, 'swing');
+								}, 0, 'swing').animate({
+									'width' : this.frontWidth,
+									'height' : this.frontHeight,
+									'left' : this.sRLeft,
+									'top' : this.sTop,
+									'opacity' : 0
+								}, 800, 'swing').css({
+									'z-index' : this.maxZindex - 1,
+									'font-size' : this.maxFontSize - 1 + 'px'
+								});
 
-				// 当前的灰色图片
-				var $lastModal = this.modals.eq(this.lastActiveModal);
-				var $frontModal = this.modals.eq(m);
-				var width = this.startWidth * this.factor;
-				var height = this.startHeight * this.factor;
-				var left = parseFloat(startLeft) - width / 2;
-				var rLeft = parseFloat(startLeft) + this.startWidth
-						- this.startWidth * this.factor / 2;
-				var top = ((this.height - height) / 2).toFixed(0)
-
-				if (prev) {
-					// 向左
-					$frontItem.css({
-								'top' : top + 'px',
-								'left' : left + 'px',
-								'width' : width,
-								'height' : height,
-								'z-index' : this.maxZindex - 1
+					} else {
+						$lastActiveItem.animate({
+									'opacity' : 1
+								}, 0, 'swing').animate({
+									'width' : this.frontWidth,
+									'height' : this.frontHeight,
+									'left' : this.sLeft,
+									'top' : this.sTop,
+									'opacity' : 0
+								}, 800, 'swing').css({
+									'z-index' : this.maxZindex - 1,
+									'font-size' : this.maxFontSize - 1 + 'px'
+								});
+					}
+					$frontModal.addClass(this.baseCls + '-item-modal-focus')
+							.animate({
+										'width' : this.startWidth,
+										'height' : this.startHeight,
+										'left' : startLeft,
+										'top' : startTop,
+										'font-size' : this.maxFontSize + 'px'
+									}, 800, 'swing').css({
+										'z-index' : this.maxZindex
+									});
+					$frontItem.animate({
+								'width' : this.startWidth,
+								'height' : this.startHeight,
+								'left' : startLeft,
+								'top' : startTop,
+								'opacity' : this.maxOpacity
+							}, 800, 'swing').css({
+								'z-index' : this.maxZindex + 1,
+								'font-size' : this.maxFontSize + 'px'
 							});
-				} else {
-					// 向右
-					$frontItem.css({
-								'top' : top + 'px',
-								'left' : rLeft + 'px',
-								'width' : width,
-								'height' : height,
-								'z-index' : this.maxZindex - 1
-							});
+					$frontModal.animate({
+								'opacity' : 0
+							}, 0, 'swing');
+					$lastActiveItem = null;
+					$frontModal = null;
+					$frontItem = null;
+					for (j = m + 1; j < count; j++) {
+						y++;
+						var rightModalIndex = j % this.number;
+
+						var $leftItemModal = this.modals.eq(rightModalIndex);
+						var leftModalIndex = ((rightModalIndex + 2
+								* ((this.number - 1) / 2 - y)) + 1)
+								% this.number;
+						var $rightItemModal = this.modals.eq(leftModalIndex);
+						var width = this.startWidth * this.factor / y;
+						var height = this.startHeight * this.factor / y;
+
+						var fontSize = (this.maxFontSize - y) + 'px';
+						var zIndex = this.maxZindex - y;
+
+						var left = (parseFloat(startLeft) - width * 1 / 2)
+								.toFixed(0)
+								+ 'px';
+						var rLeft = (parseFloat(startLeft) + this.startWidth - width
+								/ 2)
+								+ 'px';
+						var top = ((this.height - height) / 2).toFixed(0)
+								+ 'px';
+
+						$rightItemModal.animate({
+									'width' : width,
+									'height' : height,
+									'left' : left,
+									'top' : top
+								}, 800, 'swing').css({
+									'z-index' : zIndex,
+									'font-size' : fontSize
+								});
+						$leftItemModal.animate({
+									'width' : width,
+									'height' : height,
+									'left' : rLeft,
+									'top' : top
+								}, 800, 'swing').css({
+									'z-index' : zIndex,
+									'font-size' : fontSize
+								});;
+						$leftItemModal = null;
+						$rightItemModal = null;
+					}
+					if (this.autoPlay) {
+						this.carouselInterval();
+					}
+
+					// 选择器样式改变
+					var $indicators = this.indicatorsCt.children()
+							.removeClass('active');
+					$indicators.eq(this.activeIndex).addClass('active');
+
+					this.trigger('play', this, this.getItem(this.activeIndex));
+					this.trigger('switch', this, this
+									.getItem(this.lastActiveIndex), this
+									.getItem(this.activeIndex));
+					$indicators = null;
 				}
-				if (prev) {
-					$lastActiveItem.animate({
-								'opacity' : 1
-							}, 0, 'swing').animate({
-								'z-index' : me.maxZindex - 1,
-								'width' : width,
-								'height' : height,
-								'left' : rLeft,
-								'top' : top,
-								'opacity' : 0,
-								'font-size' : me.maxFontSize - 1 + 'px'
-							}, 800, 'swing')
-
-				} else {
-					$lastActiveItem.animate({
-								'opacity' : 1
-							}, 0, 'swing').animate({
-								'z-index' : me.maxZindex - 1,
-								'width' : width,
-								'height' : height,
-								'left' : left,
-								'top' : top,
-								'opacity' : 0,
-								'font-size' : me.maxFontSize - 1 + 'px'
-							}, 800, 'swing')
-				}
-				$frontModal.addClass(this.baseCls + '-item-modal-focus')
-						.animate({
-									'z-index' : this.maxZindex,
-									'width' : this.startWidth,
-									'height' : this.startHeight,
-									'left' : startLeft,
-									'top' : startTop,
-									'font-size' : this.maxFontSize + 'px'
-								}, 800, 'swing');
-				$frontItem.animate({
-							'z-index' : this.maxZindex + 1,
-							'width' : this.startWidth,
-							'height' : this.startHeight,
-							'left' : startLeft,
-							'top' : startTop,
-							'opacity' : this.maxOpacity,
-							'font-size' : this.maxFontSize + 'px'
-						}, 800, 'swing');
-				$frontModal.animate({
-							'opacity' : 0
-						}, 0, 'swing');
-				$lastActiveItem = null;
-				$frontModal = null;
-				$frontItem = null;
-				for (j = m + 1; j < count; j++) {
-					y++;
-					var rightModalIndex = j % this.number;
-
-					var $leftItemModal = this.modals.eq(rightModalIndex);
-					var leftModalIndex = ((rightModalIndex + 2
-							* ((this.number - 1) / 2 - y)) + 1)
-							% this.number;
-					var $rightItemModal = this.modals.eq(leftModalIndex);
-					var width = this.startWidth * this.factor / y;
-					var height = this.startHeight * this.factor / y;
-
-					var fontSize = (this.maxFontSize - y) + 'px';
-					var zIndex = this.maxZindex - y;
-
-					var left = (parseFloat(startLeft) - width * 1 / 2)
-							.toFixed(0)
-							+ 'px';
-					var rLeft = (parseFloat(startLeft) + this.startWidth - width
-							/ 2)
-							+ 'px';
-					var top = ((this.height - height) / 2).toFixed(0) + 'px';
-
-					$rightItemModal.animate({
-								'width' : width,
-								'height' : height,
-								'z-index' : zIndex,
-								'left' : left,
-								'top' : top,
-								'font-size' : fontSize
-							}, 800, 'swing');
-					$leftItemModal.animate({
-								'width' : width,
-								'height' : height,
-								'z-index' : zIndex,
-								'left' : rLeft,
-								'top' : top,
-								'font-size' : fontSize
-							}, 800, 'swing');
-					$leftItemModal = null;
-					$rightItemModal = null;
-				}
-				if (this.autoPlay) {
-					this.carouselInterval();
-				}
-
-				// 选择器样式改变
-				var $indicators = this.indicatorsCt.children()
-						.removeClass('active');
-				$indicators.eq(this.activeIndex).addClass('active');
-
-				this.trigger('play', this.getItem(this.itemContainer.children()
-								.eq(this.activeIndex).data('itemId')));
-				this.trigger('switch', this, this.getItem(this.itemContainer
-								.children().eq(this.lastActiveIndex)
-								.data('itemId')), this
-								.getItem(this.itemContainer.children()
-										.eq(this.activeIndex).data('itemId')));
-				$indicators = null;
 				$items = null;
 			},
 			/**
@@ -737,9 +774,8 @@ define(function(require, exports, module) {
 			 * 清空
 			 */
 			clear : function() {
-
-				delete this.selectedItem;
-
+				this.activeIndex = 0;
+				this.activeModal = 0;
 				if (this.dataMap && !this.dataMap.isEmpty()) {
 					var K = this.dataMap.keySet(), i, len = K.length;
 					for (i = 0; i < len; i++) {
@@ -751,19 +787,32 @@ define(function(require, exports, module) {
 			},
 			remove : function(option) {
 				var itemEl = this.getItem(option).el;
+				this.dataMap.remove(option);
+				this.itemMap.remove(option);
 				itemEl.remove();
 				itemEl = null;
 			},
 			/**
-			 * @description 播放轮播
-			 * @argument 1) index Number: 轮播项的UI序号
+			 * 播放轮播
+			 * 
+			 * @argument item Number/String/Object
+			 *           参数可以是item对象、唯一标识或者UI中的位置（从0开始）
 			 */
-			play : function(index) {
-				this.lastActiveIndex = this.activeIndex;
-				this.activeIndex = index;
-				this.indicatorsCt.children().eq((this.activeIndex + 1)
+			play : function(item) {
+				var index, $item;
+				if (utils.isString(item)) {
+					$item = this.getItem(item).el;
+					index = $item.index();
+				} else if (utils.isNumber(item)) {
+					index = item;
+				} else if (utils.isObject(item)) {
+					$item = item.el;
+					index = $item.index();
+				}
+				this.indicatorsCt.children().eq((index)
 						% this.dataMap.values().length).triggerHandler('click',
 						[this.getId()]);
+				$item = null;
 			},
 			/**
 			 * 
@@ -774,7 +823,7 @@ define(function(require, exports, module) {
 			 */
 			prev : utils.emptyFn,
 			/**
-			 * @description 停止动画
+			 * 停止动画
 			 */
 			stop : function() {
 				if (this.intervalId) {
@@ -802,6 +851,10 @@ define(function(require, exports, module) {
 				if (this.itemContainer) {
 					this.itemContainer.remove();
 					delete this.itemContainer;
+				}
+				if (this.control) {
+					this.control.remove();
+					delete this.control;
 				}
 
 				if (this.indicatorsCt) {

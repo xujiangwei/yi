@@ -7,7 +7,9 @@
  * 
  * @requires extend, component
  * 
- * @description updated on 2013-12-25
+ * @event itemrender: function(GraphRadioGroup g, jqObject $item, Object data)
+ * 
+ * @description updated on 2014-01-13
  * 
  */
 define(function(require, exports, module) {
@@ -22,6 +24,21 @@ define(function(require, exports, module) {
 		}
 		return str.charAt(0).toUpperCase() + str.substring(1);
 	};
+
+	function onLabeClick(e) {
+		var $label = $(e.target).closest('.yi-graph-radio-group-label'), cmp = Base
+				.get(e.data.cmpId);
+		if ($label.size() > 0) {
+			$('.yi-graph-radio-group-graph', cmp.el).removeClass(cmp.baseCls
+					+ '-selected');
+			$('.yi-graph-radio-group-graph', $label).addClass(cmp.baseCls
+					+ '-selected');
+			$('input', $label).prop('checked', true);
+		}
+		$label = null;
+		cmp = null;
+		e.stopPropagation();
+	}
 
 	(function() {
 		var NORTH = 'north', SOUTH = 'south', WEST = 'west', EAST = 'east';
@@ -42,24 +59,28 @@ define(function(require, exports, module) {
 			 * @cfg margin Number : 按钮的间隔
 			 */
 			margin : 0,
+			/**
+			 * @cfg data Array : 按钮数据
+			 */
+			data : [],
 			onRender : function(container, position) {
 				GraphRadioGroup.superclass.onRender.call(this, container,
 						position);
 			},
 			afterRender : function(container) {
-				GraphRadioGroup.superclass.afterRender.call(this,container);
+				GraphRadioGroup.superclass.afterRender.call(this, container);
 				this.init();
-				this.el.on('click', {
+				$('label', this.el).on('click', {
 							cmpId : this.getId()
-						}, this.onClick);
+						}, onLabeClick);
 			},
 			init : function() {
-				var $labels = this.el.children('label'), i = 0, len = $labels.length, region = this.region, graph = this.graph
-						|| {};
+				var $labels = this.el.children('label'), i = 0, len = $labels.length, region = this.region, data = this.data
+						|| [];
 				for (i = 0; i < len; i++) {
 					var $label = $($labels[i])
-							.addClass('yi-graph-radio-group-label'), url = graph[i]
-							&& graph[i].url, index = $label.index();
+							.addClass('yi-graph-radio-group-label'), d = data[i], url = d
+							&& d.url, index = $label.index();
 					if (index > 0) {
 						$label.css({
 									"margin-left" : this.margin + 'px'
@@ -67,36 +88,36 @@ define(function(require, exports, module) {
 					}
 					this["addTo" + firstLetterToUpperCase(region)]($label,
 							region, url);
-
+					var $input = $('input', $label);
+					var checked = $input.attr('checked'), $graph = $(
+							'.yi-graph-radio-group-graph', $label);
+					if (checked) {
+						$graph.addClass(this.baseCls + '-selected');
+						$input.prop('checked', true);
+					}
+					this.trigger('itemrender', this, $graph, d);
+					$input = null;
 					$label = null;
+					$graph = null;
 				}
-
-			},
-			onClick : function(e) {
-				var $target = $(e.target), $cmp = $(e.data.cmpId), $graph = $target
-						.parentsUntil('.yi-graph-radio-group label',
-								'.yi-graph-radio-group-graph');
-				if ($graph.size() > 0
-						|| $target.hasClass('yi-graph-radio-group-graph')) {
-					$target.parents('label').children('input').trigger('click');
-				}
-				$cmp = null;
-				$graph = null;
-				e.stopPropagation();
 			},
 			initGraphTemplate : function(region, url) {
-				return url
-						? ('<div class="yi-graph-radio-group-graph-'
-								+ region
-								+ ' yi-graph-radio-group-graph"><img src="'
-								+ url
-								+ '" '
-								+ (this.imgWidth ? 'width=' + this.imgWidth
-										+ 'px' : '')
-								+ ' '
-								+ (this.imgHeight ? "height=" + this.imgHeight
-										+ 'px' : '') + ' /></div>')
-						: '';
+				var baseWrap = '<div class="yi-graph-radio-group-graph-'
+						+ region + ' yi-graph-radio-group-graph">';
+				if (url) {
+					baseWrap += '<img src="'
+							+ url
+							+ '" '
+							+ (this.imgWidth
+									? 'width=' + this.imgWidth + 'px'
+									: '')
+							+ ' '
+							+ (this.imgHeight ? 'height=' + this.imgHeight
+									+ 'px' : '') + ' />';
+
+				}
+				baseWrap += '</div>';
+				return baseWrap;
 			},
 			addToSouth : function($label, region, url) {
 				$label.append(this.initGraphTemplate(region, url))
