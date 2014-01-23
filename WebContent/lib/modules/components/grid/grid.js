@@ -48,7 +48,7 @@ define(function(require, exports, module) {
 	});
 
 	// 格式化器
-	Grid.Formatters.PercentCompleteBar = Slick.Formatters.PercentCompleteBar;
+	//Grid.Formatters.PercentCompleteBar = Slick.Formatters.PercentCompleteBar;
 
 	window.Grid = Grid;
 
