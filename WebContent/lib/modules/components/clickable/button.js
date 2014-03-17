@@ -7,7 +7,10 @@
  * 
  * @requires extend, clickable
  * 
- * @description updated on 2014-01-14
+ * @method void setText(String text)
+ * @method void setIconCls(String cls)
+ * 
+ * @description updated on 2014-03-13
  * 
  */
 define(function(require, exports, module) {
@@ -17,8 +20,10 @@ define(function(require, exports, module) {
 			var Clickable = require('clickable');
 
 			(function() {
+				var inerHtmlPat = /<(\S*?)([^>]*)>.*?<\/\1>/;
 				var Button = extend(Clickable, {
 							baseCls : 'yi-button',
+
 							baseHtml : '<button class="btn"></button>',
 
 							/**
@@ -91,9 +96,8 @@ define(function(require, exports, module) {
 								} else {
 									this.value = this.el.val();
 								}
-
 								if (this.text !== undefined) {
-									this.el.text(this.text);
+									this.setText(this.text);
 								} else {
 									this.text = this.el.text();
 								}
@@ -124,7 +128,7 @@ define(function(require, exports, module) {
 							 * @augments iconCls String
 							 */
 							setIconCls : function(iconCls) {
-								var $icon = this.el.children('span');
+								var $icon = this.el.children('span.glyphicon');
 								if ($icon.size() > 0) {
 									$icon.removeClass().addClass(iconCls);
 								} else {
@@ -133,6 +137,16 @@ define(function(require, exports, module) {
 								}
 
 								$icon = null;
+							},
+							/**
+							 * @augments text String
+							 */
+							setText : function(text) {
+								var innerHtml = this.el.html();
+								var innerHtmlN = innerHtml.match(inerHtmlPat);
+								this.el.html((innerHtmlN ? innerHtmlN[0] : '')
+										+ text);
+								this.text = text;
 							}
 						});
 				module.exports = Button;

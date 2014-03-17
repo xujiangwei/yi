@@ -6,11 +6,10 @@ define(function(require, exports, module) {
 
 	var utils = require('./utils');
 
+	var DATETIME_PATTERN = 'yyyy-MM-dd HH:mm:ss', DATE_PATTERN = 'yyyy-MM-dd';
+	var dateRe = /-/g;
+
 	(function() {
-		var DATETIME_PATTERN = 'yyyy-MM-dd HH:mm:ss', DATE_PATTERN = 'yyyy-MM-dd';
-
-		var dateRe = /-/g;
-
 		function Format(pattern) {
 			this.pattern = pattern;
 		}
@@ -31,7 +30,7 @@ define(function(require, exports, module) {
 				var m = pad(date.getMinutes(), 2, '0');
 				var s = pad(date.getSeconds(), 2, '0');
 
-				return [y, M, d].join('-') + ' ' + [h, m, s].join('-');
+				return [y, M, d].join('-') + ' ' + [h, m, s].join(':');
 			} else {
 				return undefined;
 			}

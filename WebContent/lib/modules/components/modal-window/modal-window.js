@@ -1,5 +1,5 @@
 /**
- * modalWindow 对话框
+ * ModalWindow 对话框
  * 
  * @author dengfenfen, dengfenfen@dhcc.com.cn, 2013-12-05
  * 
@@ -9,13 +9,13 @@
  * @method show: Function()
  * @method hide: Function()
  * 
- * @event hide: Function(modalWindow win)
- * @event hidden: Function(modalWindow win)
- * @event shown: Function(modalWindow win)
- * @event load: Function(modalWindow win ,String responseText, String
+ * @event hide: Function(ModalWindow win)
+ * @event hidden: Function(ModalWindow win)
+ * @event shown: Function(ModalWindow win)
+ * @event load: Function(ModalWindow win ,String responseText, String
  *        textStatus, XMLHttpRequest xhr)
  * 
- * @description updated on 2014-01-12
+ * @description updated on 2014-02-24
  * 
  */
 define(function(require, exports, module) {
@@ -28,7 +28,7 @@ define(function(require, exports, module) {
 	var utils = require('utils');
 
 	(function() {
-		var modalWindow = extend(Base, {
+		var ModalWindow = extend(Base, {
 			baseCls : 'yi-modal-window',
 			// <div class="modal-body" />的左右border、padding之和，单位：px
 			bodyLRFrameWidth : 42,// (1 + 20) * 2
@@ -69,7 +69,7 @@ define(function(require, exports, module) {
 			 */
 			modal : true,
 			afterRender : function(container) {
-				modalWindow.superclass.afterRender.call(this, container);
+				ModalWindow.superclass.afterRender.call(this, container);
 				this.init();
 			},
 			init : function() {
@@ -153,11 +153,11 @@ define(function(require, exports, module) {
 									: '') + '"></a>').html(button.text || '')
 							.appendTo($footer);
 					var handler = button.handler;
-					if(handler && utils.isFunction(handler)){
-					    $btn.on('click', {
-								handler : handler,
-								cmpId : this.getId()
-							}, this.onBtnClick);
+					if (handler && utils.isFunction(handler)) {
+						$btn.on('click', {
+									handler : handler,
+									cmpId : this.getId()
+								}, this.onBtnClick);
 					}
 					$btn = null;
 				}
@@ -225,10 +225,10 @@ define(function(require, exports, module) {
 						});
 			},
 			beforeDestroy : function() {
-				modalWindow.superclass.beforeDestroy.call(this);
+				ModalWindow.superclass.beforeDestroy.call(this);
 			}
 		});
 
-		module.exports = modalWindow;
+		module.exports = ModalWindow;
 	}());
 });

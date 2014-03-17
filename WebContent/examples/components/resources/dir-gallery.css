@@ -1,0 +1,19 @@
+.yi-gallery-item.dir-gallery-item {
+	height: 30px;
+	margin-bottom: 20px;
+	border: 1px solid #b3d8ec;
+	-webkkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	background-color: #d4e9f4;
+	color: #2b74b4;
+	text-align: center;
+}
+
+.yi-gallery-item.yi-gallery-item-selected.dir-gallery-item {
+	background-color: #85bff1;
+	border-color: #61a8e5;
+	color: white;
+}

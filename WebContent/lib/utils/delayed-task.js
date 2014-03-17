@@ -17,16 +17,13 @@ define(function(/* require */) {
 		 * @param {Number}
 		 *            delay The milliseconds to delay
 		 * @param {Function}
-		 *            newFn (optional) Overrides function passed to
-		 *            constructor
+		 *            newFn (optional) Overrides function passed to constructor
 		 * @param {Object}
-		 *            newScope (optional) Overrides scope passed to
-		 *            constructor. Remember that if no scope is
-		 *            specified, <code>this</code> will refer to the
-		 *            browser window.
+		 *            newScope (optional) Overrides scope passed to constructor.
+		 *            Remember that if no scope is specified, <code>this</code>
+		 *            will refer to the browser window.
 		 * @param {Array}
-		 *            newArgs (optional) Overrides args passed to
-		 *            constructor
+		 *            newArgs (optional) Overrides args passed to constructor
 		 */
 		me.delay = function(delay, newFn, newScope, newArgs) {
 			me.cancel();

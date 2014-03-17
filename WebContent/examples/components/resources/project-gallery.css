@@ -1,0 +1,75 @@
+.project-gallery-item {
+	-webkkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	padding: 6px 23px;
+}
+
+.project-gallery-item.yi-gallery-item {
+	margin-bottom: 20px;
+}
+
+.project-gallery-item .project-gallery-name {
+	text-align: left; /* override */
+	color: #428BCA;
+}
+
+.project-gallery-item .project-gallery-status {
+	text-align: right; /* override */
+}
+
+.project-gallery-item .project-gallery-tools {
+	margin-top: 9px;
+	text-align: left; /* override */
+}
+
+.project-gallery-item .project-gallery-tools .btn {
+	margin-right: 15px;
+	padding: 6px 8px; /* override */
+	width: 32px; /* override */
+	height: 32px; /* override */
+}
+
+.project-gallery-item .project-gallery-timeline {
+	margin-top: 5px;
+}
+
+.project-gallery-item .project-gallery-manager {
+	margin-top: 12px;
+	text-align: left /* override */
+}
+
+.project-gallery-item .project-gallery-manager .btn {
+	padding: 0;
+	width: 34px; /* override */
+	height: 34px; /* override */
+}
+
+.project-gallery-item .project-gallery-manager .btn .project-manager-face
+	{
+	width: 32px;
+	height: 32px;
+}
+
+.project-gallery-item .project-gallery-ip {
+	margin-top: 12px;
+	text-align: left; /* override */
+}
+
+.project-gallery-item .project-gallery-ip p {
+	margin-bottom: 0; /* override */
+}
+
+.project-gallery-item .project-gallery-syn {
+	margin-top: 22px; /* 12 + 20 / 2 */
+	text-align: right; /* override */
+}
+
+.project-gallery-item .project-gallery-syn .btn {
+	padding-left: 12px; /* override */
+	padding-right: 12px; /* override */
+}
+
+.project-gallery-item .row {
+	margin: 0;
+}

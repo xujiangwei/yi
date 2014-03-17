@@ -22,7 +22,7 @@ define(function(require, exports, module) {
 		l.task = new DelayedTask();
 		return function() {
 			l.task.delay(o.buffer, h, scope, Array.prototype.slice.call(
-							arguments, 0));
+					arguments, 0));
 		};
 	};
 
@@ -42,9 +42,9 @@ define(function(require, exports, module) {
 			}
 			l.tasks.push(task);
 			task.delay(o.delay || 10, function() {
-						l.tasks.remove(task);
-						h.apply(scope, args);
-					}, scope);
+				l.tasks.remove(task);
+				h.apply(scope, args);
+			}, scope);
 		};
 	};
 

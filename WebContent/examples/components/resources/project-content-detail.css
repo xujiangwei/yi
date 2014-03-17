@@ -1,0 +1,76 @@
+.project-content-detail {
+	padding: 10px 25px;
+}
+
+.project-content-switcher {
+	margin-bottom: 40px;
+	height: 51px;
+}
+
+.project-content-switcher-item {
+	width: 106px;
+	height: 51px;
+	cursor: pointer;
+	float: left;
+}
+
+.project-content-switcher-graph {
+	border-bottom: 3px solid transparent;
+	width: 48px;
+	height: 51px;
+	background-repeat: no-repeat;
+	background-position: 0 0;
+	float: left;
+}
+
+.project-content-switcher-text {
+	padding: 15px 0 16px;
+	float: left;
+}
+
+.project-content-switcher-count {
+	
+}
+
+.project-content-switcher-bp .project-content-switcher-graph {
+	background-image: url(images/48_48/bp.png);
+}
+
+.project-content-switcher-page .project-content-switcher-graph {
+	background-image: url(images/48_48/page.png);
+}
+
+.project-content-switcher-report .project-content-switcher-graph {
+	background-image: url(images/48_48/report.png);
+}
+
+.project-content-switcher-item-active .project-content-switcher-graph {
+	border-color: #428bca;
+}
+
+.project-content-switcher-bp:hover .project-content-switcher-graph {
+	background-image: url(images/48_48/bp_select.png);
+}
+
+.project-content-switcher-page:hover .project-content-switcher-graph {
+	background-image: url(images/48_48/page_select.png);
+}
+
+.project-content-switcher-report:hover .project-content-switcher-graph {
+	background-image: url(images/48_48/report_select.png);
+}
+
+.project-content-switcher-bp.project-content-switcher-item-active .project-content-switcher-graph
+	{
+	background-image: url(images/48_48/bp_select.png);
+}
+
+.project-content-switcher-page.project-content-switcher-item-active .project-content-switcher-graph
+	{
+	background-image: url(images/48_48/page_select.png);
+}
+
+.project-content-switcher-report.project-content-switcher-item-active .project-content-switcher-graph
+	{
+	background-image: url(images/48_48/report_select.png);
+}

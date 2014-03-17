@@ -12,7 +12,7 @@
  * @method String getValue()
  * @method void setValue(String value)
  * 
- * @description 1.目前只处理到天 2.目前只处理闭区间 updated on 2014-01-16
+ * @description 1.目前只处理到天 2.目前只处理闭区间 updated on 2014-03-11
  * 
  */
 define(function(require, exports, module) {
@@ -157,140 +157,146 @@ define(function(require, exports, module) {
 	(function() {
 		var SMALL = 'small', NORMAL = 'normal';
 
-		var Timeline = extend(Base, {
-			/**
-			 * @cfg size String
-			 * 
-			 * 'normal' or 'small'，默认：'normal'
-			 */
+		var Timeline = extend(
+				Base,
+				{
+					baseCls : 'yi-timeline',
+					baseHtml : '<div><div class="yi-timeline-axis"></div><div class="yi-timeline-start"></div><div class="yi-timeline-end"></div></div>',
+					/*
+					 * 时间点宽度的1/2
+					 */
+					halfPointWidth : 9,
 
-			/**
-			 * @cfg dateFormat String
-			 * 
-			 * 'yyyy-MM-dd' or 'yyyy-MM-dd HH:mm:ss'
-			 */
-			dateFormat : 'yyyy-MM-dd',
+					/**
+					 * @cfg size String
+					 * 
+					 * 'normal' or 'small'，默认：'normal'
+					 */
 
-			/**
-			 * @cfg startDate String
-			 * 
-			 * 开始日期
-			 */
+					/**
+					 * @cfg dateFormat String
+					 * 
+					 * 'yyyy-MM-dd' or 'yyyy-MM-dd HH:mm:ss'
+					 */
+					dateFormat : 'yyyy-MM-dd',
 
-			/**
-			 * @cfg endDate String
-			 * 
-			 * 结束日期
-			 */
+					/**
+					 * @cfg startDate String
+					 * 
+					 * 开始日期
+					 */
 
-			/**
-			 * @cfg readonly Boolean
-			 * 
-			 * 是否只读。缺少startDate或endDate时也会强制为只读状态
-			 */
+					/**
+					 * @cfg endDate String
+					 * 
+					 * 结束日期
+					 */
 
-			/**
-			 * @cfg value String
-			 * 
-			 * 初始值，逗号分隔的字符串
-			 */
+					/**
+					 * @cfg readonly Boolean
+					 * 
+					 * 是否只读。缺少startDate或endDate时也会强制为只读状态
+					 */
 
-			baseCls : 'yi-timeline',
-			baseHtml : '<div><div class="yi-timeline-axis"></div><div class="yi-timeline-start"></div><div class="yi-timeline-end"></div></div>',
-			/*
-			 * 时间点宽度的1/2
-			 */
-			halfPointWidth : 9,
-			initComponent : function() {
-				Timeline.superclass.initComponent.call(this);
+					/**
+					 * @cfg value String
+					 * 
+					 * 初始值，逗号分隔的字符串
+					 */
 
-				this.formatter = new DateFormat(this.dateFormat);
-			},
-			afterRender : function(container) {
-				Timeline.superclass.afterRender.call(this, container);
+					initComponent : function() {
+						Timeline.superclass.initComponent.call(this);
 
-				if (this.size == SMALL) {
-					this.el.addClass(this.baseCls + '-sm');
-				} else if (this.size == NORMAL) {
-					this.el.removeClass(this.baseCls + '-sm')
-				} else {
-					this.size = this.el.hasClass(this.baseCls + '-sm')
-							? SMALL
-							: NORMAL
-				}
+						this.formatter = new DateFormat(this.dateFormat);
+					},
+					afterRender : function(container) {
+						Timeline.superclass.afterRender.call(this, container);
 
-				this.startDateEl = this.el.children('.' + this.baseCls
-						+ '-start');
-				if (this.startDate !== undefined) {
-					this.setStartDate(this.startDate, true);
-				}
+						if (this.size == SMALL) {
+							this.el.addClass(this.baseCls + '-sm');
+						} else if (this.size == NORMAL) {
+							this.el.removeClass(this.baseCls + '-sm')
+						} else {
+							this.size = this.el.hasClass(this.baseCls + '-sm')
+									? SMALL
+									: NORMAL
+						}
 
-				this.endDateEl = this.el.children('.' + this.baseCls + '-end');
-				if (this.endDate !== undefined) {
-					this.setEndDate(this.endDate, true);
-				}
+						this.startDateEl = this.el.children('.' + this.baseCls
+								+ '-start');
+						if (this.startDate !== undefined) {
+							this.setStartDate(this.startDate, true);
+						}
 
-				this.updateReadonly();
-				this.initValue();
-			},
-			/**
-			 * 设置开始日期
-			 */
-			setStartDate : function(startDate, silent) {
-				this.startDate = startDate;
-				if (this.startDateEl) {
-					this.startDateEl.html(startDate);
-				}
-				if (!silent) {
-					this.updateReadonly();
-					this.updateValue(true);
-				}
-			},
-			/**
-			 * 设置结束日期
-			 */
-			setEndDate : function(endDate, silent) {
-				this.endDate = endDate;
-				if (this.endDateEl) {
-					this.endDateEl.html(endDate);
-				}
-				if (!silent) {
-					this.updateReadonly();
-					this.updateValue(true);
-				}
-			},
-			updateReadonly : function() {
-				if (this.startDate) {
-					this.sm = this.formatter.toMilliseconds(this.startDate);
-				}
-				if (this.endDate) {
-					this.em = this.formatter.toMilliseconds(this.endDate);
-				}
-				this.dm = this.em - this.sm;
-				this.readonly = this.readonly || isNaN(this.sm)
-						|| isNaN(this.em);
+						this.endDateEl = this.el.children('.' + this.baseCls
+								+ '-end');
+						if (this.endDate !== undefined) {
+							this.setEndDate(this.endDate, true);
+						}
 
-				// 未免setStartDate()和setEndDate()时还未渲染
-				if (this.rendered) {
-					if (this.readonly) {
-						this.el.addClass(this.baseCls + '-readonly');
-					} else {
-						this.el.removeClass(this.baseCls + '-readonly');
-					}
+						this.updateReadonly();
+						this.initValue();
+					},
+					/**
+					 * 设置开始日期
+					 */
+					setStartDate : function(startDate, silent) {
+						this.startDate = startDate;
+						if (this.startDateEl) {
+							this.startDateEl.html(startDate);
+						}
+						if (!silent) {
+							this.updateReadonly();
+							this.updateValue(true);
+						}
+					},
+					/**
+					 * 设置结束日期
+					 */
+					setEndDate : function(endDate, silent) {
+						this.endDate = endDate;
+						if (this.endDateEl) {
+							this.endDateEl.html(endDate);
+						}
+						if (!silent) {
+							this.updateReadonly();
+							this.updateValue(true);
+						}
+					},
+					updateReadonly : function() {
+						if (this.startDate) {
+							this.sm = this.formatter
+									.toMilliseconds(this.startDate);
+						}
+						if (this.endDate) {
+							this.em = this.formatter
+									.toMilliseconds(this.endDate);
+						}
+						this.dm = this.em - this.sm;
+						this.readonly = this.readonly || isNaN(this.sm)
+								|| isNaN(this.em);
 
-					this.updateEvents();
-				}
-			},
-			updateEvents : function() {
-				if (this.readonly) {
-					this.removeDragEvents();
-				} else {
-					this.addDragEvents()
-				}
-			},
-			addDragEvents : function() {
-				if (this.el) {
-					this.el.on('mousedown', {
+						// 未免setStartDate()和setEndDate()时还未渲染
+						if (this.rendered) {
+							if (this.readonly) {
+								this.el.addClass(this.baseCls + '-readonly');
+							} else {
+								this.el.removeClass(this.baseCls + '-readonly');
+							}
+
+							this.updateEvents();
+						}
+					},
+					updateEvents : function() {
+						if (this.readonly) {
+							this.removeDragEvents();
+						} else {
+							this.addDragEvents()
+						}
+					},
+					addDragEvents : function() {
+						if (this.el) {
+							this.el.on('mousedown', {
 								componentId : this.getId()
 							}, onMousedown).on('mousemove', {
 								componentId : this.getId()
@@ -299,219 +305,229 @@ define(function(require, exports, module) {
 							}, onMouseout).on('mouseup', {
 								componentId : this.getId()
 							}, onMouseup);
-				}
-			},
-			removeDragEvents : function() {
-				if (this.el) {
-					this.el.off('mousedown', onMousedown).off('mousemove',
-							onMousemove).off('mouseout', onMouseout).off(
-							'mouseup', onMouseup);
-				}
-			},
-			onDrag : function(target, newX, oldX) {
-				var leftStr = target.css('left');
-				var left = utils.getNumberOfPixelString(leftStr) + newX - oldX;
-				if (left < -this.halfPointWidth) {
-					left = -this.halfPointWidth;
-				}
-				var w = this.el.width() - this.halfPointWidth;
-				if (left > w) {
-					left = w
-				}
-				target.css({
+						}
+					},
+					removeDragEvents : function() {
+						if (this.el) {
+							this.el.off('mousedown', onMousedown).off(
+									'mousemove', onMousemove).off('mouseout',
+									onMouseout).off('mouseup', onMouseup);
+						}
+					},
+					onDrag : function(target, newX, oldX) {
+						var leftStr = target.css('left');
+						var left = utils.getNumberOfPixelString(leftStr) + newX
+								- oldX;
+						if (left < -this.halfPointWidth) {
+							left = -this.halfPointWidth;
+						}
+						var w = this.el.width() - this.halfPointWidth;
+						if (left > w) {
+							left = w
+						}
+						target.css({
 							left : left
 						});
 
-				var dateString = this.getDateString(left);
-				target.attr('data-original-title', dateString).attr('title',
-						dateString).html(dateString).tooltip('show');
-				target.parent().find('.tooltip-inner').html(dateString);
-			},
-			getDateString : function(left) {
-				var w = this.el.width();
-				var d = left + this.halfPointWidth;
-				var vm = Math.floor(d * this.dm / w) + this.sm;
-				var date = new Date(vm);
-				return this.formatter.format(date);
-			},
-			addDelegateEvents : function() {
-				$('body').on('mousemove', {
+						var dateString = this.getDateString(left);
+						target.attr('data-original-title', dateString).attr(
+								'title', dateString).html(dateString).tooltip(
+								'show');
+						target.parent().find('.tooltip-inner').html(dateString);
+					},
+					getDateString : function(left) {
+						var w = this.el.width();
+						var d = left + this.halfPointWidth;
+						var vm = Math.floor(d * this.dm / w) + this.sm;
+						var date = new Date(vm);
+						return this.formatter.format(date);
+					},
+					addDelegateEvents : function() {
+						$('body').on('mousemove', {
 							componentId : this.getId()
 						}, delegateMouseMoveToBody).on('mouseup', {
 							componentId : this.getId()
 						}, delegateMouseUpToBody);
-			},
-			removeDelegateEvents : function() {
-				$('body').off('mousemove', delegateMouseMoveToBody).off(
-						'mouseup', delegateMouseUpToBody);
-			},
-			createPointOnMouseup : function(eventPageX) {
-				var offset = this.el.offset();
-				var left = eventPageX - offset.left;
-				var dateString = this.getDateString(left);
+					},
+					removeDelegateEvents : function() {
+						$('body').off('mousemove', delegateMouseMoveToBody)
+								.off('mouseup', delegateMouseUpToBody);
+					},
+					createPointOnMouseup : function(eventPageX) {
+						var offset = this.el.offset();
+						var left = eventPageX - offset.left;
+						var dateString = this.getDateString(left);
 
-				this.createPoint(left, dateString);
-			},
-			createPoint : function(left, value) {
-				this.el.append($('<div class="' + this.baseCls
-						+ '-point" style="left: ' + left + 'px;" title="'
-						+ value + '">' + value + '</div>').tooltip());
+						this.createPoint(left, dateString);
+					},
+					createPoint : function(left, value) {
+						this.el.append($(
+								'<div class="' + this.baseCls
+										+ '-point" style="left: ' + left
+										+ 'px;" title="' + value + '">' + value
+										+ '</div>').tooltip());
 
-				this.points = this.el.children('.' + this.baseCls + '-point');
-			},
-			showDeleteMenu : function(x, y) {
-				if (!this.deleteMenu) {
-					this.deleteMenu = $('<ul class="dropdown-menu" role="menu">'
-							+ '<li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)">删除</a></li>'
-							+ '</ul>').on('click', {
+						this.points = this.el.children('.' + this.baseCls
+								+ '-point');
+					},
+					showDeleteMenu : function(x, y) {
+						if (!this.deleteMenu) {
+							this.deleteMenu = $(
+									'<ul class="dropdown-menu" role="menu">'
+											+ '<li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)">删除</a></li>'
+											+ '</ul>').on('click', {
 								componentId : this.getId()
 							}, onDeleteMenuClick).appendTo($('body'));
-				}
-				// 从一个deleteTarget到另一个deleteTarget，先清除之前的body事件
-				this.removeDelegateDeleteEvent();
+						}
+						// 从一个deleteTarget到另一个deleteTarget，先清除之前的body事件
+						this.removeDelegateDeleteEvent();
 
-				this.deleteMenu.css({
+						this.deleteMenu.css({
 							top : y,
 							left : x
 						}).show();
 
-				this.addDelegateDeleteEvent();
-			},
-			deletePoint : function(point) {
-				point.tooltip('destroy').remove();
+						this.addDelegateDeleteEvent();
+					},
+					deletePoint : function(point) {
+						point.tooltip('destroy').remove();
 
-				this.points = this.el.children('.' + this.baseCls + '-point');
-			},
-			addDelegateDeleteEvent : function() {
-				$('body').on('click', {
+						this.points = this.el.children('.' + this.baseCls
+								+ '-point');
+					},
+					addDelegateDeleteEvent : function() {
+						$('body').on('click', {
 							componentId : this.getId()
 						}, hideDeleteMenu);
-			},
-			removeDelegateDeleteEvent : function() {
-				$('body').off('click', hideDeleteMenu);
-			},
-			initValue : function() {
-				if (this.value !== undefined) {
-					this.setValue(this.value);
-				} else {
-					this.updateValue(true);
-				}
-			},
-			/**
-			 * 接受逗号分隔的字符串
-			 */
-			setValue : function(v) {
-				this.deletePoints();
-
-				this.value = v;
-				if (this.rendered) {
-					if (utils.isString(v)) {
-						var vs = v.split(','), len = vs.length, i;
-						for (i = 0; i < len; i++) {
-							var value = utils.trim(vs[i]);
-							var vm = this.formatter.toMilliseconds(value)
-							var l = isNaN(vm) ? -this.halfPointWidth : this
-									.getLeft(vm);
-
-							this.createPoint(l, value)
+					},
+					removeDelegateDeleteEvent : function() {
+						$('body').off('click', hideDeleteMenu);
+					},
+					initValue : function() {
+						if (this.value !== undefined) {
+							this.setValue(this.value);
+						} else {
+							this.updateValue(true);
 						}
+					},
+					/**
+					 * 接受逗号分隔的字符串
+					 */
+					setValue : function(v) {
+						this.deletePoints();
 
-						vs = null;
-					}
-				}
-			},
-			updateValue : function(reposition) {
-				var fisrtTime = false;
-				if (!this.points || this.points.size() == 0) {
-					fisrtTime = true;
+						this.value = v;
+						if (this.rendered) {
+							if (utils.isString(v)) {
+								var vs = v.split(','), len = vs.length, i;
+								for (i = 0; i < len; i++) {
+									var value = utils.trim(vs[i]);
+									var vm = this.formatter
+											.toMilliseconds(value)
+									var l = isNaN(vm)
+											? -this.halfPointWidth
+											: this.getLeft(vm);
 
-					this.points = this.el.children('.' + this.baseCls
-							+ '-point');
-				}
+									this.createPoint(l, value)
+								}
 
-				if (this.points.size() > 0) {
-					var len = this.points.size(), i, vs = [];
-					for (i = 0; i < len; i++) {
-						var $p = this.points.eq(i);
-						var value = $p.html();
-						vs.push(value);
-						if (fisrtTime) {
-							$p.attr('title', value).tooltip();
-						}
-
-						if (reposition) {
-							// 处理时间点位置
-							var vm = this.formatter.toMilliseconds(value);
-							if (!isNaN(vm)) {
-								var l = this.getLeft(vm);
-								$p.css({
-											left : l
-										});
+								vs = null;
 							}
 						}
+					},
+					updateValue : function(reposition) {
+						var fisrtTime = false;
+						if (!this.points || this.points.size() == 0) {
+							fisrtTime = true;
 
-						$p = null;
+							this.points = this.el.children('.' + this.baseCls
+									+ '-point');
+						}
+
+						if (this.points.size() > 0) {
+							var len = this.points.size(), i, vs = [];
+							for (i = 0; i < len; i++) {
+								var $p = this.points.eq(i);
+								var value = $p.html();
+								vs.push(value);
+								if (fisrtTime) {
+									$p.attr('title', value).tooltip();
+								}
+
+								if (reposition) {
+									// 处理时间点位置
+									var vm = this.formatter
+											.toMilliseconds(value);
+									if (!isNaN(vm)) {
+										var l = this.getLeft(vm);
+										$p.css({
+											left : l
+										});
+									}
+								}
+
+								$p = null;
+							}
+
+							this.value = vs.join();
+
+							vs = null;
+						} else {
+							this.value = undefined;
+							delete this.points;
+						}
+					},
+					getLeft : function(vm) {
+						var left = -this.halfPointWidth, w = this.el.width();
+						var d = vm - this.sm;
+						if (d >= 0) {
+							left += Math.floor((d / this.dm) * w);
+						}
+						return left;
+					},
+					deletePoints : function() {
+						if (this.points) {
+							var len = this.points.size(), i;
+							for (i = 0; i < len; i++) {
+								this.points.eq(i).tooltip('destroy');
+							}
+
+							this.points.remove();
+							delete this.points;
+						}
+					},
+					/**
+					 * 返回逗号分隔的字符串
+					 */
+					getValue : function() {
+						return this.value;
+					},
+					beforeDestroy : function() {
+						this.removeDelegateEvents();
+						this.removeDelegateDeleteEvent();
+
+						delete this.target;
+						delete this.deleteTarget;
+
+						if (this.deleteMenu) {
+							this.deleteMenu.remove();
+						}
+						delete this.deleteMenu;
+
+						this.deletePoints();
+
+						if (this.startDateEl) {
+							this.startDateEl.remove();
+							delete this.startDateEl;
+						}
+						if (this.endDateEl) {
+							this.endDateEl.remove();
+							delete this.endDateEl;
+						}
+
+						Timeline.superclass.beforeDestroy.call(this);
 					}
-
-					this.value = vs.join();
-
-					vs = null;
-				} else {
-					this.value = undefined;
-					delete this.points;
-				}
-			},
-			getLeft : function(vm) {
-				var left = -this.halfPointWidth, w = this.el.width();
-				var d = vm - this.sm;
-				if (d >= 0) {
-					left += Math.floor((d / this.dm) * w);
-				}
-				return left;
-			},
-			deletePoints : function() {
-				if (this.points) {
-					var len = this.points.size(), i;
-					for (i = 0; i < len; i++) {
-						this.points.eq(i).tooltip('destroy');
-					}
-
-					this.points.remove();
-					delete this.points;
-				}
-			},
-			/**
-			 * 返回逗号分隔的字符串
-			 */
-			getValue : function() {
-				return this.value;
-			},
-			beforeDestroy : function() {
-				this.removeDelegateEvents();
-				this.removeDelegateDeleteEvent();
-
-				delete this.target;
-				delete this.deleteTarget;
-
-				if (this.deleteMenu) {
-					this.deleteMenu.remove();
-				}
-				delete this.deleteMenu;
-
-				this.deletePoints();
-
-				if (this.startDateEl) {
-					this.startDateEl.remove();
-					delete this.startDateEl;
-				}
-				if (this.endDateEl) {
-					this.endDateEl.remove();
-					delete this.endDateEl;
-				}
-
-				Timeline.superclass.beforeDestroy.call(this);
-			}
-		});
+				});
 
 		module.exports = Timeline;
 	}());

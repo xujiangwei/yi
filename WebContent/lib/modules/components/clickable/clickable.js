@@ -10,52 +10,58 @@
  * @event click: function(Clickable c, Event e)
  * @event dblClick: function(Clickable c, Event e)
  * 
- * @description updated on 2013-12-26
+ * @description updated on 2014-03-11
  * 
  */
 define(function(require, exports, module) {
-			'require:nomunge,exports:nomunge,module:nomunge';
+	'require:nomunge,exports:nomunge,module:nomunge';
 
-			var extend = require('extend');
-			var Base = require('component');
+	var extend = require('extend');
+	var Base = require('component');
 
-			function onClick(e) {
-				var comp = Base.get(e.data.componentId);
-				comp.trigger('click', comp, e);
+	function onClick(e) {
+		var comp = Base.get(e.data.componentId);
+		comp.trigger('click', comp, e);
 
-				comp = null;
+		comp = null;
+	}
+
+	function onDblClick(e) {
+		var comp = Base.get(e.data.componentId);
+		comp.trigger('dblclick', comp, e);
+
+		comp = null;
+	}
+
+	(function() {
+		var Clickable = extend(Base, {
+			baseCls : 'yi-clickable',
+
+			initComponent : function() {
+				Clickable.superclass.initComponent.call(this);
+
+				this.addEvents('click',
+
+				'dblclick');
+			},
+			afterRender : function(container) {
+				Clickable.superclass.afterRender.call(this, container);
+
+				this.el.on('click', {
+					componentId : this.getId()
+				}, onClick);
+				this.el.on('dblclick', {
+					componentId : this.getId()
+				}, onDblClick);
+			},
+			beforeDestroy : function() {
+				this.el.off('click', onClick);
+				this.el.off('dblclick', onDblClick);
+
+				Clickable.superclass.beforeDestroy.call(this);
 			}
-
-			function onDblClick(e) {
-				var comp = Base.get(e.data.componentId);
-				comp.trigger('dblclick', comp, e);
-
-				comp = null;
-			}
-
-			(function() {
-				var Clickable = extend(Base, {
-							baseCls : 'yi-clickable',
-							initComponent : function() {
-								Clickable.superclass.initComponent.call(this);
-
-								this.addEvents('click',
-
-										'dblclick');
-							},
-							afterRender : function(container) {
-								Clickable.superclass.afterRender.call(this,
-										container);
-
-								this.el.on('click', {
-											componentId : this.getId()
-										}, onClick);
-								this.el.on('dblclick', {
-											componentId : this.getId()
-										}, onDblClick);
-							}
-						});
-
-				module.exports = Clickable;
-			}());
 		});
+
+		module.exports = Clickable;
+	}());
+});

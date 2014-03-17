@@ -2,89 +2,17 @@
  * 工具
  */
 define(function(/* require */) {
-	var U = {};
+	var Utils = {};
 
-	/*
-	 * 属性复制
+	/**
+	 * 1.JavaScript基本对象类
 	 */
-	(function() {
-		function apply(o, c, defaults) {
-			// no "this" reference for friendly out of scope calls
-			if (defaults) {
-				apply(o, defaults);
-			}
-			if (o && c && typeof c == 'object') {
-				for (var p in c) {
-					o[p] = c[p];
-				}
-			}
-			return o;
-		}
-
-		function applyIf(o, c) {
-			if (o) {
-				for (var p in c) {
-					if (typeof o[p] === 'undefined') {
-						o[p] = c[p];
-					}
-				}
-			}
-			return o;
-		}
-
-		U.apply = apply;
-		U.applyIf = applyIf;
-	}());
-
-	/*
-	 * 浏览器判断
-	 */
-	(function() {
-		// I think window.ActiveXObject would be in IE for a long time
-		var isIE = window.ActiveXObject !== undefined;
-
-		U.apply(U, {
-			isIE : isIE,
-			// window.XMLHttpRequest IE7+
-			isIE6 : isIE && !!(document.compatMode && !window.XMLHttpRequest),
-			// document.documentMode IE8+
-			isIE7 : isIE && !!(window.XMLHttpRequest && !document.documentMode),
-			// window.performance IE9+
-			isIE8 : isIE && !!(document.documentMode && !window.performance),
-			// window.applicationCache IE10+
-			isIE9 : isIE && !!(window.performance && !window.applicationCache),
-			// window.msCrypto IE11+
-			isIE10 : isIE && !!(window.applicationCache && !window.msCrypto),
-			isIE11 : isIE && !!window.msCrypto,
-			isFirefox : !!(window.sidebar && (window.sidebar.addPanel || window.sidebar.addSearchEngine)),
-			isChrome : !!window.chrome,
-			isSafari : /a/.__proto__ == '//'
-		});
-	}());
-
-	/*
-	 * 属性覆盖
-	 */
-	(function() {
-		function override(origclass, overrides) {
-			if (overrides) {
-				var p = origclass.prototype;
-				U.apply(p, overrides);
-				if (U.isIE && overrides.hasOwnProperty('toString')) {
-					p.toString = overrides.toString;
-				}
-			}
-		}
-
-		U.override = override;
-	}());
-
-	/*
+	/**
 	 * 类型判断
 	 */
-	(function() {
+	(function(u) {
 		function type(v) {
-			var ts = Object.prototype.toString.call(v);// [object Xx]
+			var ts = Object.prototype.toString.call(v);// '[object Xx]'
 			return ts.substring(8, ts.length - 1).toLowerCase();
 		}
 
@@ -120,17 +48,38 @@ define(function(/* require */) {
 			return type(v) === 'string';
 		}
 
+		u.isArray = isArray;
+		u.isBoolean = isBoolean;
+		u.isDate = isDate;
+		u.isFunction = isFunction;
+		u.isNumber = isNumber;
+		u.isObject = isObject;
+		u.isRegexp = isRegexp;
+		u.isString = isString;
+	}(Utils));
+
+	/**
+	 * 判断一个对象是否为空（undefine、null、空字符串）
+	 */
+	(function(u) {
 		function isEmpty(v, allowEmptyString) {
-			return (v === null) || (v === undefined)
+			return v === undefined || v === null
 					|| (!allowEmptyString ? v === '' : false)
-					|| (isArray(v) && v.length === 0);
+					|| (u.isArray(v) && v.length === 0);
 		}
 
+		u.isEmpty = isEmpty;
+	}(Utils));
+
+	/**
+	 * 判断一个对象是否可迭代
+	 */
+	(function(u) {
 		var nodeListRe = /NodeList|HTMLCollection/;
 
 		function isIterable(v) {
 			// check for array or arguments
-			if (isArray(v) || v.callee) {
+			if (u.isArray(v) || v.callee) {
 				return true;
 			}
 			// check for node list type
@@ -140,119 +89,59 @@ define(function(/* require */) {
 			// NodeList has an item and length property
 			// IXMLDOMNodeList has nextNode method, needs to be checked
 			// first.
-			return ((typeof v.nextNode != 'undefined' || v.item) && isNumber(v.length));
+			return ((v.nextNode !== undefined || v.item) && u
+					.isNumber(v.length));
 		}
 
+		u.isIterable = isIterable;
+	}(Utils));
+
+	/**
+	 * 判断一个对象是否是原始类型
+	 */
+	(function(u) {
 		function isPrimitive(v) {
-			return isString(v) || isNumber(v) || isBoolean(v);
+			return u.isString(v) || u.isNumber(v) || u.isBoolean(v);
 		}
 
-		U.apply(U, {
-					isArray : isArray,
-					isBoolean : isBoolean,
-					isDate : isDate,
-					isFunction : isFunction,
-					isNumber : isNumber,
-					isObject : isObject,
-					isRegexp : isRegexp,
-					isString : isString,
-					isEmpty : isEmpty,
-					isIterable : isIterable,
-					isPrimitive : isPrimitive
-				});
-	}());
+		u.isPrimitive = isPrimitive;
+	}(Utils));
 
-	/*
-	 * 对象操作
-	 */
-	(function() {
-		function each(array, fn, scope) {
-			if (U.isEmpty(array, true)) {
-				return;
-			}
-			if (!U.isPrimitive(array) || U.isPrimitive(array)) {
-				array = [array];
-			}
-			for (var i = 0, len = array.length; i < len; i++) {
-				if (fn.call(scope || array[i], array[i], i, array) === false) {
-					return i;
-				};
-			}
-		}
-
-		U.each = each;
-	}());
-
-	/*
-	 * id 产生器
-	 */
-	(function() {
-		var AUTO_ID = 0, PREFIX = 'yi';
-
-		function id(prefix) {
-			return (prefix || PREFIX) + '_' + (AUTO_ID++);
-		}
-
-		U.id = id;
-	}());
-
-	/*
-	 * 空函数
-	 */
-	(function() {
-		function emptyFn() {
-
-		};
-
-		U.emptyFn = emptyFn;
-	}());
-
-	/*
+	/**
 	 * 除去字符串开头和末尾的空格
 	 */
-	(function() {
+	(function(u) {
 		var trimRe = /^\s+|\s+$/g;
 
 		function trim(v) {
-			if (U.isString(v)) {
+			if (u.isString(v)) {
 				return v.replace(trimRe, '');
 			}
 			return v;
 		}
 
-		U.trim = trim;
-	}());
+		u.trim = trim;
+	}(Utils));
 
-	/*
-	 * 像素字符串中与Number的转化
+	/**
+	 * 字符串首字母大写
 	 */
-	(function() {
-		var pxRe = /px\s*$/, pxStr = 'px';
-
-		function getNumberOfPixelString(pixelString) {
-			if (U.isString(pixelString)) {
-				return parseFloat(U.trim(pixelString.replace(pxRe, '')));
+	(function(u) {
+		function firstLetterToUpperCase(str) {
+			if (!u.isString(str)) {
+				return '';
 			}
-			return undefined;
+
+			return str.charAt(0).toUpperCase() + str.substring(1);
 		}
 
-		function parseNumberToPixelString(number) {
-			if (U.isNumber(number)) {
-				return '' + number + pxStr;
-			}
-			return undefined;
-		}
+		u.firstLetterToUpperCase = firstLetterToUpperCase;
+	}(Utils));
 
-		U.apply(U, {
-					getNumberOfPixelString : getNumberOfPixelString,
-					parseNumberToPixelString : parseNumberToPixelString
-				});
-	}());
-
-	/*
-	 * 如果一个字符串的长度小于指定的值,则在字符串的左侧(也就是前面)用指定的字符填充,直到字符串长度达到最小值
+	/**
+	 * 如果一个字符串的长度小于指定的值，则在字符串的左侧（也就是前面）用指定的字符填充，直到字符串长度达到最小值
 	 */
-	(function() {
+	(function(u) {
 		function leftPad(string, size, character) {
 			var result = String(string);
 			character = character || ' ';
@@ -262,9 +151,231 @@ define(function(/* require */) {
 			return result;
 		}
 
-		U.leftPad = leftPad;
-	}());
+		u.leftPad = leftPad;
+	}(Utils));
+
+	/**
+	 * 2.DOM类
+	 */
+	/**
+	 * 浏览器判断
+	 */
+	(function(u) {
+		// I think window.ActiveXObject would be in IE for a long time
+		var isIE = window.ActiveXObject !== undefined;
+
+		u.isIE = isIE;
+		// window.XMLHttpRequest IE7+
+		u.isIE6 = isIE && !!(document.compatMode && !window.XMLHttpRequest);
+		// document.documentMode IE8+
+		u.isIE7 = isIE && !!(window.XMLHttpRequest && !document.documentMode);
+		// window.performance IE9+
+		u.isIE8 = isIE && !!(document.documentMode && !window.performance);
+		// window.applicationCache IE10+
+		u.isIE9 = isIE && !!(window.performance && !window.applicationCache);
+		// window.msCrypto IE11+
+		u.isIE10 = isIE && !!(window.applicationCache && !window.msCrypto);
+		u.isIE11 = isIE && !!window.msCrypto;
+		u.isFirefox = !!(window.sidebar && (window.sidebar.addPanel || window.sidebar.addSearchEngine));
+		u.isChrome = !!window.chrome;
+		u.isSafari = /a/.__proto__ == '//';
+
+	}(Utils));
+
+	/**
+	 * 事件检测
+	 */
+	(function(u) {
+		// 可以扩充
+		var MAP = {
+			'select' : 'input',
+			'change' : 'input',
+			'input' : 'input',
+			'submit' : 'form',
+			'reset' : 'form',
+			'error' : 'img',
+			'load' : 'img',
+			'abort' : 'img'
+		};
+
+		function isEventSupported(eventName) {
+			var el = document.createElement(MAP[eventName] || 'div');
+			eventName = 'on' + eventName;
+			if (eventName in el) {
+				el = null;
+				return true;
+			} else {
+				el.setAttribute(eventName, 'return;');
+				if (u.isFunction(el[eventName])) {
+					el = null;
+					return true;
+				} else {
+					el = null;
+					return false
+				}
+			}
+		}
+
+		u.isEventSupported = isEventSupported;
+	}(Utils));
+
+	/**
+	 * CSS检测
+	 */
+	(function(u) {
+		var VENDORS = ['Khtml', 'Ms', 'O', 'Moz', 'Webkit'];
+		var sample = document.createElement('div');
+
+		function toUpperCase(v) {
+			return v.toUpperCase();
+		}
+
+		(function() {
+			function isCssSupported(feature) {
+				if (feature in sample.style) {
+					return true;
+				}
+				feature = feature.replace(/^[a-z]/, toUpperCase);
+				var len = VENDORS.length;
+				while (len--) {
+					if (VENDORS[len] + feature in sample.style) {
+						return true;
+					}
+				}
+				return false;
+			}
+
+			u.isCssSupported = isCssSupported;
+		}());
+	}(Utils));
+
+	/**
+	 * 3.组件辅助
+	 */
+	/**
+	 * 属性复制
+	 */
+	(function(u) {
+		function apply(o, c, defaults) {
+			// no "this" reference for friendly out of scope calls
+			if (defaults) {
+				apply(o, defaults);
+			}
+			if (o && c && u.isObject(c)) {
+				var p;
+				for (p in c) {
+					if (c.hasOwnProperty(p)) {
+						o[p] = c[p];
+					}
+				}
+			}
+			return o;
+		}
+
+		function applyIf(o, c) {
+			if (o) {
+				var p;
+				for (p in c) {
+					if (o[p] === undefined) {
+						o[p] = c[p];
+					}
+				}
+			}
+			return o;
+		}
+
+		u.apply = apply;
+		u.applyIf = applyIf;
+	}(Utils));
+
+	/**
+	 * 原型覆盖
+	 */
+	(function(u) {
+		function override(origclass, overrides) {
+			if (overrides) {
+				var p = origclass.prototype;
+				u.apply(p, overrides);
+				if (window.ActiveXObject !== undefined
+						&& overrides.hasOwnProperty('toString')) {
+					p.toString = overrides.toString;
+				}
+			}
+		}
+
+		u.override = override;
+	}(Utils));
+
+	/**
+	 * 对象操作
+	 */
+	(function(u) {
+		function each(array, fn, scope) {
+			if (u.isEmpty(array, true)) {
+				return;
+			}
+			if (!u.isPrimitive(array) || u.isPrimitive(array)) {
+				array = [array];
+			}
+			var i, len = array.length;
+			for (i = 0; i < len; i++) {
+				if (fn.call(scope || array[i], array[i], i, array) === false) {
+					return i;
+				};
+			}
+		}
+
+		u.each = each;
+	}(Utils));
+
+	/**
+	 * 空函数
+	 */
+	(function(u) {
+		function emptyFn() {
+
+		};
+
+		u.emptyFn = emptyFn;
+	}(Utils));
+
+	/**
+	 * id 产生器
+	 */
+	(function(u) {
+		var AUTO_ID = 0, PREFIX = 'yi';
+
+		function id(prefix) {
+			return (prefix || PREFIX) + '_' + (AUTO_ID++);
+		}
+
+		u.id = id;
+	}(Utils));
+
+	/**
+	 * 像素字符串中与Number的转化
+	 */
+	(function(u) {
+		var pxRe = /px\s*$/, pxStr = 'px';
+
+		function getNumberOfPixelString(pixelString) {
+			if (u.isString(pixelString)) {
+				return parseFloat(u.trim(pixelString.replace(pxRe, '')));
+			}
+			return undefined;
+		}
+
+		function parseNumberToPixelString(number) {
+			if (u.isNumber(number)) {
+				return '' + number + pxStr;
+			}
+			return undefined;
+		}
+
+		u.getNumberOfPixelString = getNumberOfPixelString;
+		u.parseNumberToPixelString = parseNumberToPixelString;
+	}(Utils));
 
 	// 
-	return U;
+	return Utils;
 });

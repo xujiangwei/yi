@@ -9,7 +9,7 @@
  * 
  * @method void submit(Object option)
  * 
- * @description updated on 2014-01-16
+ * @description updated on 2014-03-11
  * 
  */
 define(function(require, exports, module) {
@@ -106,9 +106,11 @@ define(function(require, exports, module) {
 	}
 
 	(function() {
-		var HttpsRe = /^https/i;
+		var httpsRe = /^https/i;
 
-		var Form = extend(Base, {
+		var Form = extend(
+				Base,
+				{
 					baseCls : 'yi-form',
 					baseHtml : '<form></form>',
 
@@ -157,17 +159,19 @@ define(function(require, exports, module) {
 
 						if (this.uploadFile) {
 							var id = utils.id('iframe');
-							var $f = $('<iframe id="'
-									+ id
-									+ '" class="'
-									+ this.baseCls
-									+ '-hidden-frame" name="'
-									+ id
-									+ '" src="'
-									+ (HttpsRe.test(window.location.protocol)
-											&& utils.isIE
-											? 'javascript:""'
-											: 'about:blank') + '" />')
+							var $f = $(
+									'<iframe id="'
+											+ id
+											+ '" class="'
+											+ this.baseCls
+											+ '-hidden-frame" name="'
+											+ id
+											+ '" src="'
+											+ (httpsRe
+													.test(window.location.protocol)
+													&& utils.isIE
+													? 'javascript:""'
+													: 'about:blank') + '" />')
 									.appendTo($('body'));
 							if (utils.isIE) {
 								document.frames[id].name = id;
@@ -195,12 +199,12 @@ define(function(require, exports, module) {
 							}
 
 							$f.one('load', {
-										componentId : this.getId(),
-										fc : fc,
-										success : option.success,
-										failure : option.failure,
-										scope : option.scope
-									}, onUploadFileFrameLoad);
+								componentId : this.getId(),
+								fc : fc,
+								success : option.success,
+								failure : option.failure,
+								scope : option.scope
+							}, onUploadFileFrameLoad);
 
 							this.el.submit();
 
@@ -273,9 +277,10 @@ define(function(require, exports, module) {
 						var p;
 						for (p in params) {
 							if (params.hasOwnProperty(p)) {
-								var $h = $('<input type="hidden" name="' + p
-										+ '" value="' + params[p] + '" />')
-										.appendTo(this.el);
+								var $h = $(
+										'<input type="hidden" name="' + p
+												+ '" value="' + params[p]
+												+ '" />').appendTo(this.el);
 								this.hiddens.push($h);
 
 								$h = null;
