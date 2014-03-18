@@ -232,7 +232,7 @@ var c = new Component(option);
 		           <td>listeners</td>
 		           <td>Object</td>
 		           <td></td>
-		           <td><code>{'eventName1': {fn: function(args){},scope: {}}[, event2...]}</code><br>创建组件时就监听事件。</td>
+		           <td><code>{'eventName1': {fn: function(args){}, scope: {}}[, event2...]}</code><br>创建组件时就监听事件。</td>
 		         </tr>
 		         <tr>
 		           <td>permission</td>
@@ -633,7 +633,8 @@ function handler(e){
 &lt;/div&gt;
 				</pre>
 			</div>
-			<p>只通过html展示静态的时间线时，需要为每个点（<code>.yi-timeline-point</code>）设置<code>left</code>。为<code>.yi-timeline</code>添加<code>.yi-timeline-readonly</code>可以将时间线设置为只读样式。</p>
+			<p>只通过html展示静态的时间线时，需要为每个点（<code>.yi-timeline-point</code>）设置<code>left</code>。</p>
+			<p>此外，添加<code>.yi-timeline-readonly</code>可以将时间线设置为只读样式。</p>
 	        
 	        <h3>动态示例</h3>
 	        <p class="text-muted">提示：点击时间线创建时间点，时间点创建后可以拖动，点击时间点会弹出删除菜单。</p>
@@ -1807,7 +1808,7 @@ function getTitle(g, item, id, data, isAdd) {
 		           <td>reader</td>
 		           <td>Object</td>
 		           <td></td>
-		           <td>数据读取设置，它需要指定以下三个参数：<br><strong>identifier</strong> String: item的id对应数据哪个属性，默认'id'<br><strong>srcProperty</strong> String/Function: 图片的src对应数据哪个属性<br><strong>titleProperty</strong> String/Function : 图片的标题对应数据哪个属性</td>
+		           <td>数据读取设置，它需要指定以下三个参数：<br><strong>identifier</strong> String: item的id对应数据哪个属性，默认<code>'id'</code><br><strong>srcProperty</strong> String/Function: 图片的src对应数据哪个属性<br><strong>titleProperty</strong> String/Function : 图片的标题对应数据哪个属性</td>
 		         </tr>
 		         <tr>
 		           <td>defaultSrc</td>
@@ -1954,8 +1955,8 @@ var onRadioItemRender = function(comp, $ct, data) {
 		         <tr>
 		           <td>region</td>
 		           <td>String</td>
-		           <td><strong>'north'</strong></td>
-		           <td>按钮的内容显示在按钮的哪个方向，可取值为<strong>'north'</strong>,<strong>'south'</strong>,<strong>'east'</strong>,<strong>'west'</strong></td>
+		           <td>'north'</td>
+		           <td>按钮的内容显示在按钮的哪个方向，可取值为<code>'north'</code>, <code>'south'</code>, <code>'east'</code>, <code>'west'</code></td>
 		         </tr>
 		         <tr>
 		           <td>margin</td>
@@ -2086,7 +2087,7 @@ var win = new ModalWindow({
 		           <td>buttons</td>
 		           <td>Array</td>
 		           <td></td>
-		           <td>显示在窗口底部的按钮。每个按钮的属性包括：<br>{id：按钮的id, cls: 按钮的样式 , disabled: 按钮是否可用, hidden:是否隐藏按钮,text: 按钮的文字, handler: 点击按钮时的处理方法}</td>
+		           <td>显示在窗口底部的按钮。每个按钮的属性包括：<br><strong>id</strong> String: 按钮的id<br><strong>cls</strong> String: 按钮的样式<br><strong>disabled</strong> Boolean: 是否不可用<br><strong>hidden</strong> Boolean: 是否隐藏<br><strong>text</strong> String: 按钮的文字<br><strong>handler</strong> Function: 点击按钮时的处理方法</td>
 		         </tr>
 		         <tr>
 		           <td>title</td>
@@ -2323,13 +2324,13 @@ var onItemRender = function(scope, item, id) {
 		           <td>startWidth</td>
 		           <td>Number</td>
 		           <td></td>
-		           <td>轮播项的起始宽度，thumbnail为true的时候才需要配置</td>
+		           <td>轮播项的起始宽度，<code>thumbnail : true</code>时才需要配置</td>
 		         </tr>
 		         <tr>
 		           <td>startHeight</td>
 		           <td>Number</td>
 		           <td></td>
-		           <td>轮播项的起始高度，thumbnail为true的时候才需要配置</td>
+		           <td>轮播项的起始高度，<code>thumbnail : true</code>时才需要配置</td>
 		         </tr>
 		         <tr>
 		           <td>thumbnail</td>
@@ -4098,9 +4099,9 @@ form.submit(option);
 				<br>
 				<strong>mothod</strong> String : <code>'GET'</code> or <code>'POST'</code>，默认<code>'GET'</code>。
 				<br>
-				<strong>success</strong> Function : 成功时的回调，函数格式：function(Form form, XmlHttpRequest xhr)。
+				<strong>success</strong> Function : 成功时的回调，函数格式：<code>function(Form form, XmlHttpRequest xhr)</code>。
 				<br>
-				<strong>failure</strong> Function : 失败时的回调，函数格式：function(Form form, XmlHttpRequest xhr)。
+				<strong>failure</strong> Function : 失败时的回调，函数格式：<code>function(Form form, XmlHttpRequest xhr)</code>。
 				<br>
 				<strong>timeout</strong> Number : 超时设置，单位：毫秒。
 				<br>

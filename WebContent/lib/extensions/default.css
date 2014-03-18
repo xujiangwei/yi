@@ -4,11 +4,34 @@
 		Arial, sans-serif;
 }
 
-/* 2.form */
+h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
+	font-family: "Helvetica Neue", Helvetica, "微软雅黑", "Microsoft YaHei",
+		Arial, sans-serif;
+}
+
+/* 2.common utilities */
+.yi-hide-display {
+	display: none !important;
+}
+
+.yi-hide-visibility {
+	visibility: hidden !important;
+}
+
+/* 3.form */
+.yi-form {
+	
+}
+
 .yi-form-container {
 	border: 1px solid #dddddd;
 	padding: 15px 25px;
 	background-color: white;
+}
+
+.yi-form-container {
+	border-width: 0;
+	padding: 0;
 }
 
 .yi-form-legend {
@@ -19,6 +42,10 @@
 
 .yi-form-label {
 	font-weight: normal; /* override */
+}
+
+.yi-form-label-readonly {
+	font-size: 12px;
 }
 
 /* X.styels for both statics and components */
@@ -71,17 +98,20 @@
 	left: -9px;
 	width: 18px;
 	height: 22px;
-	background: url(default/timeline/point.png) no-repeat;
+	background: url(default/images/18_22/timeline_point.png) no-repeat;
 	font-size: 0;
+	cursor: pointer;
 }
 
 .yi-timeline-readonly>.yi-timeline-point {
-	background-image: url(default/timeline/point_readonly.png)
+	background-image: url(default/images/18_22/timeline_point_readonly.png);
+	cursor: default;
 }
 
 /* X.2 graph-radio-group */
-.yi-graph-radio-group-label {
+.yi-graph-radio-group-item {
 	text-align: center;
+	position: relative;
 }
 
 .yi-graph-radio-group-graph-south {
@@ -119,7 +149,7 @@
 	float: none;
 }
 
-.yi-graph-radio-group-label-east input[type=radio],.yi-graph-radio-group-label-west input[type=radio]
+.yi-graph-radio-group-item-east input[type=radio],.yi-graph-radio-group-item-west input[type=radio]
 	{
 	vertical-align: middle;
 	margin-top: 1px;
@@ -131,4 +161,8 @@
 
 .yi-graph-radio-group-graph {
 	vertical-align: middle;
+}
+
+.yi-graph-radio-group-selected {
+	background-color: #dddddd;
 }
