@@ -327,7 +327,7 @@ define(function(require, exports, module) {
 				endDate : '2013-12-31'
 			});
 
-			// gallery-base-example
+			// gallery_base_example
 			var emptyGallery = new Gallery({
 				renderTo : 'gallery_base_example',
 				cols : [4, 4, 4, 4],
@@ -462,23 +462,23 @@ define(function(require, exports, module) {
 					});
 
 			// 模态窗口
-			var win;
+			var win = new ModalWindow({
+				renderTo : 'modal_window_example_first',
+				url : 'examples/components/html/modal_win_example.html',
+				title : 'Modal Heading',
+				height : 500,
+				buttons : [{
+					text : 'close',
+					disabled : false,
+					handler : handler
+				}, {
+					text : 'save',
+					iconCls : 'glyphicon glyphicon-ok',
+					cls : 'btn-primary'
+				}]
+			});
 			$('#window_example_one_btn').on('click', function() {
-				win = new ModalWindow({
-					applyTo : 'modal_window_example_first',
-					url : 'examples/components/html/modal_win_example.html',
-					title : 'Modal Heading',
-					height : 500,
-					buttons : [{
-						text : 'close',
-						disabled : false,
-						handler : handler
-					}, {
-						text : 'save',
-						iconCls : 'glyphicon glyphicon-ok',
-						cls : 'btn-primary'
-					}]
-				});
+				win.show();
 			});
 
 			// 轮播

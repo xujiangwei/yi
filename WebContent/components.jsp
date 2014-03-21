@@ -81,6 +81,7 @@
             <a href="#modal_window">模态窗口</a>
             <ul class="nav">
               <li><a href="#modal_window_example_one">示例</a></li>
+              <li><a href="#modal_window_usage">用法</a></li>
             </ul>
           </li>
           <li>
@@ -1399,7 +1400,7 @@ function renderProject(g, item, id, isAdd) {
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;? data.manager.face
 <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: 'examples/components/resources/images/32_32/project_manager_face.png')// 循环
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: 'resources/images/32_32/project_manager_face.png')// 循环
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ '"&gt;&lt;/img&gt;&lt;/button&gt;'
 <br>
@@ -1477,7 +1478,7 @@ function destroyProject(g, item, id, isAdd) {
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itemCls : 'project-gallery-item',
 <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dataUrl : 'scripts/data/project-gallery-data.json',
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dataUrl : 'data/project-gallery-data.json',
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;params : {
 <br>
@@ -1661,7 +1662,7 @@ function addDir() {
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itemCls : 'dir-gallery-item',
 <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dataUrl : 'scripts/data/dir-gallery-data.json',
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dataUrl : 'data/dir-gallery-data.json',
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;params : {
 <br>
@@ -1737,7 +1738,7 @@ var ImageGallery = require('image-gallery');
 <br>
 function getSrc(g, item, id, data, isAdd) {
 <br>
-&nbsp;&nbsp;return isAdd ? 'examples/components/resources/images/100_120/add.png' : 'examples/components/resources/images/100_120/bp.png';
+&nbsp;&nbsp;return isAdd ? 'resources/images/100_120/add.png' : 'resources/images/100_120/bp.png';
 <br>
 }
 <br>
@@ -1770,7 +1771,7 @@ function getTitle(g, item, id, data, isAdd) {
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;addItemFront : true,
 <br>
-&nbsp;&nbsp;&nbsp;&nbsp;dataUrl : 'scripts/data/image-gallery-data.json',
+&nbsp;&nbsp;&nbsp;&nbsp;dataUrl : 'data/image-gallery-data.json',
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;autoLoad : true,
 <br>
@@ -1880,25 +1881,47 @@ resourceGallery.setTitle(2, '分派二线');// 通过UI中的位置（从0开始
 		      </div>
 		      
 		      <div class="highlight">
-				<pre>// html
+				<pre>
+// html
 <br>
 &lt;div id="graph_radio_group_example_custom"&gt;
-<br/>&nbsp;&nbsp;&nbsp;&nbsp;&lt;label class="radio-inline"&gt;&lt;input type="radio" name="a" checked/&gt;&lt;/label&gt;
-<br/>&nbsp;&nbsp;&nbsp;&nbsp;&lt;label class="radio-inline"&gt;&lt;input type="radio" name="a"/&gt;&lt;/label&gt;
-<br/>&nbsp;&nbsp;&nbsp;&nbsp;&lt;label class="radio-inline"&gt;&lt;input type="radio" name="a"/&gt;&lt;/label&gt;
-<br/>&nbsp;&nbsp;&nbsp;&nbsp;&lt;label class="radio-inline"&gt;&lt;input type="radio" name="a"/&gt;&lt;/label&gt;
-<br/>&lt;/div&gt;
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;label class="radio-inline"&gt;&lt;input type="radio" name="a" checked/&gt;&lt;/label&gt;
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;label class="radio-inline"&gt;&lt;input type="radio" name="a"/&gt;&lt;/label&gt;
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;label class="radio-inline"&gt;&lt;input type="radio" name="a"/&gt;&lt;/label&gt;
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;label class="radio-inline"&gt;&lt;input type="radio" name="a"/&gt;&lt;/label&gt;
+<br/>
+&lt;/div&gt;
+<br>
 <br>
 //css
-<br>.yi-component-demo-radio-group-graph{
-<br/>&nbsp;&nbsp;&nbsp;&nbsp;border: 1px solid #DDDDDD;
-<br/>&nbsp;&nbsp;&nbsp;&nbsp;padding: 20px 50px;
-<br>}
+<br>
+.yi-component-demo-radio-group-graph{
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;border: 1px solid #DDDDDD;
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;padding: 20px 50px;
+<br>
+}
+<br>
 <br>
 // javascript
 <br>
 require('./resources/graph-radio-group.css');
-<br>var GraphRadioGroup = require('graph-radio-group');
+<br>
+var GraphRadioGroup = require('graph-radio-group');
+<br>
+<br>
+var onRadioItemRender = function(comp, $ct, data) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;$ct.html('&lt;p&gt;' + data.text + '&lt;/p&gt;&lt;img src=' + data.url + '/&gt;')
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.addClass('yi-component-demo-radio-group-graph');
+<br>
+}
 <br>
 <br>
 (function() {
@@ -1906,36 +1929,49 @@ require('./resources/graph-radio-group.css');
 &nbsp;&nbsp;...
 <br>
 <br>
-
-var onRadioItemRender = function(comp, $ct, data) {
-<br>&nbsp;&nbsp;&nbsp;&nbsp;$ct.html('&lt;p&gt;' + data.text + '&lt;/p&gt;&lt;img src=' + data.url + '/&gt;')
-					<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.addClass('yi-component-demo-radio-group-graph');
-<br>		}
-
-<br>		var graphRadioGroup = new GraphRadioGroup({
-<br>&nbsp;&nbsp;&nbsp;&nbsp;applyTo : 'graph_radio_group_example_custom',
-<br>&nbsp;&nbsp;&nbsp;&nbsp;margin : 50,
-<br>&nbsp;&nbsp;&nbsp;&nbsp;region : "north",
-<br>&nbsp;&nbsp;&nbsp;&nbsp;data : [{
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text : '集中开发',
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;url : 'examples/components/resources/images/graph_radio_group/centralize.png'
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}, {
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text : '分散开发',
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;url : 'examples/components/resources/images/graph_radio_group/separate.png'
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}, {
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text : '自由开发',
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;url : 'examples/components/resources/images/graph_radio_group/free.png'
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}, {
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text : '个人开发',
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;url : 'examples/components/resources/images/graph_radio_group/individual.png'
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}],
-<br>&nbsp;&nbsp;&nbsp;&nbsp;listeners : {
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'itemrender' : onRadioItemRender
-<br>&nbsp;&nbsp;&nbsp;&nbsp;}
-<br>		});
-
-
-
+&nbsp;&nbsp;var graphRadioGroup = new GraphRadioGroup({
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;applyTo : 'graph_radio_group_example_custom',
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;margin : 50,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;region : "north",
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;data : [{
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text : '集中开发',
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;url : 'resources/images/graph_radio_group/centralize.png'
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}, {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text : '分散开发',
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;url : 'resources/images/graph_radio_group/separate.png'
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}, {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text : '自由开发',
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;url : 'resources/images/graph_radio_group/free.png'
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}, {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text : '个人开发',
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;url : 'resources/images/graph_radio_group/individual.png'
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}],
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;listeners : {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'itemrender' : onRadioItemRender
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+&nbsp;&nbsp;});
+<br>
+<br>
 &nbsp;&nbsp;...
 <br>
 }());
@@ -2020,34 +2056,55 @@ var onRadioItemRender = function(comp, $ct, data) {
 var ModalWindow = require('modal-window');
 <br>
 <br>
+function handler(){
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;this.hide();
+<br>
+}
+<br>
+<br>
 (function() {
 <br>
 &nbsp;&nbsp;...
 <br>
 <br>
-var win = new ModalWindow({
-<br>&nbsp;&nbsp;&nbsp;&nbsp;applyTo : 'modal_window_example_first',
-<br>&nbsp;&nbsp;&nbsp;&nbsp;url : 'html/modal_win_example.html',
-<br>&nbsp;&nbsp;&nbsp;&nbsp;title : 'Modal Heading',
-<br>&nbsp;&nbsp;&nbsp;&nbsp;height: 500,
-<br>&nbsp;&nbsp;&nbsp;&nbsp;buttons : [{
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text : 'close',
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;disabled : false,
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;handler : handler
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}, {
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text : 'save',
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cls : 'btn-primary'
-<br>&nbsp;&nbsp;&nbsp;&nbsp;}]
-<br>});
-<br>function handler(){
-<br>&nbsp;&nbsp;&nbsp;&nbsp;this.hide();
-<br>}
+&nbsp;&nbsp;var win = new ModalWindow({
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;renderTo : 'modal_window_example_first',
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;url : 'html/modal_win_example.html',
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;title : 'Modal Heading',
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;height: 500,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;buttons : [{
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text : 'close',
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;disabled : false,
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;handler : handler
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}, {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text : 'save',
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cls : 'btn-primary'
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}]
+<br>
+&nbsp;&nbsp;});
+<br>
 <br>
 &nbsp;&nbsp;...
 <br>
 }());
 				</pre>
 			</div>
+			
+	        <h2 id="modal_window_usage">用法</h2>
+	        
 			<h3>参数</h3>
 		    <div class="table-responsive">
 		      <table class="table table-bordered table-striped">
@@ -2061,16 +2118,10 @@ var win = new ModalWindow({
 		        </thead>
 		        <tbody>
 		         <tr>
-		           <td>url</td>
+		           <td>title</td>
 		           <td>String</td>
 		           <td></td>
-		           <td>请求的页面地址</td>
-		         </tr>
-		         <tr>
-		           <td>params</td>
-		           <td>Object</td>
-		           <td></td>
-		           <td>额外的参数</td>
+		           <td>窗口的标题</td>
 		         </tr>
 		         <tr>
 		           <td>width</td>
@@ -2085,24 +2136,6 @@ var win = new ModalWindow({
 		           <td>窗口高度</td>
 		         </tr>
 		         <tr>
-		           <td>buttons</td>
-		           <td>Array</td>
-		           <td></td>
-		           <td>显示在窗口底部的按钮。每个按钮的属性包括：<br><strong>id</strong> String: 按钮的id<br><strong>cls</strong> String: 按钮的样式<br><strong>disabled</strong> Boolean: 是否不可用<br><strong>hidden</strong> Boolean: 是否隐藏<br><strong>text</strong> String: 按钮的文字<br><strong>handler</strong> Function: 点击按钮时的处理方法</td>
-		         </tr>
-		         <tr>
-		           <td>title</td>
-		           <td>String</td>
-		           <td></td>
-		           <td>窗口的标题</td>
-		         </tr>
-		         <tr>
-		           <td>scroll</td>
-		           <td>Boolean</td>
-		           <td></td>
-		           <td>窗口的内容溢出是否显示滚动条</td>
-		         </tr>
-		         <tr>
 		           <td>minHeight</td>
 		           <td>Number</td>
 		           <td></td>
@@ -2115,6 +2148,30 @@ var win = new ModalWindow({
 		           <td>窗口的最大高度</td>
 		         </tr>
 		         <tr>
+		           <td>scroll</td>
+		           <td>Boolean</td>
+		           <td></td>
+		           <td>窗口的内容溢出是否显示滚动条</td>
+		         </tr>
+		         <tr>
+		           <td>url</td>
+		           <td>String</td>
+		           <td></td>
+		           <td>请求的页面地址</td>
+		         </tr>
+		         <tr>
+		           <td>params</td>
+		           <td>Object</td>
+		           <td></td>
+		           <td>额外的参数</td>
+		         </tr>
+		         <tr>
+		           <td>buttons</td>
+		           <td>Array</td>
+		           <td></td>
+		           <td>显示在窗口底部的按钮。每个按钮的属性包括：<br><strong>id</strong> String: 按钮的id<br><strong>cls</strong> String: 按钮的样式<br><strong>disabled</strong> Boolean: 是否不可用<br><strong>hidden</strong> Boolean: 是否隐藏<br><strong>text</strong> String: 按钮的文字<br><strong>handler</strong> Function: 点击按钮时的处理方法</td>
+		         </tr>
+		         <tr>
 		           <td>modal</td>
 		           <td>Boolean</td>
 		           <td>true</td>
@@ -2125,7 +2182,7 @@ var win = new ModalWindow({
 		    </div> 
 	        <h3>方法</h3>
 	        <h4>void load(Object option)</h4>
-	        <p>(重新)加载数据</p>
+	        <p>(重新)加载页面</p>
 	        <div class='highlight'><pre>
 	        
 	        var win = new ModalWindow(option);
@@ -2154,24 +2211,29 @@ var win = new ModalWindow({
 		        </thead>
 		        <tbody>
 		         <tr>
-		           <td>load</td>
-		           <td>function(ModalWindow win, String responseText, String textStatus, XMLHttpRequest xhr)</td>
-		           <td>数据加载完成后的事件。</td>
+		           <td>beforeshow</td>
+		           <td>function(modalWindow win)</td>
+		           <td>执行显示操作前的事件，返回false将终止显示操作。</td>
+		         </tr>
+		         <tr>
+		           <td>show</td>
+		           <td>function(modalWindow win)</td>
+		           <td>显示完成后的事件。</td>
+		         </tr>
+		         <tr>
+		           <td>beforehide</td>
+		           <td>function(modalWindow win)</td>
+		           <td>执行隐藏操作前的事件，返回false将终止隐藏操作。</td>
 		         </tr>
 		         <tr>
 		           <td>hide</td>
 		           <td>function(modalWindow win)</td>
-		           <td>隐藏窗口的时候触发。</td>
+		           <td>隐藏完成后的事件。</td>
 		         </tr>
 		         <tr>
-		           <td>hidden</td>
-		           <td>function(modalWindow win)</td>
-		           <td>窗口隐藏完之后再触发。</td>
-		         </tr>
-		         <tr>
-		           <td>shown</td>
-		           <td>function(modalWindow win)</td>
-		           <td>窗口显示(渲染完成)之后触发</td>
+		           <td>load</td>
+		           <td>function(ModalWindow win, String responseText, String textStatus, XMLHttpRequest xhr)</td>
+		           <td>页面加载完成后的事件。</td>
 		         </tr>
 		        </tbody>
 		      </table>
@@ -2225,7 +2287,7 @@ var Carousel = require('carousel');
 var onItemRender = function(scope, item, id) {
 			<br>&nbsp;&nbsp;&nbsp;&nbsp;var data = scope.getItemData(id);
 			<br>&nbsp;&nbsp;&nbsp;&nbsp;item.el
-			<br>&nbsp;&nbsp;&nbsp;&nbsp;.html('&lt;img src="examples/components/resources/images/carousel/base.png"/&gt;
+			<br>&nbsp;&nbsp;&nbsp;&nbsp;.html('&lt;img src="resources/images/carousel/base.png"/&gt;
 			<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p class="yi-component-demo-carousel-name"&gt;'+ data.name + '&lt;/p&gt;');
 		<br>}
 		<br>var carousel = new Carousel({
@@ -2470,7 +2532,7 @@ var Carousel = require('carousel');
 
 var onItemRenderThumail = function(scope, item, id) {
 <br>&nbsp;&nbsp;&nbsp;&nbsp;var data = scope.getItemData(id);
-<br>&nbsp;&nbsp;&nbsp;&nbsp;item.el.html('&lt;img src="examples/components/resources/images/carousel/upageVersion.jpg"/&gt;
+<br>&nbsp;&nbsp;&nbsp;&nbsp;item.el.html('&lt;img src="resources/images/carousel/upageVersion.jpg"/&gt;
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p class="yi-component-demo-carousel-thumbnail-name"&gt;'+ data.name + '&lt;/p&gt;');
 <br>}
 		<br>var onSwitch = function($scope, currentItem, nextItem) {
@@ -3044,7 +3106,7 @@ function renderGalleryInTab(p) {
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;addItemFront : true,
 <br>
-&nbsp;&nbsp;&nbsp;&nbsp;dataUrl : 'scripts/data/resource-gallery-data.json',
+&nbsp;&nbsp;&nbsp;&nbsp;dataUrl : 'data/resource-gallery-data.json',
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;autoLoad : true,
 <br>
@@ -4004,7 +4066,7 @@ function submit(b, e) {
 <br>
 &nbsp;&nbsp;this.submit({
 <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;url : 'scripts/data/url-for-submit-form.jsp',
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;url : 'data/url-for-submit-form.jsp',
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;method : 'POST',
 <br>
