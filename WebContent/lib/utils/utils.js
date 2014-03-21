@@ -376,6 +376,25 @@ define(function(/* require */) {
 		u.parseNumberToPixelString = parseNumberToPixelString;
 	}(Utils));
 
+	/**
+	 * 层次控制
+	 */
+	(function(u) {
+		// I had to use global variable to synchronize the index between
+		// Components and Plugins
+		try {
+			globalIndex = globalIndex;
+		} catch (e) {
+			globalIndex = 1040;
+		}
+
+		function getZIndex() {
+			return globalIndex++;
+		}
+
+		u.getZIndex = getZIndex;
+	}(Utils));
+
 	// 
 	return Utils;
 });

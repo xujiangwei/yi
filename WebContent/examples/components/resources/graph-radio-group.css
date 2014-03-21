@@ -1,7 +1,8 @@
-.yi-component-demo-radio-group-graph{
-    border: 1px solid #DDDDDD;
+.yi-component-demo-radio-group-graph {
+	border: 1px solid #DDDDDD;
 	padding: 20px 50px;
 }
-#graph_radio_group_example_base .yi-graph-radio-group-selected{
-    background: none;
+
+#graph_radio_group_example_base .yi-graph-radio-group-selected {
+	background: none;
 }

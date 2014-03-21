@@ -1,11 +1,11 @@
 define(function(require, exports, module) {
 	'require:nomunge,exports:nomunge,module:nomunge';
 
-	require('../resources/project-gallery.css');
-	require('../resources/dir-gallery.css');
-	require('../resources/carousel.css');
-	require('../resources/graph-radio-group.css');
-	require('../resources/project-content-detail.css');
+	require('./resources/project-gallery.css');
+	require('./resources/dir-gallery.css');
+	require('./resources/carousel.css');
+	require('./resources/graph-radio-group.css');
+	require('./resources/project-content-detail.css');
 	var utils = require('utils');
 	var DateFormat = require('date-format');
 	var Base = require('component');
@@ -76,7 +76,7 @@ define(function(require, exports, module) {
 						+ '<button type="button" class="btn btn-default"><img class="project-manager-face" src="'
 						+ (data.manager
 								? data.manager.face
-								: 'resources/images/32_32/project_manager_face.png')// 循环
+								: 'examples/components/resources/images/32_32/project_manager_face.png')// 循环
 						+ '"></img></button>'
 						+ '</div>'
 						+ '</div>'
@@ -132,8 +132,8 @@ define(function(require, exports, module) {
 	// image_gallery_example
 	function getSrc(g, item, id, data, isAdd) {
 		return isAdd
-				? 'resources/images/100_120/add.png'
-				: 'resources/images/100_120/bp.png';
+				? 'examples/components/resources/images/100_120/add.png'
+				: 'examples/components/resources/images/100_120/bp.png';
 	}
 
 	function getTitle(g, item, id, data, isAdd) {
@@ -142,7 +142,7 @@ define(function(require, exports, module) {
 
 	// 带图单选组
 	var onRadioItemRender = function(comp, $ct, data) {
-		$ct.html('<p>' + data.text + '</p><img src=' + data.url + '/>')
+		$ct.html('<p>' + data.text + '</p><img src="' + data.url + '"/>')
 				.addClass('yi-component-demo-radio-group-graph');
 	}
 
@@ -155,13 +155,13 @@ define(function(require, exports, module) {
 	var onItemRender = function(scope, item, id) {
 		var data = scope.getItemData(id);
 		item.el
-				.html('<img src="resources/images/carousel/base.png"/><p class="yi-component-demo-carousel-name">'
+				.html('<img src="examples/components/resources/images/carousel/base.png"/><p class="yi-component-demo-carousel-name">'
 						+ data.name + '</p>');
 	}
 	var onItemRenderThumail = function(scope, item, id) {
 		var data = scope.getItemData(id);
 		item.el
-				.html('<img src="resources/images/carousel/upageVersion.jpg"/><p class="yi-component-demo-carousel-thumbnail-name">'
+				.html('<img src="examples/components/resources/images/carousel/upageVersion.jpg"/><p class="yi-component-demo-carousel-thumbnail-name">'
 						+ data.name + '</p>');
 	}
 	var onSwitch = function($scope, currentItem, nextItem) {
@@ -434,34 +434,39 @@ define(function(require, exports, module) {
 					});
 
 			// 带图单选组
-			var graphRadioGroup = new GraphRadioGroup({
-				applyTo : 'graph_radio_group_example_custom',
-				margin : 50,
-				region : "north",
-				data : [{
-					text : '集中开发',
-					url : 'resources/images/graph_radio_group/centralize.png'
-				}, {
-					text : '分散开发',
-					url : 'resources/images/graph_radio_group/separate.png'
-				}, {
-					text : '自由开发',
-					url : 'resources/images/graph_radio_group/free.png'
-				}, {
-					text : '个人开发',
-					url : 'resources/images/graph_radio_group/individual.png'
-				}],
-				listeners : {
-					'itemrender' : onRadioItemRender
-				}
-			});
+			var graphRadioGroup = new GraphRadioGroup(
+					{
+						applyTo : 'graph_radio_group_example_custom',
+						margin : 50,
+						region : "north",
+						data : [
+								{
+									text : '集中开发',
+									url : 'examples/components/resources/images/graph_radio_group/centralize.png'
+								},
+								{
+									text : '分散开发',
+									url : 'examples/components/resources/images/graph_radio_group/separate.png'
+								},
+								{
+									text : '自由开发',
+									url : 'examples/components/resources/images/graph_radio_group/free.png'
+								},
+								{
+									text : '个人开发',
+									url : 'examples/components/resources/images/graph_radio_group/individual.png'
+								}],
+						listeners : {
+							'itemrender' : onRadioItemRender
+						}
+					});
 
 			// 模态窗口
 			var win;
 			$('#window_example_one_btn').on('click', function() {
 				win = new ModalWindow({
 					applyTo : 'modal_window_example_first',
-					url : 'html/modal_win_example.html',
+					url : 'examples/components/html/modal_win_example.html',
 					title : 'Modal Heading',
 					height : 500,
 					buttons : [{
@@ -540,14 +545,15 @@ define(function(require, exports, module) {
 			});
 
 			// page_loader_example
-			var projectContent = new PageLoader({
-				type : 'bp',
-				renderTo : 'page_loader_example',
-				url : 'html/page_for_page_loader_example.html',
-				listeners : {
-					'load' : renderProjectContent
-				}
-			});
+			var projectContent = new PageLoader(
+					{
+						type : 'bp',
+						renderTo : 'page_loader_example',
+						url : 'examples/components/html/page_for_page_loader_example.html',
+						listeners : {
+							'load' : renderProjectContent
+						}
+					});
 
 			// tab_example
 			var tab = new Tab(
@@ -561,7 +567,7 @@ define(function(require, exports, module) {
 								},
 								{
 									title : '标签2',
-									url : 'html/page_for_tab_example2.html',
+									url : 'examples/components/html/page_for_tab_example2.html',
 									loadScripts : true
 								},
 								{

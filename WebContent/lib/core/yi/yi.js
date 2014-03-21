@@ -79,7 +79,6 @@ Yi.prototype.config = function(relativePath, addition, excluded) {
 
 	// from CAYENNE
 	alias["date-format"] = "utils/date-format.js"; // 卡式布局
-	alias["jquery-utils"] = "utils/jquery-utils.js"; // jquery相关的实用函数库
 	alias["card-layout"] = "modules/components/card-layout/card-layout.js";	// 卡式布局
 	alias["carousel"]="modules/components/carousel/carousel.js"; // 轮播转盘
 	alias["clickable"] = "modules/components/clickable/clickable.js";	// 点击类

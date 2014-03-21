@@ -8,6 +8,7 @@
 <title>组件 - 壹框</title>
 <%=Stage.importStyles("lib/")%>
 <link href="assets/css/docs.css" rel="stylesheet">
+<link href="lib/extensions/default.css" rel="stylesheet">
 </head>
 
 <body>
@@ -1280,7 +1281,7 @@ console.info(data.lenght);
 <br>
 // javascript
 <br>
-require('../resources/project-gallery.css');
+require('./resources/project-gallery.css');
 <br>
 <br>
 var PROJECT_STATUS = {
@@ -1398,7 +1399,7 @@ function renderProject(g, item, id, isAdd) {
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;? data.manager.face
 <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: 'resources/images/32_32/project_manager_face.png')// 循环
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: 'examples/components/resources/images/32_32/project_manager_face.png')// 循环
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ '"&gt;&lt;/img&gt;&lt;/button&gt;'
 <br>
@@ -1610,7 +1611,7 @@ function destroyProject(g, item, id, isAdd) {
 <br>
 // javascript
 <br>
-require('../resources/dir-gallery.css');
+require('./resources/dir-gallery.css');
 <br>
 var utils = require('utils');
 <br>
@@ -1736,7 +1737,7 @@ var ImageGallery = require('image-gallery');
 <br>
 function getSrc(g, item, id, data, isAdd) {
 <br>
-&nbsp;&nbsp;return isAdd ? 'resources/images/100_120/add.png' : 'resources/images/100_120/bp.png';
+&nbsp;&nbsp;return isAdd ? 'examples/components/resources/images/100_120/add.png' : 'examples/components/resources/images/100_120/bp.png';
 <br>
 }
 <br>
@@ -1896,7 +1897,7 @@ resourceGallery.setTitle(2, '分派二线');// 通过UI中的位置（从0开始
 <br>
 // javascript
 <br>
-require('../resources/graph-radio-group.css');
+require('./resources/graph-radio-group.css');
 <br>var GraphRadioGroup = require('graph-radio-group');
 <br>
 <br>
@@ -1917,16 +1918,16 @@ var onRadioItemRender = function(comp, $ct, data) {
 <br>&nbsp;&nbsp;&nbsp;&nbsp;region : "north",
 <br>&nbsp;&nbsp;&nbsp;&nbsp;data : [{
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text : '集中开发',
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;url : 'resources/images/graph_radio_group/centralize.png'
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;url : 'examples/components/resources/images/graph_radio_group/centralize.png'
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}, {
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text : '分散开发',
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;url : 'resources/images/graph_radio_group/separate.png'
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;url : 'examples/components/resources/images/graph_radio_group/separate.png'
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}, {
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text : '自由开发',
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;url : 'resources/images/graph_radio_group/free.png'
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;url : 'examples/components/resources/images/graph_radio_group/free.png'
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}, {
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text : '个人开发',
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;url : 'resources/images/graph_radio_group/individual.png'
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;url : 'examples/components/resources/images/graph_radio_group/individual.png'
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}],
 <br>&nbsp;&nbsp;&nbsp;&nbsp;listeners : {
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'itemrender' : onRadioItemRender
@@ -2211,7 +2212,7 @@ var win = new ModalWindow({
 <br>
 // javascript
 <br>
-require('../resources/carousel.css');
+require('./resources/carousel.css');
 <br>
 var Carousel = require('carousel');
 <br>
@@ -2224,7 +2225,7 @@ var Carousel = require('carousel');
 var onItemRender = function(scope, item, id) {
 			<br>&nbsp;&nbsp;&nbsp;&nbsp;var data = scope.getItemData(id);
 			<br>&nbsp;&nbsp;&nbsp;&nbsp;item.el
-			<br>&nbsp;&nbsp;&nbsp;&nbsp;.html('&lt;img src="resources/images/carousel/base.png"/&gt;
+			<br>&nbsp;&nbsp;&nbsp;&nbsp;.html('&lt;img src="examples/components/resources/images/carousel/base.png"/&gt;
 			<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p class="yi-component-demo-carousel-name"&gt;'+ data.name + '&lt;/p&gt;');
 		<br>}
 		<br>var carousel = new Carousel({
@@ -2456,7 +2457,7 @@ var onItemRender = function(scope, item, id) {
 <br>
 // javascript
 <br>
-require('../resources/carousel.css');
+require('./resources/carousel.css');
 <br>
 var Carousel = require('carousel');
 <br>
@@ -2469,7 +2470,7 @@ var Carousel = require('carousel');
 
 var onItemRenderThumail = function(scope, item, id) {
 <br>&nbsp;&nbsp;&nbsp;&nbsp;var data = scope.getItemData(id);
-<br>&nbsp;&nbsp;&nbsp;&nbsp;item.el.html('&lt;img src="resources/images/carousel/upageVersion.jpg"/&gt;
+<br>&nbsp;&nbsp;&nbsp;&nbsp;item.el.html('&lt;img src="examples/components/resources/images/carousel/upageVersion.jpg"/&gt;
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p class="yi-component-demo-carousel-thumbnail-name"&gt;'+ data.name + '&lt;/p&gt;');
 <br>}
 		<br>var onSwitch = function($scope, currentItem, nextItem) {
