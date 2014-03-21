@@ -23,7 +23,7 @@
  * @event activate: function(Tab t, Object activeTab)
  * @event addbuttonclick: function(Tab t, jqObject addButton, Event e)
  * 
- * @description updated on 2013-03-11
+ * @description updated on 2013-03-21
  * 
  */
 define(function(require, exports, module) {
@@ -72,6 +72,12 @@ define(function(require, exports, module) {
 					baseHtml : '<div><ul class="nav nav-tabs"></ul><div class="tab-content"></div></div>',
 
 					/**
+					 * @cfg items Array
+					 * 
+					 * 每一个标签页都是一个页面加载器，数组中的每一个对象即为组件实例的参数。
+					 */
+
+					/**
 					 * @cfg activeIndex Number
 					 * 
 					 * 初始化时激活的标签序号（从0开始）
@@ -113,10 +119,9 @@ define(function(require, exports, module) {
 					afterRender : function(parent) {
 						Tab.superclass.afterRender.call(this, parent);
 
-						var id = this.getId();
 						this.nav = this.el.children('.nav-tabs').addClass(
 								this.baseCls + '-nav').on('click', {
-							componentId : id
+							componentId : this.getId()
 						}, onClick);
 						this.headers = this.nav.children().addClass(
 								this.baseCls + '-header');

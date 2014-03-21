@@ -8,9 +8,9 @@
  * @requires utils, extend, clickable
  * 
  * @method void setText(String text)
- * @method void setIconCls(String cls)
+ * @method void setIconCls(String iconCls)
  * 
- * @description updated on 2014-03-18
+ * @description updated on 2014-03-21
  * 
  */
 define(function(require, exports, module) {

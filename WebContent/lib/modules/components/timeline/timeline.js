@@ -12,7 +12,7 @@
  * @method String getValue()
  * @method void setValue(String value)
  * 
- * @description 1.目前只处理到天 2.目前只处理闭区间 updated on 2014-03-11
+ * @description 1.目前只处理到天 2.目前只处理闭区间 updated on 2014-03-21
  * 
  */
 define(function(require, exports, module) {
@@ -296,14 +296,15 @@ define(function(require, exports, module) {
 					},
 					addDragEvents : function() {
 						if (this.el) {
+							var id = this.getId();
 							this.el.on('mousedown', {
-								componentId : this.getId()
+								componentId : id
 							}, onMousedown).on('mousemove', {
-								componentId : this.getId()
+								componentId : id
 							}, onMousemove).on('mouseout', {
-								componentId : this.getId()
+								componentId : id
 							}, onMouseout).on('mouseup', {
-								componentId : this.getId()
+								componentId : id
 							}, onMouseup);
 						}
 					},
@@ -343,10 +344,11 @@ define(function(require, exports, module) {
 						return this.formatter.format(date);
 					},
 					addDelegateEvents : function() {
+						var id = this.getId();
 						$('body').on('mousemove', {
-							componentId : this.getId()
+							componentId : id
 						}, delegateMouseMoveToBody).on('mouseup', {
-							componentId : this.getId()
+							componentId : id
 						}, delegateMouseUpToBody);
 					},
 					removeDelegateEvents : function() {

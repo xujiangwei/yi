@@ -3851,7 +3851,7 @@ function onButton8Click(b, e) {
 		      </table>
 		    </div><!-- /.table-responsive -->
 		    <h3>方法</h3>
-		    <h4>void setIconCls(String cls)</h4>
+		    <h4>void setIconCls(String iconCls)</h4>
 		    <p>设置按钮的图标</p>
 		    <div class="highlight"><pre>	        
 	        var button = new Button(option);

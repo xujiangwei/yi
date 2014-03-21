@@ -10,7 +10,7 @@
  * @event click: function(Clickable c, Event e)
  * @event dblClick: function(Clickable c, Event e)
  * 
- * @description updated on 2014-03-11
+ * @description updated on 2014-03-21
  * 
  */
 define(function(require, exports, module) {
@@ -47,11 +47,12 @@ define(function(require, exports, module) {
 			afterRender : function(container) {
 				Clickable.superclass.afterRender.call(this, container);
 
+				var id = this.getId();
 				this.el.on('click', {
-					componentId : this.getId()
+					componentId : id
 				}, onClick);
 				this.el.on('dblclick', {
-					componentId : this.getId()
+					componentId : id
 				}, onDblClick);
 			},
 			beforeDestroy : function() {
