@@ -76,7 +76,9 @@
 			<fileset dir="${web.dir}">
 				<include name="**/*.css"/>
 				<include name="**/*.js"/>
+				<include name="**/*.json"/>
 				<include name="**/*.jsp"/>
+				<include name="**/*.html"/>
 				<include name="**/*.png"/>
 				<include name="**/*.jpg"/>
 				<include name="**/*.jpeg"/>
