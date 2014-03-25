@@ -463,13 +463,12 @@ define(function(require, exports, module) {
 
 			// 模态窗口
 			var win = new ModalWindow({
-				renderTo : 'modal_window_example_first',
+				renderTo : 'modal_window_example',
 				url : 'examples/components/html/modal_win_example.html',
 				title : 'Modal Heading',
 				height : 500,
 				buttons : [{
 					text : 'close',
-					disabled : false,
 					handler : handler
 				}, {
 					text : 'save',
@@ -477,7 +476,7 @@ define(function(require, exports, module) {
 					cls : 'btn-primary'
 				}]
 			});
-			$('#window_example_one_btn').on('click', function() {
+			$('#modal_window_example_btn').on('click', function() {
 				win.show();
 			});
 

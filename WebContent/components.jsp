@@ -81,7 +81,7 @@
           <li>
             <a href="#modal_window">模态窗口</a>
             <ul class="nav">
-              <li><a href="#modal_window_example_one">示例</a></li>
+              <li><a href="#modal_window_examples">示例</a></li>
               <li><a href="#modal_window_usage">用法</a></li>
             </ul>
           </li>
@@ -2039,16 +2039,16 @@ var onRadioItemRender = function(comp, $ct, data) {
 				<h1 id="modal_window">模态窗口 <small>modal-window</small></h1>
 				<p class="lead">模态窗口。</p>
 	          </div>
-	           <h2 id="modal_window_example_one">示例</h2>
+	           <h2 id="modal_window_examples">示例</h2>
 	                           点击下面的按钮即可通过JavaScript启动一个模态框。此模态框将从上到下、逐渐浮现到页面前。
 	           <div class="bs-example">
-	               <button id='window_example_one_btn' class='btn btn-primary btn-lg'>Launch demo modal</button>
-	               <div id='modal_window_example_first'></div>
+	               <button id='modal_window_example_btn' class='btn btn-primary btn-lg'>Launch demo modal</button>
+	               <div id='modal_window_example'></div>
 	           </div>
 	           <div class="highlight">
 				<pre>// html
 <br>
-&lt;div id='modal_window_example_first'&gt;
+&lt;div id='modal_window_example'&gt;
 <br/>&lt;/div&gt;
 <br>
 <br>
@@ -2071,7 +2071,7 @@ function handler(){
 <br>
 &nbsp;&nbsp;var win = new ModalWindow({
 <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;renderTo : 'modal_window_example_first',
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;renderTo : 'modal_window_example',
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;url : 'html/modal_win_example.html',
 <br>
@@ -2083,8 +2083,6 @@ function handler(){
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text : 'close',
 <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;disabled : false,
-<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;handler : handler
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}, {
@@ -2094,6 +2092,12 @@ function handler(){
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cls : 'btn-primary'
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}]
+<br>
+&nbsp;&nbsp;});
+<br>
+&nbsp;&nbsp;$('#modal_window_example_btn').on('click', function() {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;win.show();
 <br>
 &nbsp;&nbsp;});
 <br>
