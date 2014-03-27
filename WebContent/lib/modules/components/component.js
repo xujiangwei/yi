@@ -35,7 +35,7 @@
  * @event beforedestroy function(Component c)
  * @event destroy function(Component c)
  * 
- * @description updated on 2014-02-25
+ * @description updated on 2014-03-27
  */
 define(function(require, exports, module) {
 	'require:nomunge,exports:nomunge,module:nomunge';
@@ -254,7 +254,7 @@ define(function(require, exports, module) {
 			 * 
 			 * {name: 'cigrid', method: 'hide'}
 			 * 
-			 * 组件权限控制，如果当前用户没有name属性的权限，则按照method属性的方法进行处理。method：'hide'，'disable'和'space'
+			 * 组件权限控制，如果当前用户没有name属性的权限，则按照method属性的方法进行处理。method：'hide'、'disable'和'space'
 			 */
 
 			/**

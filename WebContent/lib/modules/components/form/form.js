@@ -9,7 +9,7 @@
  * 
  * @method void submit(Object option)
  * 
- * @description updated on 2014-03-11
+ * @description updated on 2014-03-27
  * 
  */
 define(function(require, exports, module) {
@@ -130,7 +130,7 @@ define(function(require, exports, module) {
 					 * 
 					 * @augments option {} 1)original Boolean 是否使用原生的表单提交 2)url
 					 *           String: URL 3)params Object: 额外的参数 4)mothod
-					 *           String: 'GET' or 'POST'，默认'GET' 5)success
+					 *           String: 'GET'或'POST'，默认'GET' 5)success
 					 *           Function: function(Form form, XmlHttpRequest
 					 *           xhr) 6)failure Function: function(Form form,
 					 *           XmlHttpRequest xhr) 7)timeout Number: 单位：毫秒

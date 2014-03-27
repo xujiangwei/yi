@@ -23,7 +23,7 @@
  * @event activate: function(Tab t, Object activeTab)
  * @event addbuttonclick: function(Tab t, jqObject addButton, Event e)
  * 
- * @description updated on 2013-03-21
+ * @description updated on 2013-03-27
  * 
  */
 define(function(require, exports, module) {
@@ -74,7 +74,7 @@ define(function(require, exports, module) {
 					/**
 					 * @cfg items Array
 					 * 
-					 * 每一个标签页都是一个页面加载器，数组中的每一个对象即为组件实例的参数。
+					 * 每一个标签页都是一个页面加载器，数组中的每一个对象即为组件实例的参数
 					 */
 
 					/**
@@ -87,13 +87,13 @@ define(function(require, exports, module) {
 					/**
 					 * @cfg hasAddButton Boolean
 					 * 
-					 * 是否有'添加'按钮
+					 * 是否有“添加”按钮
 					 */
 
 					/**
 					 * @cfg defaultTitle String
 					 * 
-					 * item中没有title属性则使用它作为标题
+					 * item中没有title属性则使用它作为标题，默认'new tab'
 					 */
 					defaultTitle : 'new tab',
 

@@ -12,7 +12,7 @@
  * @method String getValue()
  * @method void setValue(String value)
  * 
- * @description 1.目前只处理到天 2.目前只处理闭区间 updated on 2014-03-21
+ * @description 1.目前只处理到天 2.目前只处理闭区间 updated on 2014-03-27
  * 
  */
 define(function(require, exports, module) {
@@ -170,13 +170,13 @@ define(function(require, exports, module) {
 					/**
 					 * @cfg size String
 					 * 
-					 * 'normal' or 'small'，默认：'normal'
+					 * 尺寸，'normal'或'small'，默认'normal'
 					 */
 
 					/**
 					 * @cfg dateFormat String
 					 * 
-					 * 'yyyy-MM-dd' or 'yyyy-MM-dd HH:mm:ss'
+					 * 日期格式，'yyyy-MM-dd'或'yyyy-MM-dd HH:mm:ss'，默认'yyyy-MM-dd'
 					 */
 					dateFormat : 'yyyy-MM-dd',
 

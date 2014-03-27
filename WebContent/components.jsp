@@ -241,7 +241,7 @@ var c = new Component(option);
 		           <td>permission</td>
 		           <td>String</td>
 		           <td>'hide'</td>
-		           <td><code>{name: 'cigrid', method: 'hide'}</code><br>组件权限控制，如果当前用户没有name属性的权限，则按照method属性的方法进行处理。method：<code>'hide'</code>，<code>'disable'</code>和<code>'space'</code>。</td>
+		           <td><code>{name: 'cigrid', method: 'hide'}</code><br>组件权限控制，如果当前用户没有name属性的权限，则按照method属性的方法进行处理。method：<code>'hide'</code>、<code>'disable'</code>和<code>'space'</code>。</td>
 		         </tr>
 		        </tbody>
 		      </table>
@@ -683,19 +683,19 @@ var timeline = new Timeline({
 		           <td>size</td>
 		           <td>String</td>
 		           <td>'normal'</td>
-		           <td>尺寸。<code>'normal'</code>或<code>'small'</code>。</td>
+		           <td>尺寸，<code>'normal'</code>或<code>'small'</code>。</td>
 		         </tr>
 		         <tr>
 		           <td>dateFormat</td>
 		           <td>String</td>
 		           <td>'yyyy-MM-dd'</td>
-		           <td>日期格式。<code>'yyyy-MM-dd'</code> or <code>'yyyy-MM-dd HH:mm:ss'</code>。</td>
+		           <td>日期格式，<code>'yyyy-MM-dd'</code>或<code>'yyyy-MM-dd HH:mm:ss'</code>。</td>
 		         </tr>
 		         <tr>
 		           <td>startDate</td>
 		           <td>String</td>
 		           <td></td>
-		           <td>开始日期</td>
+		           <td>开始日期。</td>
 		         </tr>
 		         <tr>
 		           <td>endDate</td>
@@ -1994,7 +1994,7 @@ var onRadioItemRender = function(comp, $ct, data) {
 		           <td>region</td>
 		           <td>String</td>
 		           <td>'north'</td>
-		           <td>按钮的内容显示在按钮的哪个方向，可取值为<code>'north'</code>, <code>'south'</code>, <code>'east'</code>, <code>'west'</code></td>
+		           <td>按钮的内容显示在按钮的哪个方向，<code>'north'</code>, <code>'south'</code>, <code>'east'</code>或<code>'west'</code></td>
 		         </tr>
 		         <tr>
 		           <td>margin</td>
@@ -3252,7 +3252,7 @@ function addNewTab(t, addButton, e) {
 		           <td>items</td>
 		           <td>Array</td>
 		           <td></td>
-		           <td>每一个标签页都是一个<strong>页面加载器</strong>，数组中的每一个对象即为组件实例的参数。<br>具体使用方法参考<a href="#page_loader_usage">页面加载器 - 用法</a>。</td>
+		           <td>每一个标签页都是一个<strong>页面加载器</strong>，数组中的每一个对象即为组件实例的参数。<br>具体使用方法，请参考<a href="#page_loader_usage">页面加载器 - 用法</a>。</td>
 		         </tr>
 		         <tr>
 		           <td>activeIndex</td>
@@ -3826,7 +3826,7 @@ function onButton8Click(b, e) {
 		           <td>type</td>
 		           <td>String</td>
 		           <td>'button'</td>
-		           <td>&lt;button&gt;的type属性，<code>'button'</code>、<code>'submit'</code>和<code>'reset'</code>。</td>
+		           <td>&lt;button&gt;的type属性，<code>'button'</code>、<code>'submit'</code>或<code>'reset'</code>。</td>
 		         </tr>
 		         <tr>
 		           <td>name</td>
@@ -4165,7 +4165,7 @@ form.submit(option);
 				<br>
 				<strong>params</strong> Object : 额外的参数。
 				<br>
-				<strong>mothod</strong> String : <code>'GET'</code> or <code>'POST'</code>，默认<code>'GET'</code>。
+				<strong>mothod</strong> String : <code>'GET'</code>或<code>'POST'</code>，默认<code>'GET'</code>。
 				<br>
 				<strong>success</strong> Function : 成功时的回调，函数格式：<code>function(Form form, XmlHttpRequest xhr)</code>。
 				<br>

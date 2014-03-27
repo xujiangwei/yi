@@ -29,11 +29,6 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
 	background-color: white;
 }
 
-.yi-form-container {
-	border-width: 0;
-	padding: 0;
-}
-
 .yi-form-legend {
 	border-bottom-width: 0;
 	font-size: 15px;

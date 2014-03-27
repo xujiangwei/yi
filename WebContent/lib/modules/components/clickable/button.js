@@ -10,7 +10,7 @@
  * @method void setText(String text)
  * @method void setIconCls(String iconCls)
  * 
- * @description updated on 2014-03-21
+ * @description updated on 2014-03-27
  * 
  */
 define(function(require, exports, module) {
@@ -35,19 +35,19 @@ define(function(require, exports, module) {
 			/**
 			 * @cfg type String
 			 * 
-			 * 'button'、'submit'和'reset'，默认'button'
+			 * <button>的type属性，'button'、'submit'或'reset'，默认'button'
 			 */
 
 			/**
 			 * @cfg name String
 			 * 
-			 * name属性
+			 * <button>的name属性
 			 */
 
 			/**
 			 * @cfg value String
 			 * 
-			 * value属性
+			 * <button>的value属性
 			 */
 
 			/**
@@ -59,7 +59,7 @@ define(function(require, exports, module) {
 			/**
 			 * @cfg text String
 			 * 
-			 * 按钮文字
+			 * 按钮的文字
 			 */
 
 			afterRender : function(container) {
