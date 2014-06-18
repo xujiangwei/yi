@@ -6,12 +6,13 @@
  * @requires extend, component
  * 
  * @method Object getSelectedItem()
+ * @method void select()
  * 
  * @event itemrender: function(GraphRadioGroup g, jqObject $item, Object data)
  * @event itemclick: function(GraphRadioGroup g, jqObject $item, Object data,
  *        Event e)
  * 
- * @description updated on 2014-03-27
+ * @description updated on 2014-05-06
  * 
  */
 define(function(require, exports, module) {
@@ -71,17 +72,26 @@ define(function(require, exports, module) {
 							this.createItems();
 						}
 						for (i = 0; i < len; i++) {
-							var d = data[i], url = d && d.url, $item = $(
-									this.items[i]).addClass(baseCls + '-item')
-									.data('item', d), index = $item.index();
+							var d = data[i], $item = $(this.items[i]).addClass(
+									baseCls + '-item').data('item', d), index = $item
+									.index();
 							if (index > 0) {
 								$item.css({
 									"margin-left" : this.margin + 'px'
-								})
+								});
 							}
 							this["addTo"
 									+ utils.firstLetterToUpperCase(this.region)]
 									($item);
+							if (this.itemCls) {
+								$item.addClass(this.itemCls);
+							}
+							if (this.itemWidth) {
+								$item.width(this.itemWidth);
+							}
+							if (this.itemHeight) {
+								$item.height(this.itemHeight);
+							}
 							var $input = $('input', $item);
 							var checked = $input.attr('checked'), $graph = $(
 									'.' + baseCls + '-graph', $item);
@@ -145,8 +155,19 @@ define(function(require, exports, module) {
 								item.data('item'), e);
 					},
 					/**
-					 * 获取选中项,返回选中的数据
+					 * 选中记录
+					 * 
+					 * @argument
+					 * 
+					 * 1、Number 参数可以是UI中的位置（从0开始）
+					 * 
+					 * 2、keep Boolean 是否保持选中先前的选中项，多选中有效
 					 */
+					select : function(item) {
+						if (utils.isNumber(item)) {
+							this.items.eq(item).trigger('click');
+						}
+					},
 					getSelectedItem : function() {
 						return $('.' + this.baseCls + '-selected', this.el)
 								.parent().data('item');

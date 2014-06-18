@@ -1,0 +1,61 @@
+.yi-portal {
+	
+}
+
+.yi-portlet-col {
+	min-height: 60px;
+}
+
+.yi-portlet {
+	margin-bottom: 20px;
+	background-color: #ffffff;
+	border: 1px solid transparent;
+	border-radius: 4px;
+	-webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+
+.yi-portlet-title {
+	position: relative;
+	padding: 10px 15px;
+	border-bottom: 1px solid transparent;
+	border-top-right-radius: 3px;
+	border-top-left-radius: 3px;
+}
+
+.yi-portlet-content {
+	padding: 15px;
+}
+
+.yi-portlet-remove {
+	position: absolute !important;
+	top: 15px !important;
+	right: 10px;
+}
+
+.yi-portlet-toggle {
+	position: absolute !important;
+	top: 15px !important;
+	right: 30px;
+}
+
+.yi-portlet-default {
+	border-color: #dddddd;
+}
+
+.yi-portlet-default>.yi-portlet-title {
+	color: #333333;
+	background-color: #f5f5f5;
+	border-color: #dddddd;
+}
+
+.yi-portlet-default>.yi-portlet-title .yi-portlet-content {
+	border-top-color: #dddddd;
+}
+
+.yi-portlet-placeholder {
+	height: 60px !important;
+	border: 1px dashed #357EBD;
+	visibility: visible !important;
+	margin-bottom: 20px;
+}

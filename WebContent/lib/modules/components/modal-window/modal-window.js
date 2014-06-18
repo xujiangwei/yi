@@ -16,7 +16,7 @@
  * @event load: Function(ModalWindow win ,String responseText, String
  *        textStatus, XMLHttpRequest xhr)
  * 
- * @description updated on 2014-03-21
+ * @description updated on 2014-04-29
  * 
  */
 define(function(require, exports, module) {
@@ -142,8 +142,9 @@ define(function(require, exports, module) {
 					 * @cfg buttons Array
 					 * 
 					 * 显示在窗口底部的按钮。每个按钮的属性包括：{id String: 按钮的id, cls String:
-					 * 按钮的样式, disabled Boolean: 是否不可用, hidden Boolean: 是否隐藏,
-					 * text String: 按钮的文字, handler Function: 点击按钮时的处理方法}
+					 * 按钮的样式, iconCls String: 按钮的图标样式,disabled Boolean: 是否不可用,
+					 * hidden Boolean: 是否隐藏, text String: 按钮的文字, handler
+					 * Function: 点击按钮时的处理方法}
 					 */
 
 					/**
@@ -220,22 +221,25 @@ define(function(require, exports, module) {
 						var i, len = buttons.length, $footer = $(
 								'.modal-footer', this.el), id = this.getId();
 						for (i = 0; i < len; i++) {
-							var button = buttons[i];
+							var b = buttons[i];
 							var $btn = $(
-									'<a id="'
-											+ (button.id || '')
-											+ '" class="btn btn-default '
-											+ (button.cls || '')
-											+ ' '
-											+ (button.disabled
-													? 'disabled'
+									'<button type="button"'
+											+ (b.id
+													? (' id="' + b.id + '"')
 													: '')
-											+ ' '
-											+ (button.hidden ? this.baseCls
-													+ '-button-hide' : '')
-											+ '"></a>').html(button.text || '')
+											+ ' class="'
+											+ (b.cls ? 'btn btn-default '
+													+ b.cls : 'btn btn-default')
+											+ '"'
+											+ (b.disabled ? ' disabled' : '')
+											+ '>'
+											+ (b.iconCls
+													? ('<span class="'
+															+ b.iconCls
+															+ '"></span> ' + b.text)
+													: b.text) + '</button>')
 									.appendTo($footer);
-							var handler = button.handler;
+							var handler = b.handler;
 							if (handler && utils.isFunction(handler)) {
 								$btn.on('click', {
 									handler : handler,
@@ -270,9 +274,6 @@ define(function(require, exports, module) {
 						}
 					},
 					toFront : function() {
-						$('.modal-backdrop').css({
-							'zIndex' : utils.getZIndex()
-						});
 						this.el.css({
 							'zIndex' : utils.getZIndex()
 						});

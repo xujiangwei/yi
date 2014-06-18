@@ -353,6 +353,99 @@ define(function(/* require */) {
 	}(Utils));
 
 	/**
+	 * 权限验证
+	 */
+	(function(u) {
+		var permissionStr = '', methods = {
+			hide : function() {
+				this.hideMode = 'display';
+				this.hide();
+			},
+			space : function() {
+				this.hideMode = 'visibility';
+				this.hide();
+			},
+			disable : function() {
+				this.disable();
+			}
+		};
+
+		function onGetPermissionSuccess(data, textStatus, jqXHR) {
+			if (!jqXHR.responseText) {
+				return;
+			}
+
+			try {
+				var r = $.parseJSON(jqXHR.responseText);
+				if (r && r.success) {
+					permissionStr = r.permission || '';
+				}
+			} catch (e) {
+
+			}
+		}
+
+		(function() {
+			/**
+			 * permission
+			 * 
+			 * @interface
+			 * 
+			 * @augments 1、component Component: 组件 2、permission {}: 1)name
+			 *           String: 权限名 2)method String: 处理方式。'hide'、'space' 或者
+			 *           'disable'，默认'hide'
+			 */
+			function permission(component, permission) {
+				permission = permission || {};
+
+				if (!u.hasPermission(permission.name)) {
+					var method = permission.method;
+					if (!u.isFunction(methods[method])) {
+						method = 'hide';
+					}
+					return methods[method].call(component);
+				}
+			}
+
+			/**
+			 * 判断用户是否具有某项权限
+			 * 
+			 * @augments permissionName String
+			 */
+			function hasPermission(permissionName) {
+				if (u.isString(permissionName)) {
+					if (permissionStr.indexOf(permissionName) < 0) {
+						return false;
+					} else {
+						return true;
+					}
+				} else {
+					return false;
+				}
+			}
+
+			/**
+			 * 载入权限字符串
+			 * 
+			 * @augments url String URL
+			 */
+			function loadPermission(url) {
+				if ($.isString(url)) {
+					$.ajax({
+						url : url,
+						async : false,
+						success : onGetPermissionSuccess
+					});
+				}
+			}
+
+			u.permission = permission;
+			u.hasPermission = hasPermission;
+			u.loadPermission = loadPermission;
+		}());
+	}(Utils));
+
+	/**
 	 * 像素字符串中与Number的转化
 	 */
 	(function(u) {
@@ -393,6 +486,17 @@ define(function(/* require */) {
 		}
 
 		u.getZIndex = getZIndex;
+	}(Utils));
+
+	/**
+	 * 获取应用上下文 - 相对于WebRoot的路径（结尾没有"/"）
+	 */
+	(function(u) {
+		function getContext() {
+			return '/' + window.location.href.replace('//', '').split('/')[1];
+		}
+
+		u.getContext = getContext;
 	}(Utils));
 
 	// 

@@ -3,8 +3,7 @@
  * 
  * Copyright (c) 2013,2014 DHC Software Research Department
  */
-
-(function(){
+(function() {
 	/**
 	 * HashMap 封装。
 	 */
@@ -18,7 +17,7 @@
 		 * 判断 Map 是否为空
 		 */
 		this.isEmpty = function() {
-			 return length == 0;
+			return length == 0;
 		};
 
 		/**
@@ -32,7 +31,7 @@
 		 * 判断对象中是否包含给定的 Value
 		 */
 		this.containsValue = function(value) {
-			for (var key in obj) {
+			for ( var key in obj) {
 				if (obj[key] == value) {
 					return true;
 				}
@@ -43,7 +42,7 @@
 		/**
 		 * 向 Map 中添加数据
 		 */
-		this.put = function(key,value) {
+		this.put = function(key, value) {
 			if (!this.containsKey(key)) {
 				length++;
 			}
@@ -70,8 +69,8 @@
 		 * 获得 Map 中的所有 Value
 		 */
 		this.values = function() {
-			var _values= new Array();
-			for (var key in obj) {
+			var _values = new Array();
+			for ( var key in obj) {
 				_values.push(obj[key]);
 			}
 			return _values;
@@ -82,7 +81,7 @@
 		 */
 		this.keySet = function() {
 			var _keys = new Array();
-			for (var key in obj) {
+			for ( var key in obj) {
 				_keys.push(key);
 			}
 			return _keys;
@@ -112,8 +111,7 @@
  * CommonJS 规范定义
  */
 define(function(require, exports, module) {
+	'require:nomunge,exports:nomunge,module:nomunge';
 
 	module.exports = window.HashMap;
-
-	return window.HashMap;
 });

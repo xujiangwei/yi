@@ -2,6 +2,10 @@
 	
 }
 
+.yi-modal-window .modal-footer {
+	margin-top: 0;
+}
+
 .yi-modal-window-scroll {
 	overflow: auto;
 }

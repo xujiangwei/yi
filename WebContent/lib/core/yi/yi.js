@@ -60,6 +60,7 @@ Yi.prototype.config = function(relativePath, addition, excluded) {
 	alias["class"] = "utils/class.js";						// 辅助构建 JS 对象关系
 	alias["utils"] = "utils/utils.js";						// 实用函数库
 	alias["map"] = "utils/hashmap.js";						// 实用 Map 实现
+	alias["store"] = "utils/store.js";						// 实用 本地存储 实现
 	alias["extend"] = "utils/extend.js";					// 对象继承实现
 	alias["observable"] = "utils/observable.js";			// 观察者实现
 	alias["delayed-task"] = "utils/delayed-task.js";		// 延迟任务
@@ -78,7 +79,7 @@ Yi.prototype.config = function(relativePath, addition, excluded) {
 	alias["grid"] = "modules/components/grid/grid-boot.js";
 
 	// from CAYENNE
-	alias["date-format"] = "utils/date-format.js"; // 卡式布局
+	alias["date-format"] = "utils/date-format.js"; // 日期格式化工具
 	alias["card-layout"] = "modules/components/card-layout/card-layout.js";	// 卡式布局
 	alias["carousel"]="modules/components/carousel/carousel.js"; // 轮播转盘
 	alias["clickable"] = "modules/components/clickable/clickable.js";	// 点击类
@@ -89,6 +90,7 @@ Yi.prototype.config = function(relativePath, addition, excluded) {
 	alias["graph-radio-group"] = "modules/components/graph-radio-group/graph-radio-group.js"; // 单选按钮组
 	alias["modal-window"] = "modules/components/modal-window/modal-window.js"; // 对话框
 	alias["page-loader"] = "modules/components/page-loader/page-loader.js";	// 点击类
+	alias["portal"] = "modules/components/portal/portal.js";	// Portal
 	alias["tab"] = "modules/components/tab/tab.js"; // 单选按钮组
 	alias["timeline"] = "modules/components/timeline/timeline.js";	// 时间线
 

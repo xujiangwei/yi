@@ -35,7 +35,7 @@
  * @event beforedestroy function(Component c)
  * @event destroy function(Component c)
  * 
- * @description updated on 2014-03-27
+ * @description updated on 2014-06-17
  */
 define(function(require, exports, module) {
 	'require:nomunge,exports:nomunge,module:nomunge';
@@ -327,9 +327,9 @@ define(function(require, exports, module) {
 					if (this.disabled) {
 						this._disable();
 					}
-					// require jquery.permission
+
 					if (this.permission) {
-						this.el.permission(this.permission);
+						utils.permission(this, this.permission);
 					}
 				}
 				return this;
